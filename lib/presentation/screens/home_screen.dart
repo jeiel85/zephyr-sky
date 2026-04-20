@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/weather_provider.dart';
+import 'search_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // 앱 시작 시 현재 위치의 날씨를 가져옴
     Future.microtask(() => _refreshWeather());
   }
 
@@ -25,7 +25,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await ref.read(weatherStateProvider.notifier).fetchWeather(
         position.latitude, 
         position.longitude, 
-        '현재 위치' // 추후 Geocoding으로 동네 이름을 가져올 수 있음
+        '현재 위치'
       );
     } catch (e) {
       if (mounted) {
@@ -82,9 +82,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                   const Spacer(),
-                  // 날씨 아이콘 영역 (추후 SVG 등으로 대체 가능)
                   const Icon(
-                    Icons.wb_sunny_rounded, // 임시 아이콘
+                    Icons.wb_sunny_rounded,
                     size: 100,
                     color: Colors.white,
                   ),
@@ -116,9 +115,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 40),
-                    child: IconButton(
-                      onPressed: _refreshWeather,
-                      icon: const Icon(Icons.refresh, color: Colors.white70, size: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SearchScreen()),
+                            );
+                          },
+                          icon: const Icon(Icons.search, color: Colors.white70, size: 30),
+                        ),
+                        const SizedBox(width: 40),
+                        IconButton(
+                          onPressed: _refreshWeather,
+                          icon: const Icon(Icons.refresh, color: Colors.white70, size: 30),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -151,19 +165,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   List<Color> _getGradientColors(int? code) {
-    // 날씨 상태에 따른 부드러운 배경색 변경
     if (code == null || code == 0) {
-      return [const Color(0xFF4facfe), const Color(0xFF00f2fe)]; // 맑음 (블루)
+      return [const Color(0xFF4facfe), const Color(0xFF00f2fe)];
     }
     if (code <= 3) {
-      return [const Color(0xFF6a11cb), const Color(0xFF2575fc)]; // 구름 (퍼플/블루)
+      return [const Color(0xFF6a11cb), const Color(0xFF2575fc)];
     }
     if (code >= 51 && code <= 65) {
-      return [const Color(0xFF485563), const Color(0xFF29323c)]; // 비 (그레이/차콜)
+      return [const Color(0xFF485563), const Color(0xFF29323c)];
     }
     if (code >= 71 && code <= 75) {
-      return [const Color(0xFFe6e9f0), const Color(0xFFeef1f5)]; // 눈 (연그레이)
+      return [const Color(0xFFe6e9f0), const Color(0xFFeef1f5)];
     }
-    return [const Color(0xFF1e3c72), const Color(0xFF2a5298)]; // 기본 (네이비)
+    return [const Color(0xFF1e3c72), const Color(0xFF2a5298)];
   }
 }

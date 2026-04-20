@@ -26,20 +26,14 @@ class WeatherApiSource {
     }
   }
 
-  // 도시 이름을 기반으로 위도, 경도 및 장소 정보를 검색함
-  Future<Map<String, dynamic>> searchLocation(String query) async {
-    final url = Uri.parse('$_geocodingUrl?name=$query&count=1&language=ko&format=json');
+  // 도시 이름을 기반으로 여러 장소 정보를 검색함
+  Future<List<dynamic>> searchLocation(String query) async {
+    final url = Uri.parse('$_geocodingUrl?name=$query&count=5&language=ko&format=json');
     final response = await _client.get(url);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as Map<String, dynamic>;
-      final results = data['results'] as List<dynamic>?;
-
-      if (results != null && results.isNotEmpty) {
-        return results[0] as Map<String, dynamic>;
-      } else {
-        throw Exception('위치를 찾을 수 없습니다.');
-      }
+      return data['results'] as List<dynamic>? ?? [];
     } else {
       throw Exception('위치 검색에 실패했습니다.');
     }

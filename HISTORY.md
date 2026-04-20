@@ -16,11 +16,13 @@
 - 클린 아키텍처 기반 폴더 구조 설계 및 데이터 레이어 구현 완료.
 - 프리젠테이션 레이어(UI) 및 상태 관리(Riverpod) 기본 구현 완료.
 - 상태바 알림 기능 구현 및 날씨 데이터 연동 완료.
+- 위치 검색 기능(`SearchScreen`) 추가 및 전반적인 UI 디자인 개선 완료.
 
-## [2026-04-20] 상태바 알림 구현 및 백그라운드 연동 준비
+## [2026-04-20] 위치 검색 기능 추가 및 UI 고도화
 
 ### 작업 내용
-- `NotificationService` 구현 (`flutter_local_notifications` 활용).
-- 상태바에 현재 위치, 날씨(최저/최고), 아이콘을 표시하는 지속 알림 기능 추가.
-- `WeatherNotifier`와 연동하여 날씨 정보 갱신 시 알림 자동 업데이트.
-- `main.dart` 앱 초기화 시점에 알림 서비스 초기화 로직 추가.
+- `SearchScreen` 구현 (도시 이름 기반 위치 검색 및 선택 기능).
+- Open-Meteo Geocoding API 연동 (`searchLocation` 메서드 확장).
+- `searchResultsProvider` 및 `SearchNotifier` 추가.
+- `HomeScreen` 레이아웃 개선 (검색 및 새로고침 버튼 배치).
+- 날씨 상태에 따른 동적 그라데이션 배경 로직 정교화.

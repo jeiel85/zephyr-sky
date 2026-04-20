@@ -54,3 +54,30 @@ final weatherStateProvider = StateNotifierProvider<WeatherNotifier, AsyncValue<W
   final repository = ref.watch(weatherRepositoryProvider);
   return WeatherNotifier(repository, ref);
 });
+
+// 검색 결과를 관리하는 Notifier
+class SearchNotifier extends StateNotifier<AsyncValue<List<dynamic>>> {
+  final WeatherRepository _repository;
+
+  SearchNotifier(this._repository) : super(const AsyncValue.data([]));
+
+  Future<void> search(String query) async {
+    if (query.isEmpty) {
+      state = const AsyncValue.data([]);
+      return;
+    }
+    state = const AsyncValue.loading();
+    try {
+      final results = await _repository.searchLocation(query);
+      state = AsyncValue.data(results);
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+  }
+}
+
+// 검색 결과 프로바이더
+final searchResultsProvider = StateNotifierProvider<SearchNotifier, AsyncValue<List<dynamic>>>((ref) {
+  final repository = ref.watch(weatherRepositoryProvider);
+  return SearchNotifier(repository);
+});

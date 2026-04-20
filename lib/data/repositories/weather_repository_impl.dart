@@ -13,7 +13,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> searchLocation(String query) {
+  Future<List<dynamic>> searchLocation(String query) {
     return _apiSource.searchLocation(query);
   }
 }
