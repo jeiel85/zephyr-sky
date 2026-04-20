@@ -24,6 +24,10 @@ subprojects {
             if (android.namespace == null) {
                 android.namespace = "com.example.${project.name.replace("-", "_")}"
             }
+            
+            // 모든 하위 프로젝트의 SDK 버전을 36으로 강제 고정
+            android.compileSdkVersion(36)
+            android.defaultConfig.targetSdkVersion(36)
         }
     }
 
