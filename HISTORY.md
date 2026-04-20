@@ -13,9 +13,13 @@
 - Flutter 기본 템플릿 프로젝트가 생성됨.
 - 로컬 `D:\flutter` 경로의 SDK를 연동함.
 - `http`, `geolocator`, `flutter_riverpod`, `isar`, `flutter_local_notifications` 등 주요 패키지 설치 완료.
+- 클린 아키텍처 기반 폴더 구조 설계 및 데이터 레이어 기본 구현 완료.
 
 ## [2026-04-20] 데이터 레이어 설계 및 API 연동 준비
 
 ### 작업 내용
 - `pubspec.yaml`에 외부 라이브러리 의존성 추가 및 설치 완료.
 - 클린 아키텍처(Clean Architecture) 기반 폴더 구조 설계.
+- `Weather` 엔티티 및 `WeatherModel` 구현 (JSON 파싱 로직 포함).
+- `WeatherApiSource`를 통한 Open-Meteo API 연동 구현.
+- `WeatherRepository` 인터페이스 및 구현체(`WeatherRepositoryImpl`) 작성.
