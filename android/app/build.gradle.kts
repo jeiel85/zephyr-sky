@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.open_weather"
-    compileSdk = 34
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
