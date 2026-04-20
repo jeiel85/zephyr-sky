@@ -15,6 +15,7 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 
@@ -24,14 +25,12 @@ subprojects {
             if (android.namespace == null) {
                 android.namespace = "com.example.${project.name.replace("-", "_")}"
             }
-            
-            // 모든 하위 프로젝트의 SDK 버전을 36으로 강제 고정
             android.compileSdkVersion(36)
             android.defaultConfig.targetSdkVersion(36)
         }
     }
 
-    // preBuild 태스크 시점에 Manifest 파일 수정 (afterEvaluate 없이 구현)
+    // 1. AndroidManifest.xml에서 package 속성 제거 (AGP 8.0+ 대응)
     tasks.withType<com.android.build.gradle.tasks.GenerateResValues>().configureEach {
         val manifestFile = file("src/main/AndroidManifest.xml")
         if (manifestFile.exists()) {
@@ -39,6 +38,22 @@ subprojects {
             if (content.contains("package=")) {
                 val updatedContent = content.replace(Regex("package=\"[^\"]*\""), "")
                 manifestFile.writeText(updatedContent)
+            }
+        }
+    }
+
+    // 2. lStar 리소스 오류 강제 해결 (mergeResources 태스크 이후 실행)
+    project.tasks.whenTaskAdded {
+        if (name.startsWith("merge") && name.endsWith("Resources")) {
+            doLast {
+                val valuesFiles = fileTree(mapOf("dir" to "build/intermediates/merged_res", "include" to "**/values.xml"))
+                valuesFiles.forEach { file ->
+                    val content = file.readText()
+                    if (content.contains("android:attr/lStar")) {
+                        val updatedContent = content.replace(Regex("<item name=\"android:attr/lStar\">.*?</item>"), "")
+                        file.writeText(updatedContent)
+                    }
+                }
             }
         }
     }
