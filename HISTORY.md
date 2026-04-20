@@ -17,12 +17,16 @@
 - 프리젠테이션 레이어(UI) 및 상태 관리(Riverpod) 기본 구현 완료.
 - 상태바 알림 기능 구현 및 날씨 데이터 연동 완료.
 - 위치 검색 기능(`SearchScreen`) 추가 및 전반적인 UI 디자인 개선 완료.
+- 시간별/일별 상세 예보 기능 및 동적 배경색 정교화 완료.
+- F-Droid 메타데이터 작성 및 빌드 환경 설정 최적화 완료.
 
-## [2026-04-20] 위치 검색 기능 추가 및 UI 고도화
+## [2026-04-20] 예보 기능 추가 및 배포 준비 (최종 마무리)
 
 ### 작업 내용
-- `SearchScreen` 구현 (도시 이름 기반 위치 검색 및 선택 기능).
-- Open-Meteo Geocoding API 연동 (`searchLocation` 메서드 확장).
-- `searchResultsProvider` 및 `SearchNotifier` 추가.
-- `HomeScreen` 레이아웃 개선 (검색 및 새로고침 버튼 배치).
-- 날씨 상태에 따른 동적 그라데이션 배경 로직 정교화.
+- `HourlyWeather`, `DailyWeather` 엔티티 및 모델링 확장.
+- Open-Meteo API 호출 범위 확대 (향후 24시간 및 주간 예보 데이터 포함).
+- `HomeScreen` 고도화 (시간별/일별 예보 리스트 추가, 스크롤 뷰 구성).
+- 안드로이드 빌드 오류(네임스페이스 미지정) 해결을 위한 `build.gradle.kts` 수정.
+- `fastlane/metadata` 구성을 통한 F-Droid/Play 스토어 배포 준비.
+- 프로젝트 빌드 가이드 및 기술 스택을 명시한 `README.md` 최종 업데이트.
+- MIT 라이선스 적용 및 소스 코드 최종 정리.
