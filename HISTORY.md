@@ -36,6 +36,8 @@
 ### 작업 내용
 - `android/app/proguard-rules.pro`에 `com.google.android.play.core` 관련 경고 무시(-dontwarn) 규칙 추가하여 R8 빌드 에러 해결.
 - `pubspec.yaml` 버전을 1.0.5로 업데이트하여 신규 릴리즈 시도.
+- **최종 검증 완료**: GitHub Actions 빌드 성공 및 릴리즈 APK 실기기 동작 확인 완료.
+- **저장소 정리**: 중복된 Draft 릴리즈 삭제 및 최신 버전(v1.0.5) 중심 릴리즈 페이지 최적화.
 
 ## [2026-04-21] GitHub Actions 빌드 최적화 및 v1.0.4 출시
 
