@@ -49,4 +49,5 @@
     - 블루 그라데이션 및 화이트 태양 심볼을 활용한 현대적 디자인 적용.
     - `flutter_launcher_icons`를 통한 Android/iOS 아이콘 자동화 구축.
 - **GitHub Actions 자동 빌드(CI/CD) 도입 및 v1.0.3 릴리즈 진행.**
+    - APK 및 AAB(App Bundle) 동시 자동 빌드 설정 구축.
 - **프로젝트 핵심 기능 명세 구현 완료.**
