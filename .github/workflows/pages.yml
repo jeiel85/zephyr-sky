@@ -5,8 +5,9 @@ on:
     branches:
       - main
     paths:
-      - 'website/**' # website 폴더 변경 시에만 실행
+      - 'website/**'
       - '.github/workflows/pages.yml'
+  workflow_dispatch: # 수동 실행 가능하도록 추가
 
 permissions:
   contents: read
@@ -23,10 +24,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: List files for debugging
+        run: ls -R website
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: website # 배포할 폴더 경로
+          path: website
 
       - name: Deploy to GitHub Pages
         id: deployment
