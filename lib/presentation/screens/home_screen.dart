@@ -24,8 +24,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // 1. 먼저 캐시된 데이터 로드 (빠른 화면 표시)
     await ref.read(weatherStateProvider.notifier).loadCachedWeather();
     
-    // 2. 새로운 데이터 요청
-    _refreshWeather();
+    // 2. 마지막으로 확인한 위치 정보가 있는지 확인
+    final repository = ref.read(weatherRepositoryProvider);
+    final lastLocation = await repository.getLastLocation();
+    
+    if (lastLocation != null) {
+      // 마지막 위치가 있으면 해당 위치 날씨 새로고침
+      await ref.read(weatherStateProvider.notifier).fetchWeather(
+        lastLocation['lat'], 
+        lastLocation['lon'], 
+        lastLocation['name']
+      );
+    } else {
+      // 마지막 위치가 없으면 현재 위치 기반으로 새로고침
+      _refreshWeather();
+    }
   }
 
   Future<void> _refreshWeather() async {
