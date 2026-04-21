@@ -51,7 +51,7 @@ class OpenWeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Open Weather',
+      title: 'Zephyr Sky',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

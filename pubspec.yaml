@@ -1,8 +1,8 @@
-name: open_weather
-description: "A new Flutter project."
+name: zephyr_sky
+description: "Minimalist Weather App with beautiful gradients."
 publish_to: 'none'
 
-version: 1.0.2+3
+version: 1.0.0+1
 
 environment:
   sdk: ^3.0.0
