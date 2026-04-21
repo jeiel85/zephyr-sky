@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build and Release APK
+    name: Build and Release APK & AAB
     runs-on: ubuntu-latest
     
     steps:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.4'
+          flutter-version: '3.22.2'
           channel: 'stable'
           cache: true
 
@@ -31,7 +31,7 @@ jobs:
         run: flutter pub get
 
       - name: Generate App Icons
-        run: flutter pub run flutter_launcher_icons:main
+        run: dart run flutter_launcher_icons
 
       - name: Build APK
         run: flutter build apk --release --build-number=${{ github.run_number }}
