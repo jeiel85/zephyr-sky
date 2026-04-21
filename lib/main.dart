@@ -10,20 +10,32 @@ void main() async {
   // 플러그인 초기화를 위해 필요
   WidgetsFlutterBinding.ensureInitialized();
   
-  // 날짜 포맷팅 초기화 (ko_KR 로케일 지원)
-  await initializeDateFormatting('ko_KR', null);
+  SharedPreferences? sharedPreferences;
+
+  try {
+    // 날짜 포맷팅 초기화 (ko_KR 로케일 지원)
+    await initializeDateFormatting('ko_KR', null);
+    
+    // SharedPreferences 초기화
+    sharedPreferences = await SharedPreferences.getInstance();
+  } catch (e) {
+    debugPrint('기본 초기화 오류: $e');
+  }
   
-  // SharedPreferences 초기화
-  final sharedPreferences = await SharedPreferences.getInstance();
-  
-  // 프로바이더 컨테이너 초기 생성 및 알림 서비스 초기화
+  // 프로바이더 컨테이너 초기 생성
   final container = ProviderContainer(
     overrides: [
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      if (sharedPreferences != null)
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
     ],
   );
   
-  await container.read(notificationServiceProvider).init();
+  try {
+    // 알림 서비스 초기화 (앱 실행을 방해하지 않도록 try-catch 보호)
+    await container.read(notificationServiceProvider).init();
+  } catch (e) {
+    debugPrint('서비스 초기화 오류: $e');
+  }
   
   runApp(
     UncontrolledProviderScope(
