@@ -27,19 +27,42 @@ class Weather {
     required this.dailyForecast,
   });
 
-  String get weatherDescription => getWeatherDescription(weatherCode);
+  Map<String, dynamic> toMap() {
+    return {
+      'temperature': temperature,
+      'weatherCode': weatherCode,
+      'humidity': humidity,
+      'windSpeed': windSpeed,
+      'apparentTemperature': apparentTemperature,
+      'isDay': isDay,
+      'maxTemp': maxTemp,
+      'minTemp': minTemp,
+      'locationName': locationName,
+      'time': time.toIso8601String(),
+      'hourlyForecast': hourlyForecast.map((x) => x.toMap()).toList(),
+      'dailyForecast': dailyForecast.map((x) => x.toMap()).toList(),
+    };
+  }
 
-  static String getWeatherDescription(int code) {
-    switch (code) {
-      case 0: return '맑음';
-      case 1: case 2: case 3: return '대체로 맑음';
-      case 45: case 48: return '안개';
-      case 51: case 53: case 55: return '이슬비';
-      case 61: case 63: case 65: return '비';
-      case 71: case 73: case 75: return '눈';
-      case 95: return '뇌우';
-      default: return '알 수 없음';
-    }
+  factory Weather.fromMap(Map<String, dynamic> map) {
+    return Weather(
+      temperature: map['temperature']?.toDouble() ?? 0.0,
+      weatherCode: map['weatherCode']?.toInt() ?? 0,
+      humidity: map['humidity']?.toDouble() ?? 0.0,
+      windSpeed: map['windSpeed']?.toDouble() ?? 0.0,
+      apparentTemperature: map['apparent_temperature']?.toDouble() ?? 0.0,
+      isDay: map['isDay'] ?? true,
+      maxTemp: map['maxTemp']?.toDouble() ?? 0.0,
+      minTemp: map['minTemp']?.toDouble() ?? 0.0,
+      locationName: map['locationName'] ?? '',
+      time: DateTime.parse(map['time']),
+      hourlyForecast: List<HourlyWeather>.from(
+        map['hourlyForecast']?.map((x) => HourlyWeather.fromMap(x)) ?? [],
+      ),
+      dailyForecast: List<DailyWeather>.from(
+        map['dailyForecast']?.map((x) => DailyWeather.fromMap(x)) ?? [],
+      ),
+    );
   }
 }
 
@@ -53,6 +76,22 @@ class HourlyWeather {
     required this.temperature,
     required this.weatherCode,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'time': time.toIso8601String(),
+      'temperature': temperature,
+      'weatherCode': weatherCode,
+    };
+  }
+
+  factory HourlyWeather.fromMap(Map<String, dynamic> map) {
+    return HourlyWeather(
+      time: DateTime.parse(map['time']),
+      temperature: map['temperature']?.toDouble() ?? 0.0,
+      weatherCode: map['weatherCode']?.toInt() ?? 0,
+    );
+  }
 }
 
 class DailyWeather {
@@ -67,4 +106,22 @@ class DailyWeather {
     required this.minTemp,
     required this.weatherCode,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'time': time.toIso8601String(),
+      'maxTemp': maxTemp,
+      'minTemp': minTemp,
+      'weatherCode': weatherCode,
+    };
+  }
+
+  factory DailyWeather.fromMap(Map<String, dynamic> map) {
+    return DailyWeather(
+      time: DateTime.parse(map['time']),
+      maxTemp: map['maxTemp']?.toDouble() ?? 0.0,
+      minTemp: map['minTemp']?.toDouble() ?? 0.0,
+      weatherCode: map['weatherCode']?.toInt() ?? 0,
+    );
+  }
 }

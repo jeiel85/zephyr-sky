@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/providers/weather_provider.dart';
 import 'presentation/screens/home_screen.dart';
 
@@ -8,8 +9,16 @@ void main() async {
   // 플러그인 초기화를 위해 필요
   WidgetsFlutterBinding.ensureInitialized();
   
+  // SharedPreferences 초기화
+  final sharedPreferences = await SharedPreferences.getInstance();
+  
   // 프로바이더 컨테이너 초기 생성 및 알림 서비스 초기화
-  final container = ProviderContainer();
+  final container = ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ],
+  );
+  
   await container.read(notificationServiceProvider).init();
   
   runApp(

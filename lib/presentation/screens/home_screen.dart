@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../core/utils/weather_helper.dart';
 import '../providers/weather_provider.dart';
 import '../../domain/entities/weather.dart';
 import 'search_screen.dart';
@@ -16,7 +17,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => _refreshWeather());
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    // 1. 먼저 캐시된 데이터 로드 (빠른 화면 표시)
+    await ref.read(weatherStateProvider.notifier).loadCachedWeather();
+    
+    // 2. 새로운 데이터 요청
+    _refreshWeather();
   }
 
   Future<void> _refreshWeather() async {
@@ -31,12 +40,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        // 데이터가 아예 없는 경우에만 에러 표시 (이미 캐시가 있으면 조용히 실패 가능)
+        if (ref.read(weatherStateProvider).value == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.toString()),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     }
   }
@@ -44,6 +56,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final weatherState = ref.watch(weatherStateProvider);
+    final weather = weatherState.value;
 
     return Scaffold(
       body: Container(
@@ -53,7 +66,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: _getGradientColors(weatherState.value?.weatherCode),
+            colors: WeatherHelper.getGradientColors(
+              weather?.weatherCode ?? 0, 
+              isDay: weather?.isDay ?? true
+            ),
           ),
         ),
         child: SafeArea(
@@ -90,10 +106,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               );
             },
-            loading: () => const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            ),
-            error: (err, stack) => _buildErrorView(err),
+            loading: () => weather != null 
+              ? _buildWeatherContent(weather) // 데이터가 있으면 로딩 중에도 이전 데이터 표시
+              : const Center(child: CircularProgressIndicator(color: Colors.white)),
+            error: (err, stack) => weather != null
+              ? _buildWeatherContent(weather) // 에러나도 데이터 있으면 표시
+              : _buildErrorView(err),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeatherContent(Weather weather) {
+    return RefreshIndicator(
+      onRefresh: _refreshWeather,
+      color: Colors.blue,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              _buildHeader(weather),
+              const SizedBox(height: 60),
+              _buildCurrentWeather(weather),
+              const SizedBox(height: 60),
+              _buildHourlyForecast(weather.hourlyForecast),
+              const SizedBox(height: 40),
+              _buildDailyForecast(weather.dailyForecast),
+              const SizedBox(height: 40),
+              _buildFooterActions(context),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),
@@ -126,7 +172,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildCurrentWeather(Weather weather) {
     return Column(
       children: [
-        const Icon(Icons.wb_sunny_rounded, size: 80, color: Colors.white),
+        Icon(
+          WeatherHelper.getIcon(weather.weatherCode, isDay: weather.isDay), 
+          size: 80, 
+          color: Colors.white
+        ),
         const SizedBox(height: 10),
         Text(
           '${weather.temperature.round()}°',
@@ -137,7 +187,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         Text(
-          weather.weatherDescription,
+          WeatherHelper.getDescription(weather.weatherCode),
           style: const TextStyle(
             fontSize: 24, 
             color: Colors.white,
@@ -166,7 +216,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         const SizedBox(height: 16),
         Container(
-          height: 120,
+          height: 130,
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.1),
             borderRadius: BorderRadius.circular(20),
@@ -186,7 +236,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       style: const TextStyle(color: Colors.white70, fontSize: 14),
                     ),
                     const SizedBox(height: 8),
-                    const Icon(Icons.wb_cloudy_outlined, color: Colors.white, size: 24),
+                    Icon(
+                      WeatherHelper.getIcon(item.weatherCode), 
+                      color: Colors.white, 
+                      size: 28
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       '${item.temperature.round()}°',
@@ -230,8 +284,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         style: const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
-                    const Expanded(
-                      child: Icon(Icons.wb_sunny_outlined, color: Colors.white, size: 24),
+                    Expanded(
+                      child: Icon(
+                        WeatherHelper.getIcon(day.weatherCode), 
+                        color: Colors.white, 
+                        size: 24
+                      ),
                     ),
                     Expanded(
                       flex: 2,
@@ -281,17 +339,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           const Icon(Icons.error_outline, size: 60, color: Colors.white),
           const SizedBox(height: 16),
           const Text('날씨 정보를 가져올 수 없습니다.', style: TextStyle(color: Colors.white, fontSize: 18)),
+          const SizedBox(height: 8),
+          Text(
+            err.toString(), 
+            style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
           TextButton(onPressed: _refreshWeather, child: const Text('다시 시도', style: TextStyle(color: Colors.white))),
         ],
       ),
     );
-  }
-
-  List<Color> _getGradientColors(int? code) {
-    if (code == null || code == 0) return [const Color(0xFF4facfe), const Color(0xFF00f2fe)];
-    if (code <= 3) return [const Color(0xFF6a11cb), const Color(0xFF2575fc)];
-    if (code >= 51 && code <= 65) return [const Color(0xFF485563), const Color(0xFF29323c)];
-    if (code >= 71 && code <= 75) return [const Color(0xFFe6e9f0), const Color(0xFFeef1f5)];
-    return [const Color(0xFF1e3c72), const Color(0xFF2a5298)];
   }
 }

@@ -27,8 +27,8 @@ class WeatherApiSource {
   }
 
   // 도시 이름을 기반으로 여러 장소 정보를 검색함
-  Future<List<dynamic>> searchLocation(String query) async {
-    final url = Uri.parse('$_geocodingUrl?name=$query&count=5&language=ko&format=json');
+  Future<List<dynamic>> searchLocation(String query, {String language = 'ko'}) async {
+    final url = Uri.parse('$_geocodingUrl?name=$query&count=5&language=$language&format=json');
     final response = await _client.get(url);
 
     if (response.statusCode == 200) {

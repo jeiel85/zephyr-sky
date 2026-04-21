@@ -1,11 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/repositories/weather_repository_impl.dart';
 import '../../data/sources/weather_api_source.dart';
 import '../../domain/entities/weather.dart';
 import '../../core/utils/location_service.dart';
 import '../../core/utils/notification_service.dart';
 import '../../domain/repositories/weather_repository.dart';
+
+// SharedPreferences 프로바이더 (main.dart에서 override 필수)
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError();
+});
 
 // 위치 서비스 프로바이더
 final locationServiceProvider = Provider((ref) => LocationService());
@@ -25,7 +31,8 @@ final weatherApiSourceProvider = Provider((ref) {
 // 레파지토리 프로바이더
 final weatherRepositoryProvider = Provider<WeatherRepository>((ref) {
   final apiSource = ref.watch(weatherApiSourceProvider);
-  return WeatherRepositoryImpl(apiSource);
+  final prefs = ref.watch(sharedPreferencesProvider);
+  return WeatherRepositoryImpl(apiSource, prefs);
 });
 
 // 날씨 상태를 관리하는 Notifier
@@ -34,6 +41,15 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
   final Ref _ref;
 
   WeatherNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
+
+  Future<void> loadCachedWeather() async {
+    final cached = await _repository.getCachedWeather();
+    if (cached != null) {
+      state = AsyncValue.data(cached);
+      // 캐시된 데이터가 있으면 알림도 업데이트
+      await _ref.read(notificationServiceProvider).showWeatherNotification(cached);
+    }
+  }
 
   Future<void> fetchWeather(double lat, double lon, String locationName) async {
     state = const AsyncValue.loading();

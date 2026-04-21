@@ -1,5 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../domain/entities/weather.dart';
+import 'weather_helper.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -16,7 +17,7 @@ class NotificationService {
   }
 
   Future<void> showWeatherNotification(Weather weather) async {
-    final String contentTitle = '${weather.locationName} 날씨';
+    final String contentTitle = '${weather.locationName} (${WeatherHelper.getDescription(weather.weatherCode)})';
     final String contentText = 
         '현재: ${weather.temperature.round()}° (최저: ${weather.minTemp.round()}° / 최고: ${weather.maxTemp.round()}°)';
 
