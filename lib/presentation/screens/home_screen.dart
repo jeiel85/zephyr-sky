@@ -96,34 +96,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               return RefreshIndicator(
                 onRefresh: _refreshWeather,
                 color: Colors.blue,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 40),
-                        _buildHeader(weather),
-                        const SizedBox(height: 60),
-                        _buildCurrentWeather(weather),
-                        const SizedBox(height: 60),
-                        _buildHourlyForecast(weather.hourlyForecast),
-                        const SizedBox(height: 40),
-                        _buildDailyForecast(weather.dailyForecast),
-                        const SizedBox(height: 40),
-                        _buildFooterActions(context),
-                        const SizedBox(height: 40),
-                      ],
-                    ),
-                  ),
-                ),
+                child: _buildWeatherContent(weather),
               );
             },
             loading: () => weather != null 
-              ? _buildWeatherContent(weather) // 데이터가 있으면 로딩 중에도 이전 데이터 표시
+              ? RefreshIndicator(
+                  onRefresh: _refreshWeather,
+                  color: Colors.blue,
+                  child: _buildWeatherContent(weather),
+                )
               : const Center(child: CircularProgressIndicator(color: Colors.white)),
             error: (err, stack) => weather != null
-              ? _buildWeatherContent(weather) // 에러나도 데이터 있으면 표시
+              ? RefreshIndicator(
+                  onRefresh: _refreshWeather,
+                  color: Colors.blue,
+                  child: _buildWeatherContent(weather),
+                )
               : _buildErrorView(err),
           ),
         ),
@@ -145,7 +133,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _buildHeader(weather),
               const SizedBox(height: 60),
               _buildCurrentWeather(weather),
-              const SizedBox(height: 60),
+              const SizedBox(height: 40),
+              _buildWeatherDetails(weather),
+              const SizedBox(height: 40),
               _buildHourlyForecast(weather.hourlyForecast),
               const SizedBox(height: 40),
               _buildDailyForecast(weather.dailyForecast),
@@ -211,6 +201,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             color: Colors.white.withOpacity(0.8),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildWeatherDetails(Weather weather) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildDetailItem(Icons.water_drop_outlined, '습도', '${weather.humidity.round()}%'),
+          _buildDetailItem(Icons.air, '풍속', '${weather.windSpeed.round()}km/h'),
+          _buildDetailItem(Icons.thermostat_outlined, '체감', '${weather.apparentTemperature.round()}°'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailItem(IconData icon, String label, String value) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.white70, size: 24),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(color: Colors.white60, fontSize: 12)),
+        const SizedBox(height: 4),
+        Text(value, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
       ],
     );
   }
