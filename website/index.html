@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Weather - Minimalist Weather App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            --text-color: #ffffff;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-color);
+            height: 100%;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        header {
+            padding: 100px 0 50px;
+        }
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 28px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .app-icon svg {
+            width: 80px;
+            height: 80px;
+            fill: #2193b0;
+        }
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 100;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        p.tagline {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.8;
+            margin-bottom: 50px;
+        }
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-white {
+            background: white;
+            color: #2193b0;
+        }
+        .btn-white:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 50px 0;
+            text-align: left;
+        }
+        .feature-item h3 {
+            font-weight: 400;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+        .feature-item p {
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0.7;
+        }
+        footer {
+            padding: 50px 0;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+            </div>
+            <h1>Open Weather</h1>
+            <p class="tagline">당신의 하루를 가볍게, 미니멀 날씨 앱</p>
+            
+            <div class="download-buttons">
+                <a href="https://github.com/jeiel85/open-weather/releases/latest/download/app-release.apk" class="btn btn-white">
+                    APK 다운로드
+                </a>
+                <a href="https://github.com/jeiel85/open-weather/releases/latest/download/app-release.aab" class="btn btn-outline">
+                    AAB (Play Store)
+                </a>
+                <a href="https://github.com/jeiel85/open-weather/releases/latest" class="btn btn-outline">
+                    릴리즈 정보
+                </a>
+            </div>
+        </header>
+
+        <div class="features">
+            <div class="feature-item">
+                <h3>미니멀리즘 디자인</h3>
+                <p>복잡한 정보는 걷어내고, 지금 당신에게 꼭 필요한 날씨 정보만 아름다운 그라데이션과 함께 담았습니다.</p>
+            </div>
+            <div class="feature-item">
+                <h3>정교한 위치 정보</h3>
+                <p>현재 위치 기반은 물론, 전 세계 어디든 당신이 궁금한 도시의 날씨를 마지막 위치 저장 기능과 함께 즉시 확인하세요.</p>
+            </div>
+            <div class="feature-item">
+                <h3>스마트 알림</h3>
+                <p>앱을 열지 않아도 상태바 알림을 통해 실시간 날씨 변화를 감지할 수 있습니다.</p>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Open Weather Project. Designed for simplicity.
+        </footer>
+    </div>
+</body>
+</html>

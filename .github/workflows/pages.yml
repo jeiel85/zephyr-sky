@@ -1,9 +1,12 @@
-name: Deploy to GitHub Pages
+name: Deploy Brand Page to GitHub Pages
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'website/**' # website 폴더 변경 시에만 실행
+      - '.github/workflows/pages.yml'
 
 permissions:
   contents: read
@@ -11,36 +14,20 @@ permissions:
   id-token: write
 
 jobs:
-  build-web:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Web
-        run: flutter build web --base-href "/open-weather/" --release
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/web
-
   deploy:
-    needs: build-web
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website # 배포할 폴더 경로
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
