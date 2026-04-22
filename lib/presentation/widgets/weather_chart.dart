@@ -36,8 +36,9 @@ class WeatherChart extends StatelessWidget {
       height: 220,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,6 +49,7 @@ class WeatherChart extends StatelessWidget {
               color: Colors.white, 
               fontSize: 16, 
               fontWeight: FontWeight.bold,
+              shadows: [Shadow(offset: Offset(0, 1), blurRadius: 3.0, color: Colors.black38)],
             ),
           ),
           const SizedBox(height: 16),
@@ -83,8 +85,9 @@ class WeatherChart extends StatelessWidget {
                             child: Text(
                               '${hour}시',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
-                                fontSize: 11,
+                                color: Colors.white.withOpacity(0.8),
+                                fontSize: 12,
+                                shadows: [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
                               ),
                             ),
                           );
@@ -102,8 +105,9 @@ class WeatherChart extends StatelessWidget {
                         return Text(
                           '${value.round()}°',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 11,
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 12,
+                            shadows: [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
                           ),
                         );
                       },
@@ -215,8 +219,9 @@ class PrecipitationChart extends StatelessWidget {
       height: 180,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,6 +236,7 @@ class PrecipitationChart extends StatelessWidget {
                   color: Colors.white, 
                   fontSize: 16, 
                   fontWeight: FontWeight.bold,
+                  shadows: [Shadow(offset: Offset(0, 1), blurRadius: 3.0, color: Colors.black38)],
                 ),
               ),
             ],
@@ -247,7 +253,7 @@ class PrecipitationChart extends StatelessWidget {
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
                         '${rod.toY.round()}%',
-                        const TextStyle(color: Colors.white),
+                        const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                       );
                     },
                   ),
@@ -269,8 +275,9 @@ class PrecipitationChart extends StatelessWidget {
                             child: Text(
                               '${hour}시',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
-                                fontSize: 11,
+                                color: Colors.white.withOpacity(0.8),
+                                fontSize: 12,
+                                shadows: [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
                               ),
                             ),
                           );
@@ -288,8 +295,9 @@ class PrecipitationChart extends StatelessWidget {
                         return Text(
                           '${value.toInt()}%',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 11,
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 12,
+                            shadows: [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
                           ),
                         );
                       },
