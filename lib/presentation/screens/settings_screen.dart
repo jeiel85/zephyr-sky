@@ -132,7 +132,7 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.info_outline, color: Colors.grey),
                 title: const Text('Zephyr Sky'),
-                subtitle: const Text('버전 1.1.0'),
+                subtitle: const Text('버전 1.2.0'),
               ),
               const Divider(),
               ListTile(
