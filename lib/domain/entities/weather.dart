@@ -132,16 +132,6 @@ class Weather {
     return '야외 활동을 자제해 주세요';
   }
 
-  /// 야외 활동 추천 메시지
-  String get outdoorActivityMessage {
-    final score = outdoorActivityScore;
-    if (score >= 80) return '야외 활동하기 좋은 날씨입니다!';
-    if (score >= 60) return '평소보다稍량 좋습니다';
-    if (score >= 40) return '야외 활동时 주의가 필요합니다';
-    if (score >= 20) return '야외活動에不建议합니다';
-    return '야외 활동을 자제해 주세요';
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'temperature': temperature,
