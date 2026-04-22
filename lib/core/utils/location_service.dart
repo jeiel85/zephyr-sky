@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class LocationService {
   Future<Position> getCurrentPosition() async {
@@ -24,9 +25,24 @@ class LocationService {
       throw Exception('위치 권한이 영구적으로 거부되었습니다. 설정에서 직접 허용해 주세요.');
     } 
 
-    // 현재 위치 가져오기 (FOSS 준수를 위해 기본 설정 사용)
+    // 현재 위치 가져오기
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.medium,
     );
+  }
+
+  // 위도, 경도를 주소로 변환 (역지오코딩)
+  Future<String?> getAddressFromLatLng(double lat, double lon) async {
+    try {
+      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon, localeIdentifier: 'ko_KR');
+      if (placemarks.isNotEmpty) {
+        final Placemark place = placemarks.first;
+        // 행정구역(subLocality) 또는 도시명(locality) 반환
+        return place.subLocality ?? place.locality ?? place.name;
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
   }
 }

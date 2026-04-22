@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isDailyExpanded = false; // 주간 예보 펼침 상태
 
   @override
   void initState() {
@@ -71,10 +72,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     try {
       final locationService = ref.read(locationServiceProvider);
       final position = await locationService.getCurrentPosition();
+      
+      // 역지오코딩으로 지역명 가져오기
+      final address = await locationService.getAddressFromLatLng(position.latitude, position.longitude);
+      final locationLabel = address != null ? '현재 위치 ($address)' : '현재 위치';
+      
       await ref.read(weatherStateProvider.notifier).fetchWeather(
         position.latitude, 
         position.longitude, 
-        '현재 위치'
+        locationLabel
       );
     } catch (e) {
       if (mounted) {
@@ -487,69 +493,102 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildDailyForecast(List<DailyWeather> daily) {
-    // 너무 긴 리스트 방지 (최대 10일)
-    final displayList = daily.take(10).toList();
+    // 접혀있을 때는 3일, 펼쳐져있을 때는 전체(최대 10일) 표시
+    final displayList = _isDailyExpanded ? daily.take(10).toList() : daily.take(3).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Text('주간 예보', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('주간 예보', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              TextButton(
+                onPressed: () => setState(() => _isDailyExpanded = !_isDailyExpanded),
+                child: Text(
+                  _isDailyExpanded ? '접기' : '더보기',
+                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         _buildGlassCard(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Column(
-            children: displayList.map((day) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        DateFormat('E d일', 'ko_KR').format(day.time),
-                        style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w400, shadows: _textShadows),
+            children: [
+              ...displayList.map((day) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          DateFormat('E d일', 'ko_KR').format(day.time),
+                          style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w400, shadows: _textShadows),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Row(
-                        children: [
-                          Icon(WeatherHelper.getIcon(day.weatherCode), color: Colors.white, size: 24),
-                          if (day.precipitationProbability != null && day.precipitationProbability! > 0)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4),
-                              child: Text('${day.precipitationProbability!.round()}%', style: const TextStyle(color: Colors.lightBlueAccent, fontSize: 12, fontWeight: FontWeight.bold)),
-                            ),
-                        ],
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            Icon(WeatherHelper.getIcon(day.weatherCode), color: Colors.white, size: 24),
+                            if (day.precipitationProbability != null && day.precipitationProbability! > 0)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Text(
+                                  '${day.precipitationProbability!.round()}%', 
+                                  style: const TextStyle(color: Colors.lightBlueAccent, fontSize: 13, fontWeight: FontWeight.w900, shadows: [Shadow(blurRadius: 2, color: Colors.black)]),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('${day.minTemp.round()}°', style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 16, shadows: _textShadows)),
-                          const SizedBox(width: 8),
-                          Container(
-                            width: 40,
-                            height: 4,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(colors: [Colors.blueAccent, Colors.orangeAccent]),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
+                      // UV 지수 복구
+                      if (day.uvIndex != null)
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.wb_sunny, color: Colors.amber, size: 14),
+                              const SizedBox(width: 4),
+                              Text(
+                                'UV ${day.uvIndex!.round()}',
+                                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold, shadows: _textShadows),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Text('${day.maxTemp.round()}°', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
-                        ],
+                        ),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('${day.minTemp.round()}°', style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16, shadows: _textShadows)),
+                            const SizedBox(width: 8),
+                            Container(
+                              width: 30,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(colors: [Colors.blueAccent, Colors.orangeAccent]),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text('${day.maxTemp.round()}°', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ],
           ),
         ),
       ],
