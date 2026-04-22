@@ -70,10 +70,19 @@ git add pubspec.yaml
 git commit -m "chore: 버전 X.X.X으로 업"
 git push origin main
 
-# 3. 태그 생성 및 푸시 (빌드 트리거 — 이 시점에 APK 빌드 시작)
+# 3. 태그 푸시 전 버전 검증 (필수)
+./scripts/check_version.sh vX.X.X
+
+# 4. 태그 생성 및 푸시 (빌드 트리거 — 이 시점에 APK 빌드 시작)
 git tag vX.X.X
 git push origin vX.X.X
 ```
+
+> **체크 스크립트가 하는 일:**
+> - `pubspec.yaml` 버전과 입력한 태그 이름 일치 여부 확인
+> - 커밋되지 않은 변경사항 존재 여부 확인
+> - 로컬 커밋이 `origin/main`에 반영됐는지 확인
+> - 모두 통과해야만 태그 푸시 안내 메시지 출력
 
 빌드 진행 상황: https://github.com/jeiel85/zephyr-sky/actions  
 릴리즈 페이지: https://github.com/jeiel85/zephyr-sky/releases
