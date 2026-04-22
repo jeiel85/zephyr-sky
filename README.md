@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Version](https://img.shields.io/badge/Version-1.1.0-blue?style=for-the-badge)
 
-**Sophisticated Minimalist Weather App with beautiful gradients**
+**아름다운 그라데이션을 갖춘 세련된 미니멀리스트 날씨 앱**
 
 *상위 날씨 앱 분석 기반의 종합 날씨 앱*
 
@@ -83,7 +83,7 @@
 
 ![Open-Meteo](https://img.shields.io/badge/Open--Meteo-FF6B35?style=flat-square&logo=open-meteo) **Open-Meteo API** - 무료 날씨 및 대기질 API
 
-*No API Key Required • 10,000 requests/day Free*
+*API 키 불필요 • 일일 10,000회 무료 요청*
 
 </div>
 
@@ -208,21 +208,21 @@ flutter test --coverage
 
 ## 📄 라이선스
 
-MIT License - See [LICENSE](LICENSE) for details.
+MIT 라이선스 - 상세 내용은 [LICENSE](LICENSE)를 참조하세요.
 
 ---
 
 ## 🙏 감사의 글
 
 - [Open-Meteo](https://open-meteo.com/) - 무료 날씨 API 제공
-- [Flutter](https://flutter.dev/) -素晴らしい 프레임워크
+- [Flutter](https://flutter.dev/) - 최고의 크로스 플랫폼 프레임워크
 - Contributors 및 사용자 여러분
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [Jeiel](https://github.com/jeiel85)**
+**❤️ [Jeiel](https://github.com/jeiel85)이 사랑을 담아 만들었습니다**
 
 *날씨가 당신의 하루를 밝게 비추기를 바랍니다 ☀️*
 
