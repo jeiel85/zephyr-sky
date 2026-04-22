@@ -6,6 +6,7 @@ import '../../data/sources/weather_api_source.dart';
 import '../../domain/entities/weather.dart';
 import '../../core/utils/location_service.dart';
 import '../../core/utils/notification_service.dart';
+import '../../core/utils/home_widget_service.dart';
 import '../../domain/repositories/weather_repository.dart';
 
 // SharedPreferences 프로바이더 (main.dart에서 override 필수)
@@ -48,6 +49,8 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
       state = AsyncValue.data(cached);
       // 캐시된 데이터가 있으면 알림도 업데이트
       await _ref.read(notificationServiceProvider).showWeatherNotification(cached);
+      // 위젯 업데이트
+      await HomeWidgetService.updateWidget(cached);
     }
   }
 
@@ -59,6 +62,8 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
       
       // 날씨 데이터를 성공적으로 가져오면 상태바 알림 업데이트
       await _ref.read(notificationServiceProvider).showWeatherNotification(weather);
+      // 홈 위젯 업데이트
+      await HomeWidgetService.updateWidget(weather);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }

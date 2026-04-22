@@ -76,6 +76,72 @@ class Weather {
     return '위험';
   }
 
+  /// 야외 활동 지수 (0-100, 높을수록 좋음)
+  int get outdoorActivityScore {
+    int score = 100;
+    
+    // 온도 점수 (-10°C ~ 35°C 최적)
+    if (temperature < 0) score -= 40;
+    else if (temperature < 10) score -= 20;
+    else if (temperature > 35) score -= 40;
+    else if (temperature > 30) score -= 20;
+    
+    // 강수 확률
+    if (precipitationProbability != null) {
+      score -= (precipitationProbability! * 0.5).round();
+    }
+    
+    // 자외선
+    if (uvIndex != null) {
+      if (uvIndex! >= 8) score -= 30;
+      else if (uvIndex! >= 6) score -= 15;
+      else if (uvIndex! >= 3) score -= 5;
+    }
+    
+    // 풍속 (50km/h 이상이면 위험)
+    if (windSpeed >= 50) score -= 30;
+    else if (windSpeed >= 30) score -= 15;
+    
+    // 대기질
+    if (airQualityIndex != null) {
+      if (airQualityIndex! > 150) score -= 30;
+      else if (airQualityIndex! > 100) score -= 15;
+      else if (airQualityIndex! > 50) score -= 5;
+    }
+    
+    return score.clamp(0, 100);
+  }
+
+/// 야외 활동 권장 등급
+  String get outdoorActivityLevel {
+    final score = outdoorActivityScore;
+    if (score >= 80) return '최상';
+    if (score >= 60) return '양호';
+    if (score >= 40) return '보통';
+    if (score >= 20) return '나쁨';
+    return '위험';
+  }
+
+  /// 야외 활동 추천 메시지
+  String get outdoorActivityMessage {
+    final score = outdoorActivityScore;
+    if (score >= 80) return '야외 활동하기 좋은 날씨입니다!';
+    if (score >= 60) return '평소보다 양호합니다';
+    if (score >= 40) return '야외 활동 시 주의가 필요합니다';
+    if (score >= 20) return '야외 활동에 권장하지 않습니다';
+    return '야외 활동을 자제해 주세요';
+  }
+
+  /// 야외 활동 추천 메시지
+  String get outdoorActivityMessage {
+    final score = outdoorActivityScore;
+    if (score >= 80) return '야외 활동하기 좋은 날씨입니다!';
+    if (score >= 60) return '평소보다稍량 좋습니다';
+    if (score >= 40) return '야외 활동时 주의가 필요합니다';
+    if (score >= 20) return '야외活動에不建议합니다';
+    return '야외 활동을 자제해 주세요';
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'temperature': temperature,

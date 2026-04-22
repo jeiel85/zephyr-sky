@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../core/utils/weather_helper.dart';
 import '../providers/weather_provider.dart';
+import '../providers/settings_provider.dart';
 import '../../domain/entities/weather.dart';
+import '../widgets/weather_chart.dart';
 import 'search_screen.dart';
 import 'settings_screen.dart';
 
@@ -121,6 +123,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildWeatherContent(Weather weather) {
+    final isDarkMode = ref.watch(settingsProvider).isDarkMode;
+    
     return RefreshIndicator(
       onRefresh: _refreshWeather,
       color: Colors.blue,
@@ -138,6 +142,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _buildWeatherDetails(weather),
               const SizedBox(height: 24),
               _buildExtendedWeatherInfo(weather),
+              const SizedBox(height: 24),
+              // 야외 활동 지수
+              _buildOutdoorActivity(weather),
+              const SizedBox(height: 40),
+              // 날씨 그래프 추가
+              WeatherChart(hourlyForecast: weather.hourlyForecast, isDarkMode: isDarkMode),
+              const SizedBox(height: 24),
+              PrecipitationChart(hourlyForecast: weather.hourlyForecast),
               const SizedBox(height: 40),
               _buildHourlyForecast(weather.hourlyForecast),
               const SizedBox(height: 40),
@@ -394,6 +406,79 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (aqi <= 200) return Colors.red;
     if (aqi <= 300) return Colors.purple;
     return Colors.brown;
+  }
+
+  // 야외 활동 지수 위젯
+  Widget _buildOutdoorActivity(Weather weather) {
+    final score = weather.outdoorActivityScore;
+    final level = weather.outdoorActivityLevel;
+    final message = weather.outdoorActivityMessage;
+    
+    Color scoreColor;
+    if (score >= 80) scoreColor = Colors.green;
+    else if (score >= 60) scoreColor = Colors.lightGreen;
+    else if (score >= 40) scoreColor = Colors.orange;
+    else if (score >= 20) scoreColor = Colors.deepOrange;
+    else scoreColor = Colors.red;
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.directions_run, color: Colors.amber, size: 24),
+              const SizedBox(width: 8),
+              const Text(
+                '야외 활동 지수',
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: scoreColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  level,
+                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // 진행 바
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: score / 100,
+              backgroundColor: Colors.white.withOpacity(0.2),
+              valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
+              minHeight: 10,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '점수: $score/100',
+                style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14),
+              ),
+              Text(
+                message,
+                style: TextStyle(color: scoreColor, fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildDetailItem(IconData icon, String label, String value, {Color? color}) {
