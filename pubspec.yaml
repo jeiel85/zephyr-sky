@@ -2,7 +2,7 @@ name: zephyr_sky
 description: "Minimalist Weather App with beautiful gradients."
 publish_to: 'none'
 
-version: 1.1.0+9
+version: 1.2.0+10
 
 environment:
   sdk: ^3.0.0
