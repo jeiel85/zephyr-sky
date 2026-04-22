@@ -5,6 +5,7 @@ import '../../core/utils/weather_helper.dart';
 import '../providers/weather_provider.dart';
 import '../../domain/entities/weather.dart';
 import 'search_screen.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -587,6 +588,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             );
           },
           icon: const Icon(Icons.search, color: Colors.white70, size: 32),
+        ),
+        const SizedBox(width: 40),
+        IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SettingsScreen()),
+            );
+          },
+          icon: const Icon(Icons.settings, color: Colors.white70, size: 32),
         ),
         const SizedBox(width: 40),
         IconButton(
