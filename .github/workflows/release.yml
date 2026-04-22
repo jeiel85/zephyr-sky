@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build, Test and Release APK & AAB
+    name: Build, Test and Release APK
     runs-on: ubuntu-latest
     
     steps:
@@ -44,9 +44,6 @@ jobs:
       - name: Build APK
         run: flutter build apk --release --build-number=${{ github.run_number }}
 
-      - name: Build AAB (App Bundle)
-        run: flutter build appbundle --release --build-number=${{ github.run_number }}
-
       - name: Check Build Artifacts
         run: |
           ls -R build/app/outputs/
@@ -56,7 +53,6 @@ jobs:
         with:
           files: |
             build/app/outputs/flutter-apk/*.apk
-            build/app/outputs/bundle/release/*.aab
           generate_release_notes: true
           draft: false
           prerelease: false
