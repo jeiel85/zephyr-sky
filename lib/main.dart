@@ -32,17 +32,17 @@ void main() async {
         settingsProvider.overrideWith((ref) => SettingsNotifier(sharedPreferences!)),
     ],
   );
-  
+
   try {
-    // 알림 서비스 초기화 (앱 실행을 방해하지 않도록 try-catch 보호)
+    // 플러그인 초기화 + 채널 생성 (권한 요청은 설정 화면에서 처리)
     await container.read(notificationServiceProvider).init();
   } catch (e) {
-    debugPrint('서비스 초기화 오류: $e');
+    debugPrint('알림 서비스 초기화 오류: $e');
   }
-  
+
   // 설정에서 다크 모드 로드
   final settings = container.read(settingsProvider);
-  
+
   runApp(
     UncontrolledProviderScope(
       container: container,

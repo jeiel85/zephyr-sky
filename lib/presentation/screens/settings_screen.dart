@@ -33,14 +33,30 @@ class SettingsScreen extends ConsumerWidget {
                 value: settings.notificationsEnabled,
                 onChanged: (value) async {
                   await settingsNotifier.setNotificationsEnabled(value);
+                  final notificationService = ref.read(notificationServiceProvider);
                   if (!value) {
-                    // 알림 비활성화 시 즉시 제거
-                    ref.read(notificationServiceProvider).cancelNotification();
+                    await notificationService.cancelNotification();
                   } else {
-                    // 알림 활성화 시 날씨 데이터가 있으면 즉시 갱신
+                    // 권한 확인 후 없으면 요청
+                    bool hasPermission = await notificationService.areNotificationsEnabled();
+                    if (!hasPermission) {
+                      hasPermission = await notificationService.requestPermission();
+                    }
+                    if (!hasPermission) {
+                      // 권한 거부 시 설정 안내
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('알림 권한이 필요합니다. 시스템 설정 > 앱 > Zephyr Sky에서 알림을 허용해주세요.'),
+                            duration: Duration(seconds: 4),
+                          ),
+                        );
+                      }
+                      return;
+                    }
                     final weather = ref.read(weatherStateProvider).value;
                     if (weather != null) {
-                      ref.read(notificationServiceProvider).showWeatherNotification(weather);
+                      await notificationService.showWeatherNotification(weather);
                     }
                   }
                 },

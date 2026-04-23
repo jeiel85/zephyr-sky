@@ -6,13 +6,13 @@ import 'weather_helper.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
-  
+
   // 알림 채널 ID
   static const String _weatherChannelId = 'weather_channel';
   static const String _weatherChannelName = '날씨 알림';
   static const String _alertChannelId = 'weather_alert';
   static const String _alertChannelName = '날씨 경고';
-  
+
   // 임계값 설정
   static const double _highWindThreshold = 50.0; // km/h
   static const double _lowTempThreshold = -10.0; // °C
@@ -30,21 +30,85 @@ class NotificationService {
 
       await _notificationsPlugin.initialize(initializationSettings);
 
-      // Android 13 이상에서 알림 권한 요청
-      if (Platform.isAndroid) {
-        await _notificationsPlugin
-            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-            ?.requestNotificationsPermission();
-      }
+      // 채널을 명시적으로 생성 (runApp 이전 시점에서는 권한 요청 안 함)
+      await _createChannels();
     } catch (e) {
       debugPrint('Notification Service 초기화 실패: $e');
     }
   }
 
+  // 알림 채널 명시적 생성 (Android 8+에서 필수)
+  Future<void> _createChannels() async {
+    final androidPlugin = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin == null) return;
+
+    await androidPlugin.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _weatherChannelId,
+        _weatherChannelName,
+        description: '현재 날씨 정보를 상태바에 표시합니다.',
+        importance: Importance.default, // Importance.low에서 변경하여 상태바 아이콘 표시 보장
+        showBadge: false,
+        playSound: false,
+        enableVibration: false,
+      ),
+    );
+
+    await androidPlugin.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _alertChannelId,
+        _alertChannelName,
+        description: '날씨 경고 알림을 표시합니다.',
+        importance: Importance.high,
+      ),
+    );
+  }
+
+  // Android 13+ 알림 권한 요청
+  Future<bool> requestPermission() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      final androidPlugin = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin == null) return true;
+      
+      final granted = await androidPlugin.requestNotificationsPermission();
+      debugPrint('Notification Permission Granted: $granted');
+      return granted ?? false;
+    } catch (e) {
+      debugPrint('Permission Request Error: $e');
+      return false;
+    }
+  }
+
+  // 현재 알림 권한 여부 확인
+  Future<bool> areNotificationsEnabled() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      final androidPlugin = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin == null) return true;
+      
+      final enabled = await androidPlugin.areNotificationsEnabled();
+      return enabled ?? false;
+    } catch (e) {
+      debugPrint('Check Permission Error: $e');
+      return false;
+    }
+  }
+
   Future<void> showWeatherNotification(Weather weather) async {
     try {
+      // 권한 확인 (Android 13+)
+      final hasPermission = await areNotificationsEnabled();
+      if (!hasPermission) {
+        debugPrint('알림 권한 없음: 상태바 알림을 표시할 수 없습니다.');
+        return;
+      }
+
       final String contentTitle = '${weather.locationName} (${WeatherHelper.getDescription(weather.weatherCode)})';
-      final String contentText = 
+      final String contentText =
           '현재: ${weather.temperature.round()}° (최저: ${weather.minTemp.round()}° / 최고: ${weather.maxTemp.round()}°)';
 
       final AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -52,12 +116,14 @@ class NotificationService {
         _weatherChannelId,
         _weatherChannelName,
         channelDescription: '현재 날씨 정보를 상태바에 표시합니다.',
-        importance: Importance.low,
-        priority: Priority.low,
+        importance: Importance.default,
+        priority: Priority.default,
         ongoing: true,
         showWhen: false,
         onlyAlertOnce: true,
         icon: '@mipmap/ic_launcher',
+        // 알림 클릭 시 앱으로 이동하도록 설정 (필요시 추가)
+        category: AndroidNotificationCategory.status,
       );
 
       final NotificationDetails platformChannelSpecifics =
