@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../core/utils/weather_helper.dart';
@@ -82,7 +83,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         position.longitude, 
         locationLabel
       );
+      
+      // Pull-to-refresh 완료 햅틱 피드백
+      HapticFeedback.lightImpact();
     } catch (e) {
+      // 오류 발생 시 햅틱 피드백
+      HapticFeedback.heavyImpact();
       if (mounted) {
         if (ref.read(weatherStateProvider).value == null) {
           ScaffoldMessenger.of(context).showSnackBar(

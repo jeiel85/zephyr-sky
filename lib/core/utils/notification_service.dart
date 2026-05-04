@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../domain/entities/weather.dart';
 import 'weather_helper.dart';
@@ -185,6 +186,9 @@ class NotificationService {
 
   Future<void> _showAlertNotification(List<String> alerts) async {
     try {
+      // 날씨 경고 알림 햅틱 피드백
+      HapticFeedback.mediumImpact();
+      
       final AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
         _alertChannelId,

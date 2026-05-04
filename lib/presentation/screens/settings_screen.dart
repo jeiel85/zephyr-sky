@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/settings_provider.dart';
 import '../providers/weather_provider.dart';
@@ -32,6 +33,8 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: const Text('상태바에 현재 날씨를 항상 표시합니다.'),
                 value: settings.notificationsEnabled,
                 onChanged: (value) async {
+                  // 설정 토글 햅틱 피드백
+                  HapticFeedback.lightImpact();
                   await settingsNotifier.setNotificationsEnabled(value);
                   final notificationService = ref.read(notificationServiceProvider);
                   if (!value) {
@@ -76,7 +79,11 @@ class SettingsScreen extends ConsumerWidget {
                 title: const Text('다크 모드'),
                 subtitle: const Text('어두운 테마 사용'),
                 value: settings.isDarkMode,
-                onChanged: (value) => settingsNotifier.setDarkMode(value),
+                onChanged: (value) {
+                  // 설정 토글 햅틱 피드백
+                  HapticFeedback.lightImpact();
+                  settingsNotifier.setDarkMode(value);
+                },
                 secondary: Icon(
                   settings.isDarkMode ? Icons.dark_mode : Icons.light_mode,
                   color: settings.isDarkMode ? Colors.amber : Colors.orange,
@@ -97,14 +104,22 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: const Text('한국, 유럽 등'),
                 value: true,
                 groupValue: settings.useCelsius,
-                onChanged: (value) => settingsNotifier.setUseCelsius(true),
+                onChanged: (value) {
+                  // 설정 토글 햅틱 피드백
+                  HapticFeedback.lightImpact();
+                  settingsNotifier.setUseCelsius(true);
+                },
               ),
               RadioListTile<bool>(
                 title: const Text('화씨 (°F)'),
                 subtitle: const Text('미국 등'),
                 value: false,
                 groupValue: settings.useCelsius,
-                onChanged: (value) => settingsNotifier.setUseCelsius(false),
+                onChanged: (value) {
+                  // 설정 토글 햅틱 피드백
+                  HapticFeedback.lightImpact();
+                  settingsNotifier.setUseCelsius(false);
+                },
               ),
             ],
           ),

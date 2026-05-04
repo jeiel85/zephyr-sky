@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/weather_provider.dart';
 
@@ -71,6 +72,8 @@ class SearchScreen extends ConsumerWidget {
                   style: const TextStyle(color: Colors.white54),
                 ),
                 onTap: () {
+                  // 검색 결과 선택 햅틱 피드백
+                  HapticFeedback.selectionClick();
                   final lat = place['latitude'] as double;
                   final lon = place['longitude'] as double;
                   // 선택한 장소의 날씨 데이터 요청
