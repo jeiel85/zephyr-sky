@@ -38,6 +38,10 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // Play Store 최적화 설정
+        // Multi-dex 활성화 (메서드 수 제한 해결)
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -51,6 +55,12 @@ android {
             )
             
             signingConfig = signingConfigs.getByName("release")
+        }
+        
+        // 디버그 빌드 타입 (개발용)
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
         }
     }
 }
