@@ -9,6 +9,7 @@ import '../providers/settings_provider.dart';
 import '../../domain/entities/weather.dart';
 import '../widgets/weather_chart.dart';
 import '../widgets/offline_banner.dart';
+import '../widgets/animated_weather_background.dart';
 import 'search_screen.dart';
 import 'settings_screen.dart';
 import '../../l10n/app_localizations.dart';
@@ -144,19 +145,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: _buildDrawer(),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: WeatherHelper.getGradientColors(
-              weather?.weatherCode ?? 0, 
-              isDay: weather?.isDay ?? true
-            ),
-          ),
-        ),
+      body: AnimatedWeatherBackground(
+        weatherCode: weather?.weatherCode ?? 0,
+        isDay: weather?.isDay ?? true,
         child: SafeArea(
           child: Column(
             children: [
