@@ -149,6 +149,7 @@ class SettingsScreen extends ConsumerWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline, color: Colors.red),
                       onPressed: () => settingsNotifier.removeFavoriteLocation(index),
+                      tooltip: '삭제',
                     ),
                   );
                 }),

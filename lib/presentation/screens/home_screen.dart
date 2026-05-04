@@ -192,6 +192,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           IconButton(
             onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
             icon: const Icon(Icons.menu, color: Colors.white, size: 28),
+            tooltip: '메뉴 열기',
           ),
         ],
       ),
@@ -288,20 +289,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildCurrentWeather(Weather weather) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(weather.weatherIcon, size: 70, color: Colors.white, shadows: const [Shadow(blurRadius: 10, color: Colors.black26)]),
-            const SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  weather.weatherDescription,
-                  style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w400, shadows: _textShadows),
-                ),
+    return Semantics(
+      label: '현재 날씨: ${weather.weatherDescription}, ${weather.temperature.round()}도',
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(weather.weatherIcon, size: 70, color: Colors.white, shadows: const [Shadow(blurRadius: 10, color: Colors.black26)], semanticLabel: weather.weatherDescription),
+              const SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    weather.weatherDescription,
+                    style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w400, shadows: _textShadows),
+                  ),
                 if (weather.uvIndex != null) ...[
                   const SizedBox(height: 4),
                   Container(
@@ -350,6 +353,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ],
+      ),
     );
   }
 
@@ -405,9 +409,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     
     Color scoreColor = score >= 80 ? Colors.greenAccent : (score >= 60 ? Colors.lightGreenAccent : (score >= 40 ? Colors.orangeAccent : Colors.redAccent));
     
-    return _buildGlassCard(
-      child: Column(
-        children: [
+    return Semantics(
+      label: '야외 활동 지수: $score점, $level, $message',
+      child: _buildGlassCard(
+        child: Column(
+          children: [
           Row(
             children: [
               const Icon(Icons.directions_run, color: Colors.amber, size: 24),
@@ -429,7 +435,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           const SizedBox(height: 12),
           Text(message, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 14, shadows: _textShadows)),
-        ],
+          ],
+        ),
       ),
     );
   }
