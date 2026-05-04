@@ -8,6 +8,8 @@ class SettingsState {
   final bool notificationsEnabled;
   final List<Map<String, dynamic>> favoriteLocations;
   final String languageCode; // 'ko' or 'en'
+  final bool useSystemTheme; // true = 시스템 설정 따르기
+  final int themeColor;      // 테마 색상 (Color.value)
 
   const SettingsState({
     this.useCelsius = true,
@@ -15,6 +17,8 @@ class SettingsState {
     this.notificationsEnabled = true,
     this.favoriteLocations = const [],
     this.languageCode = 'ko',
+    this.useSystemTheme = true,
+    this.themeColor = 0xFF2196F3, // Colors.blue 기본값
   });
 
   SettingsState copyWith({
@@ -23,6 +27,8 @@ class SettingsState {
     bool? notificationsEnabled,
     List<Map<String, dynamic>>? favoriteLocations,
     String? languageCode,
+    bool? useSystemTheme,
+    int? themeColor,
   }) {
     return SettingsState(
       useCelsius: useCelsius ?? this.useCelsius,
@@ -30,6 +36,8 @@ class SettingsState {
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       favoriteLocations: favoriteLocations ?? this.favoriteLocations,
       languageCode: languageCode ?? this.languageCode,
+      useSystemTheme: useSystemTheme ?? this.useSystemTheme,
+      themeColor: themeColor ?? this.themeColor,
     );
   }
 }
@@ -43,6 +51,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   static const String _keyNotifications = 'notifications_enabled';
   static const String _keyFavorites = 'favorite_locations';
   static const String _keyLanguage = 'language_code';
+  static const String _keyUseSystemTheme = 'use_system_theme';
+  static const String _keyThemeColor = 'theme_color';
 
   SettingsNotifier(this._prefs) : super(const SettingsState()) {
     _loadSettings();
@@ -53,6 +63,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final isDarkMode = _prefs.getBool(_keyIsDarkMode) ?? false;
     final notificationsEnabled = _prefs.getBool(_keyNotifications) ?? true;
     final languageCode = _prefs.getString(_keyLanguage) ?? 'ko';
+    final useSystemTheme = _prefs.getBool(_keyUseSystemTheme) ?? true;
+    final themeColor = _prefs.getInt(_keyThemeColor) ?? 0xFF2196F3;
     
     // 즐겨찾기 위치 로드
     final favoritesJson = _prefs.getStringList(_keyFavorites) ?? [];
@@ -75,6 +87,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       notificationsEnabled: notificationsEnabled,
       favoriteLocations: favorites,
       languageCode: languageCode,
+      useSystemTheme: useSystemTheme,
+      themeColor: themeColor,
     );
   }
 
@@ -88,6 +102,18 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> setDarkMode(bool value) async {
     await _prefs.setBool(_keyIsDarkMode, value);
     state = state.copyWith(isDarkMode: value);
+  }
+
+  // 시스템 테마 설정 변경
+  Future<void> setUseSystemTheme(bool value) async {
+    await _prefs.setBool(_keyUseSystemTheme, value);
+    state = state.copyWith(useSystemTheme: value);
+  }
+
+  // 테마 색상 변경
+  Future<void> setThemeColor(int value) async {
+    await _prefs.setInt(_keyThemeColor, value);
+    state = state.copyWith(themeColor: value);
   }
 
   // 알림 설정 변경

@@ -11,6 +11,8 @@ void main() {
       expect(state.notificationsEnabled, true);
       expect(state.favoriteLocations, isEmpty);
       expect(state.languageCode, 'ko');
+      expect(state.useSystemTheme, true);
+      expect(state.themeColor, 0xFF2196F3);
     });
 
     test('copyWith updates values', () {
@@ -63,6 +65,16 @@ void main() {
     test('setLanguage updates state and prefs', () async {
       await notifier.setLanguage('en');
       expect(notifier.state.languageCode, 'en');
+    });
+
+    test('setUseSystemTheme updates state and prefs', () async {
+      await notifier.setUseSystemTheme(false);
+      expect(notifier.state.useSystemTheme, false);
+    });
+
+    test('setThemeColor updates state and prefs', () async {
+      await notifier.setThemeColor(0xFF4CAF50);
+      expect(notifier.state.themeColor, 0xFF4CAF50);
     });
 
     test('addFavoriteLocation adds location', () async {
@@ -126,6 +138,8 @@ void main() {
         'notifications_enabled': false,
         'language_code': 'en',
         'favorite_locations': ['Seoul|37.57|126.98'],
+        'use_system_theme': false,
+        'theme_color': 0xFF4CAF50,
       });
 
       final prefs = await SharedPreferences.getInstance();
@@ -137,6 +151,8 @@ void main() {
       expect(loadedNotifier.state.languageCode, 'en');
       expect(loadedNotifier.state.favoriteLocations.length, 1);
       expect(loadedNotifier.state.favoriteLocations.first['name'], 'Seoul');
+      expect(loadedNotifier.state.useSystemTheme, false);
+      expect(loadedNotifier.state.themeColor, 0xFF4CAF50);
     });
   });
 }

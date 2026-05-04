@@ -346,6 +346,24 @@ abstract class AppLocalizations {
   /// **'Use dark theme'**
   String get darkModeDesc;
 
+  /// No description provided for @followSystemTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow System Theme'**
+  String get followSystemTheme;
+
+  /// No description provided for @followSystemThemeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically switch between light and dark mode'**
+  String get followSystemThemeDesc;
+
+  /// No description provided for @themeColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme Color'**
+  String get themeColor;
+
   /// No description provided for @unit.
   ///
   /// In en, this message translates to:
@@ -1010,6 +1028,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get darkModeDesc => 'Use dark theme';
 
   @override
+  String get followSystemTheme => 'Follow System Theme';
+
+  @override
+  String get followSystemThemeDesc => 'Automatically switch between light and dark mode';
+
+  @override
+  String get themeColor => 'Theme Color';
+
+  @override
   String get unit => 'Unit';
 
   @override
@@ -1416,6 +1443,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get darkModeDesc => '어두운 테마 사용';
+
+  @override
+  String get followSystemTheme => '시스템 설정 따라하기';
+
+  @override
+  String get followSystemThemeDesc => '밝음/어두음을 시스템 설정에 맞춰 자동 전환';
+
+  @override
+  String get themeColor => '테마 색상';
 
   @override
   String get unit => '단위';

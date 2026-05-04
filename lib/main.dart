@@ -45,14 +45,10 @@ void main() async {
     debugPrint('알림 서비스 초기화 오류: $e');
   }
 
-  // 설정에서 다크 모드 로드
-  final settings = container.read(settingsProvider);
-
   runApp(
     UncontrolledProviderScope(
       container: container,
       child: OpenWeatherApp(
-        initialDarkMode: settings.isDarkMode,
         sharedPreferences: sharedPreferences,
       ),
     ),
@@ -60,12 +56,10 @@ void main() async {
 }
 
 class OpenWeatherApp extends StatelessWidget {
-  final bool initialDarkMode;
   final SharedPreferences? sharedPreferences;
   
   const OpenWeatherApp({
-    super.key, 
-    this.initialDarkMode = false,
+    super.key,
     this.sharedPreferences,
   });
 
@@ -74,6 +68,7 @@ class OpenWeatherApp extends StatelessWidget {
     return Consumer(
       builder: (context, ref, _) {
         final settings = ref.watch(settingsProvider);
+        final seedColor = Color(settings.themeColor);
         
         // 온볼딩 완료 여부 확인
         final bool seenOnboarding = sharedPreferences?.getBool('seen_onboarding') ?? false;
@@ -88,7 +83,7 @@ class OpenWeatherApp extends StatelessWidget {
             useMaterial3: true,
             textTheme: GoogleFonts.latoTextTheme(),
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blue,
+              seedColor: seedColor,
               brightness: Brightness.light,
             ),
           ),
@@ -98,11 +93,13 @@ class OpenWeatherApp extends StatelessWidget {
               ThemeData.dark().textTheme,
             ),
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blue,
+              seedColor: seedColor,
               brightness: Brightness.dark,
             ),
           ),
-          themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          themeMode: settings.useSystemTheme
+              ? ThemeMode.system
+              : (settings.isDarkMode ? ThemeMode.dark : ThemeMode.light),
           home: seenOnboarding 
               ? const HomeScreen()
               : sharedPreferences != null
