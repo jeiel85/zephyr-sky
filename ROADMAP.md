@@ -12,20 +12,32 @@
 
 ---
 
-## 현재 앱 상태 (v1.0.8)
+## 현재 앱 상태 (v1.2.2)
 
-### ✅ 구현済み 기능
+### ✅ 구현 완료 기능
 | 기능 | 파일 | 상태 |
 |------|------|------|
 | 현재 위치 날씨 조회 | location_service.dart | 완료 |
 | 전 세계 도시 검색 | search_screen.dart | 완료 |
-| 시간별 예보 (24시간) | weather_model.dart | 완료 |
-| 일별 예보 (7일) | weather_model.dart | 완료 |
+| 시간별 예보 (48시간) | weather_model.dart | 완료 |
+| 일별 예보 (16일) | weather_model.dart | 완료 |
 | 날씨 아이콘/설명 | weather_helper.dart | 완료 |
 | 동적 그라데이션 UI | home_screen.dart | 완료 |
+| 다크 모드 / 라이트 모드 | settings_provider.dart | 완료 |
+| 단위 설정 (°C / °F) | settings_provider.dart | 완료 |
+| 즐겨찾기 위치 관리 | weather_repository_impl.dart | 완료 |
 | 마지막 위치 저장 | weather_repository_impl.dart | 완료 |
 | 날씨 캐싱 | weather_repository_impl.dart | 완료 |
 | 상태바 알림 | notification_service.dart | 완료 |
+| AQI (대기질 지수) | weather_model.dart | 완료 |
+| UV Index (자외선 지수) | weather_model.dart | 완료 |
+| 강수 확률 | weather_model.dart | 완료 |
+| 일출/일몰 시간 | weather_model.dart | 완료 |
+| 상세 기상 정보 (기압, 시정, 이슬점) | weather_model.dart | 완료 |
+| 날씨 상세 그래프 | weather_chart.dart | 완료 |
+| 안드로이드 홈 스크린 위젯 | home_widget_service.dart | 완료 |
+| 날씨 경고 (강풍, 한파, 폭염, UV, 대기질) | notification_service.dart | 완료 |
+| 야외 활동 지수 | weather.dart | 완료 |
 
 ---
 
@@ -57,7 +69,7 @@
 - ❄️ **한파/추위 경고**
 - 🌊 **태풍/호우 경고**
 - 🌡️ **고온/저온 경고**
-- 📱 **시간대별推送 알림** (사용자 설정)
+- 📱 **시간대별 푸시 알림** (사용자 설정)
 - ⏰ **일출/일몰 알림**
 - 🌙 **야간 날씨 요약 알림**
 
@@ -166,7 +178,7 @@ Phase 5:
 1. **Phase 1** → 가장 사용자에게 직접적인 가치 제공
 2. **Phase 3** → UX 개선으로 사용자 만족도 향상
 3. **Phase 2** → 날씨 경고는 필수 안전 기능
-4. **Phase 4** → 위젯은安화 편의성 제공
+4. **Phase 4** → 위젯은 편의성 제공
 5. **Phase 5** → 전문가급 기능으로 차별화
 
 ---
@@ -174,16 +186,52 @@ Phase 5:
 ## ✅ 체크리스트
 
 ### Phase 1 완료 조건
-- [ ] AQI 표시 UI
-- [ ] UV Index 표시 UI
-- [ ] 강수 확률 표시 UI
-- [ ] 일출/일몰 시간 표시 UI
-- [ ] 상세 기상 정보 (기압, 시정, 이슬점)
-- [ ] 48시간 예보
-- [ ] 16일 예보
-- [ ] 빌드 성공
+- [x] AQI 표시 UI
+- [x] UV Index 표시 UI
+- [x] 강수 확률 표시 UI
+- [x] 일출/일몰 시간 표시 UI
+- [x] 상세 기상 정보 (기압, 시정, 이슬점)
+- [x] 48시간 예보
+- [x] 16일 예보
+- [x] 빌드 성공
+
+### Phase 2 완료 조건
+- [x] 강한 바람 경고
+- [x] 한파/추위 경고
+- [x] 고온/저온 경고
+- [x] UV 경고
+- [x] 대기질 경고
+- [x] 상태바 알림
+- [ ] 시간대별 푸시 알림 (사용자 설정) — 미구현
+- [ ] 일출/일몰 알림 — 미구현
+- [ ] 야간 날씨 요약 알림 — 미구현
+
+### Phase 3 완료 조건
+- [x] Pull-to-refresh
+- [x] 다크 모드 / 라이트 모드 전환
+- [x] 단위 설정 (°C / °F)
+- [ ] 언어 설정 (한국어 + 영어) — [#1](https://github.com/jeiel85/zephyr-sky/issues/1)
+- [x] 즐겨찾기 위치 관리
+- [x] 위치 관리 화면 (편집/삭제/기본 위치 설정)
+- [x] 날씨 상세 그래프
+
+### Phase 4 완료 조건
+- [x] 안드로이드 홈 스크린 위젯
+- [x] 위젯 클릭 시 앱 실행
+- [ ] 실시간 업데이트 위젯 (주기적 갱신) — 미구현
+- [ ] 배터리 효율적인 업데이트 스케줄 — 미구현
+
+### Phase 5 완료 조건
+- [x] 야외 활동 지수
+- [ ] 레이다/위성 imagery — 미정
+- [ ] AI 기반 날씨 요약 — 미정
+- [ ] 기후 데이터 분석 — 미정
+- [ ] 오프라인 모드 최적화 — [#2](https://github.com/jeiel85/zephyr-sky/issues/2)
+- [ ] 개인정보 보호 강화 (지속적 개선)
+- [ ] 단위 테스트 커버리지 80%+ — [#3](https://github.com/jeiel85/zephyr-sky/issues/3)
 
 ---
 
 *로드맵 작성일: 2026-04-22*
-*문서 관리: HISTORY.md에 각Phase 완료 시 기록*
+*최종 업데이트: 2026-05-04*
+*문서 관리: HISTORY.md에 각 Phase 완료 시 기록*
