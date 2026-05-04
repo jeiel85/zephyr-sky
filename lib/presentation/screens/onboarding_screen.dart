@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../core/utils/location_service.dart';
-import '../core/utils/notification_service.dart';
+import '../../core/utils/location_service.dart';
+import '../../core/utils/notification_service.dart';
 import 'home_screen.dart';
 import '../../l10n/app_localizations.dart';
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:share_plus/share_plus.dart';
 import '../../core/utils/weather_helper.dart';
 import '../../core/utils/route_animations.dart';
 import '../providers/weather_provider.dart';
@@ -135,31 +134,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
       }
     }
-  }
-
-  /// 날씨 정보 공유
-  void _shareWeather() {
-    final weather = ref.read(weatherStateProvider).value;
-    if (weather == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('날씨 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.')),
-      );
-      return;
-    }
-
-    final l10n = AppLocalizations.of(context)!;
-    final weatherDesc = WeatherHelper.getDescriptionLocalized(weather.weatherCode, l10n);
-    final outdoorScore = weather.outdoorActivityScore.round();
-
-    final shareText = l10n.shareWeatherText(
-      weather.locationName,
-      weather.temperature.round().toString(),
-      weatherDesc,
-      outdoorScore.toString(),
-    );
-
-    Share.share(shareText);
-    HapticFeedback.mediumImpact();
   }
 
   @override
@@ -318,15 +292,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _refreshWeather();
             },
           ),
-          const Divider(color: Colors.white24),
-          ListTile(
-            leading: const Icon(Icons.share, color: Colors.white70),
-            title: Text(AppLocalizations.of(context)!.shareWeather, style: const TextStyle(color: Colors.white70)),
-            onTap: () {
-              Navigator.pop(context);
-              _shareWeather();
-            },
-          ),
+
         ],
       ),
     );
