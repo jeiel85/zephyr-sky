@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../core/utils/weather_helper.dart';
+import '../../core/utils/route_animations.dart';
 import '../providers/weather_provider.dart';
 import '../providers/settings_provider.dart';
 import '../../domain/entities/weather.dart';
@@ -219,7 +220,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: const Text('위치 검색', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navigator.pop(context); // Drawer를 닫지 않고 이동
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen()));
+              Navigator.push(
+                context, 
+                RouteAnimations.slideTransition(page: const SearchScreen()),
+              );
             },
           ),
           ListTile(
@@ -227,7 +231,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: const Text('설정', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navigator.pop(context); // Drawer를 닫지 않고 이동
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
+              Navigator.push(
+                context, 
+                RouteAnimations.slideTransition(page: const SettingsScreen()),
+              );
             },
           ),
           ListTile(
