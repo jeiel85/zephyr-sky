@@ -309,7 +309,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 30),
             Text(
               AppLocalizations.of(context)!.temperaturePrecipitationTrend,
-              style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows),
+              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3),
             ),
             const SizedBox(height: 16),
             WeatherChart(hourlyForecast: weather.hourlyForecast, isDarkMode: isDarkMode),
@@ -343,7 +343,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   Text(
                     weatherDesc,
-                    style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w400, shadows: _textShadows),
+                    style: const TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.5),
                   ),
                 if (weather.uvIndex != null) ...[
                   const SizedBox(height: 4),
@@ -355,7 +355,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     child: Text(
                       'UV ${weather.uvIndex!.toStringAsFixed(1)} ${weather.uvRiskLevelLocalized(l10n)}',
-                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 0.2),
                     ),
                   ),
                 ],
@@ -365,11 +365,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         Text(
           '${weather.temperature.round()}°',
-          style: const TextStyle(fontSize: 100, fontWeight: FontWeight.w100, color: Colors.white, shadows: _textShadows),
+          style: const TextStyle(fontSize: 96, fontWeight: FontWeight.w300, color: Colors.white, shadows: _textShadows, letterSpacing: -2),
         ),
         Text(
           '${AppLocalizations.of(context)!.maxTemp}: ${weather.maxTemp.round()}°  ${AppLocalizations.of(context)!.minTemp}: ${weather.minTemp.round()}°',
-          style: TextStyle(fontSize: 18, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w400, shadows: _textShadows),
+          style: TextStyle(fontSize: 18, color: Colors.white.withOpacity(0.95), fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.3),
         ),
         if (weather.precipitationProbability != null && weather.precipitationProbability! > 0) ...[
           const SizedBox(height: 16),
@@ -460,9 +460,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               const Icon(Icons.directions_run, color: Colors.amber, size: 24),
               const SizedBox(width: 8),
-              Text(l10n.outdoorActivityIndex, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              Text(l10n.outdoorActivityIndex, style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3)),
               const Spacer(),
-              Text(level, style: TextStyle(color: scoreColor, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              Text(level, style: TextStyle(color: scoreColor, fontSize: 17, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.2)),
             ],
           ),
           const SizedBox(height: 16),
@@ -476,7 +476,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          Text(message, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 14, shadows: _textShadows)),
+          Text(message, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.2)),
           ],
         ),
       ),
@@ -487,11 +487,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: color ?? Colors.white, size: 24, shadows: const [Shadow(blurRadius: 5, color: Colors.black26)]),
-        const SizedBox(height: 8),
-        Text(label, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12, shadows: _textShadows)),
+        Icon(icon, color: color ?? Colors.white, size: 26, shadows: const [Shadow(blurRadius: 5, color: Colors.black26)]),
+        const SizedBox(height: 10),
+        Text(label, style: TextStyle(color: Colors.white.withOpacity(0.75), fontSize: 13, fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.2)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: color ?? Colors.white, fontSize: 14, fontWeight: FontWeight.bold, shadows: _textShadows)),
+        Text(value, style: TextStyle(color: color ?? Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3)),
       ],
     );
   }
@@ -502,7 +502,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4),
-          child: Text(AppLocalizations.of(context)!.hourlyForecast, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
+          child: Text(AppLocalizations.of(context)!.hourlyForecast, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3)),
         ),
         const SizedBox(height: 16),
         Container(
@@ -526,14 +526,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(DateFormat('HH시', AppLocalizations.of(context)!.localeName).format(item.time), style: const TextStyle(color: Colors.white70, fontSize: 12, shadows: _textShadows)),
+                        Text(DateFormat('HH시', AppLocalizations.of(context)!.localeName).format(item.time), style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.2)),
                         const SizedBox(height: 10),
                         Icon(WeatherHelper.getIcon(item.weatherCode), color: Colors.white, size: 28, shadows: const [Shadow(blurRadius: 5, color: Colors.black26)]),
                         const SizedBox(height: 10),
-                        Text('${item.temperature.round()}°', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+                        Text('${item.temperature.round()}°', style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3)),
                         if (item.precipitationProbability != null && item.precipitationProbability! > 0) ...[
                           const SizedBox(height: 4),
-                          Text('${item.precipitationProbability!.round()}%', style: const TextStyle(color: Colors.lightBlueAccent, fontSize: 11, fontWeight: FontWeight.bold)),
+                          Text('${item.precipitationProbability!.round()}%', style: const TextStyle(color: Colors.lightBlueAccent, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.2)),
                         ],
                       ],
                     ),
@@ -566,12 +566,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.dailyForecast, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              Text(AppLocalizations.of(context)!.dailyForecast, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3)),
               TextButton(
                 onPressed: () => setState(() => _isDailyExpanded = !_isDailyExpanded),
                 child: Text(
                   _isDailyExpanded ? AppLocalizations.of(context)!.collapse : AppLocalizations.of(context)!.seeMore,
-                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.2),
                 ),
               ),
             ],
@@ -591,7 +591,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         flex: 3,
                         child: Text(
                           DateFormat('E d일', AppLocalizations.of(context)!.localeName).format(day.time),
-                          style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w400, shadows: _textShadows),
+                          style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.2),
                         ),
                       ),
                       Expanded(
@@ -631,7 +631,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('${day.minTemp.round()}°', style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16, shadows: _textShadows)),
+                            Text('${day.minTemp.round()}°', style: TextStyle(color: Colors.white.withOpacity(0.75), fontSize: 16, fontWeight: FontWeight.w500, shadows: _textShadows, letterSpacing: 0.2)),
                             const SizedBox(width: 8),
                             Container(
                               width: 30,
@@ -642,7 +642,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text('${day.maxTemp.round()}°', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+                            Text('${day.maxTemp.round()}°', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3)),
                           ],
                         ),
                       ),
