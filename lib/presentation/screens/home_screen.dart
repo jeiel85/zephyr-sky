@@ -289,40 +289,96 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  bool _isTablet(BuildContext context) => MediaQuery.of(context).size.width >= 600;
+
   Widget _buildWeatherContent(Weather weather) {
     final isDarkMode = ref.watch(settingsProvider).isDarkMode;
-    
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            _buildCurrentWeather(weather),
-            const SizedBox(height: 30),
-            _buildWeatherDetails(weather),
-            const SizedBox(height: 20),
-            _buildExtendedWeatherInfo(weather),
-            const SizedBox(height: 20),
-            _buildOutdoorActivity(weather),
-            const SizedBox(height: 30),
-            Text(
-              AppLocalizations.of(context)!.temperaturePrecipitationTrend,
-              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3),
+    final tablet = _isTablet(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: tablet ? 32 : 20),
+                child: tablet
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 30),
+                                _buildCurrentWeather(weather),
+                                const SizedBox(height: 30),
+                                _buildWeatherDetails(weather),
+                                const SizedBox(height: 20),
+                                _buildExtendedWeatherInfo(weather, maxWidth: constraints.maxWidth * 0.45),
+                                const SizedBox(height: 20),
+                                _buildOutdoorActivity(weather),
+                                const SizedBox(height: 40),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 24),
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 30),
+                                Text(
+                                  AppLocalizations.of(context)!.temperaturePrecipitationTrend,
+                                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3),
+                                ),
+                                const SizedBox(height: 16),
+                                WeatherChart(hourlyForecast: weather.hourlyForecast, isDarkMode: isDarkMode),
+                                const SizedBox(height: 20),
+                                PrecipitationChart(hourlyForecast: weather.hourlyForecast),
+                                const SizedBox(height: 40),
+                                _buildHourlyForecast(weather.hourlyForecast),
+                                const SizedBox(height: 40),
+                                _buildDailyForecast(weather.dailyForecast),
+                                const SizedBox(height: 60),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          const SizedBox(height: 30),
+                          _buildCurrentWeather(weather),
+                          const SizedBox(height: 30),
+                          _buildWeatherDetails(weather),
+                          const SizedBox(height: 20),
+                          _buildExtendedWeatherInfo(weather),
+                          const SizedBox(height: 20),
+                          _buildOutdoorActivity(weather),
+                          const SizedBox(height: 30),
+                          Text(
+                            AppLocalizations.of(context)!.temperaturePrecipitationTrend,
+                            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, shadows: _textShadows, letterSpacing: 0.3),
+                          ),
+                          const SizedBox(height: 16),
+                          WeatherChart(hourlyForecast: weather.hourlyForecast, isDarkMode: isDarkMode),
+                          const SizedBox(height: 20),
+                          PrecipitationChart(hourlyForecast: weather.hourlyForecast),
+                          const SizedBox(height: 40),
+                          _buildHourlyForecast(weather.hourlyForecast),
+                          const SizedBox(height: 40),
+                          _buildDailyForecast(weather.dailyForecast),
+                          const SizedBox(height: 60),
+                        ],
+                      ),
+              ),
             ),
-            const SizedBox(height: 16),
-            WeatherChart(hourlyForecast: weather.hourlyForecast, isDarkMode: isDarkMode),
-            const SizedBox(height: 20),
-            PrecipitationChart(hourlyForecast: weather.hourlyForecast),
-            const SizedBox(height: 40),
-            _buildHourlyForecast(weather.hourlyForecast),
-            const SizedBox(height: 40),
-            _buildDailyForecast(weather.dailyForecast),
-            const SizedBox(height: 60),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -411,7 +467,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildExtendedWeatherInfo(Weather weather) {
+  Widget _buildExtendedWeatherInfo(Weather weather, {double? maxWidth}) {
     final l10n = AppLocalizations.of(context)!;
     final List<Widget> items = [];
     if (weather.airQualityIndex != null) {
@@ -431,12 +487,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
     
     if (items.isEmpty) return const SizedBox.shrink();
+
+    // 화면 너비에 따른 열 수 조정
+    final crossCount = maxWidth != null && maxWidth >= 400 ? 5 : 3;
     
     return _buildGlassCard(
       child: GridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 3,
+        crossAxisCount: items.length < crossCount ? items.length : crossCount,
         mainAxisSpacing: 20,
         children: items,
       ),
