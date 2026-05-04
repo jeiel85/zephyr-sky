@@ -11,16 +11,16 @@
 아래 항목은 프로젝트마다 최초 1회만 채워 넣습니다.
 
 ```text
-Project Name: Zephyr Sky
-Repository: https://github.com/jeiel85/zephyr-sky.git
+Project Name: AGENTS.md
+Repository: https://github.com/jeiel85/AGENTS.md.git
 Main Branch: main
 Primary Spec: README.md
 History Document: HISTORY.md
 Changelog: CHANGELOG.md
-Task Document: ROADMAP.md
-Decision Log: HISTORY.md
-Version Files: pubspec.yaml, android/app/build.gradle.kts
-Build/Test Commands: flutter test, flutter build apk
+Task Document: README.md
+Decision Log: README.md
+Version Files: AGENTS.md
+Build/Test Commands: N/A
 Release Trigger: tag push
 CI System: GitHub Actions
 ```
@@ -84,18 +84,18 @@ CI System: GitHub Actions
 
 ```bash
 git fetch origin
-git checkout main
-git pull origin main
+git checkout <MAIN_BRANCH>
+git pull origin <MAIN_BRANCH>
 git status
 ```
 
 그 다음 아래 문서를 순서대로 확인합니다.
 
 1. `AGENTS.md`
-2. `Primary Spec` (README.md)
-3. `Task Document` (ROADMAP.md)
-4. `History Document` (HISTORY.md)
-5. `Decision Log` (HISTORY.md)
+2. `Primary Spec`
+3. `Task Document`
+4. `History Document`
+5. `Decision Log`
 6. `CHANGELOG.md`
 7. 관련 `README.md`, `docs/`, CI/CD 설정 파일
 
@@ -264,18 +264,24 @@ git status
 
 변경 후 가능한 범위에서 아래 순서로 검증합니다.
 
-1. 정적 검사 또는 린트 (`flutter analyze`)
-2. 타입 체크 (Dart strong mode)
-3. 단위 테스트 (`flutter test`)
+1. 정적 검사 또는 린트
+2. 타입 체크
+3. 단위 테스트
 4. 통합 테스트 또는 E2E 테스트
-5. 빌드 (`flutter build apk`)
+5. 빌드
 6. 앱 실행 또는 핵심 플로우 수동 확인
 
-프로젝트별 명령:
+프로젝트별 명령은 `Build/Test Commands`에 정의합니다.
+
+예시:
 
 ```bash
+npm test
+npm run lint
+npm run build
+./gradlew test
+./gradlew assembleDebug
 flutter test
-flutter analyze
 flutter build apk
 ```
 
@@ -296,7 +302,7 @@ flutter build apk
 - 로컬 빌드가 특정 기기나 OS 환경을 충분히 보증하지 못하는 경우, 로컬 성공만으로 최종 검증 완료로 간주하지 않습니다.
 - CI가 실패하면 `gh run view --log-failed` 등으로 실패 로그를 확인하고, 원인을 수정한 뒤 다시 푸시합니다.
 - CI 검증이 필요한 변경을 한 경우, 커밋과 푸시 이후 GitHub Actions 결과까지 확인합니다.
-- 로컬에서 무거운 검증을 생략했다면, 이력 문서나 작업 요약에 "로컬 생략, CI에서 검증"처럼 명확히 기록합니다.
+- 로컬에서 무거운 검증을 생략했다면, 이력 문서나 작업 요약에 “로컬 생략, CI에서 검증”처럼 명확히 기록합니다.
 - 실제로 실행하지 않은 로컬 테스트나 빌드를 성공한 것처럼 기록하지 않습니다.
 
 권장 명령:
@@ -334,11 +340,11 @@ git diff
 
 코드가 바뀌면 관련 문서를 함께 갱신합니다.
 
-- 주요 변경 사항: `History Document` (HISTORY.md)
+- 주요 변경 사항: `History Document`
 - 릴리즈 변경 사항: `CHANGELOG.md` 또는 릴리즈 노트
-- 기능 명세 변경: `Primary Spec` (README.md)
-- 작업 목록 변경: `Task Document` (ROADMAP.md)
-- 중요한 기술적 판단: `Decision Log` (HISTORY.md)
+- 기능 명세 변경: `Primary Spec` 또는 `README.md`
+- 작업 목록 변경: `Task Document`
+- 중요한 기술적 판단: `Decision Log`
 
 이력 문서에는 최소한 아래 내용을 남깁니다.
 
@@ -351,7 +357,7 @@ git diff
 후속 작업:
 ```
 
-`CHANGELOG.md`는 사용자에게 공개 가능한 변경 요약을 기록합니다. `History Document`는 작업 과정, 시행착오, 검증 내역, 에이전트 작업 기록을 남기는 용도로 사용합니다.
+`CHANGELOG.md`는 사용자에게 공개 가능한 변경 요약을 기록합니다. `History Document` 또는 `PROGRESS.md`는 작업 과정, 시행착오, 검증 내역, 에이전트 작업 기록을 남기는 용도로 사용합니다.
 
 ---
 
@@ -364,7 +370,7 @@ git diff
 - 사용자에게 영향이 있는 모든 변경 사항은 기록합니다.
 - 내부 구현 변경도 유지보수, 안정성, 성능, 보안, 배포에 영향이 있으면 기록합니다.
 - 단순 커밋 메시지를 그대로 복사하지 않습니다.
-- "수정함", "개선함"처럼 목적이 불명확한 표현만 쓰지 않습니다.
+- “수정함”, “개선함”처럼 목적이 불명확한 표현만 쓰지 않습니다.
 - 최신 버전이 항상 문서 상단에 오도록 역순으로 작성합니다.
 - 날짜와 버전을 명확히 기록합니다.
 - 테스트나 빌드를 실제로 실행하지 않았다면 성공으로 기록하지 않습니다.
@@ -446,7 +452,8 @@ git diff
 릴리즈 전에는 아래 항목이 서로 일치하는지 확인합니다.
 
 - 태그 버전
-- 앱 내부 버전 (pubspec.yaml)
+- 앱 내부 버전
+- 패키지 또는 빌드 파일 버전
 - `CHANGELOG.md`
 - GitHub Release 제목
 - 릴리즈 노트
@@ -458,9 +465,13 @@ git diff
 
 버전 변경 시 프로젝트에 정의된 모든 버전 표기 위치를 동시에 갱신합니다.
 
+예시:
+
 ```text
-pubspec.yaml (version 필드)
-android/app/build.gradle.kts (자동 참조)
+package.json
+pubspec.yaml
+build.gradle
+App version constant
 README badge
 CHANGELOG.md
 ```
@@ -468,7 +479,9 @@ CHANGELOG.md
 태그를 만들기 전에는 반드시 실제 앱 내부 버전, 문서 버전, 태그 버전이 일치하는지 확인합니다.
 
 ```bash
-grep "^version:" pubspec.yaml
+# 프로젝트에 맞게 수정해서 사용
+cat package.json | grep '"version"'
+grep -R "versionName\|versionCode\|version:" .
 ```
 
 버전 태그는 기본적으로 SemVer 형식의 `vX.Y.Z`를 사용합니다.
@@ -490,7 +503,7 @@ git push origin vX.Y.Z
 git status
 git add <changed files>
 git commit -m "<type>: <변경 요약>"
-git push origin main
+git push origin <CURRENT_BRANCH>
 ```
 
 권장 커밋 형식:
@@ -560,7 +573,7 @@ gh release view vX.Y.Z
 
 - GitHub Actions 성공 여부
 - 릴리즈 생성 여부
-- APK/AAB 산출물 업로드 여부
+- APK/AAB/EXE/MSI/ZIP 등 산출물 업로드 여부
 - 산출물 파일 크기가 0이 아닌지
 - 릴리즈 노트가 최신 변경 사항을 반영하는지
 - `CHANGELOG.md`와 릴리즈 노트가 서로 모순되지 않는지
@@ -576,10 +589,10 @@ gh release view vX.Y.Z
 
 예외적으로 커밋할 수 있는 항목:
 
-- 배포용 정적 파일 (website/ 산출물)
+- 배포용 정적 파일
 - 문서 사이트 산출물
 - 프로젝트에서 명시적으로 추적하는 generated file
-- lockfile (pubspec.lock)
+- lockfile
 - 네이티브 프로젝트 동기화 결과물처럼 프로젝트 정책상 필요한 파일
 
 커밋 전 `.gitignore`와 `git status`를 확인합니다.
@@ -590,7 +603,7 @@ gh release view vX.Y.Z
 
 에이전트는 로컬 환경을 절대적으로 신뢰하지 않습니다.
 
-- OS, Node, Java, Flutter, Android SDK, Gradle 등의 버전 차이를 고려합니다.
+- OS, Node, Java, Flutter, Android SDK, Gradle, Rust, Python 등의 버전 차이를 고려합니다.
 - 로컬에서만 성공하거나 실패한 결과는 CI 결과와 구분해서 기록합니다.
 - 환경 변수나 시크릿이 없어 실패한 경우, 값을 추측하거나 임의 생성하지 않습니다.
 - 특정 기기에서의 동작은 에뮬레이터나 로컬 빌드만으로 완전히 보증하지 않습니다.
@@ -667,30 +680,14 @@ gh release view vX.Y.Z
 관련 파일:
 ```
 
-기존 기록:
+예시:
 
 ```text
 문제: 릴리즈 태그는 v1.2.0인데 앱 내부 버전은 1.1.9로 표시됨
 원인: 버전 파일 일부만 수정하고 태그를 생성함
 해결: 모든 버전 위치를 동기화한 뒤 태그 재생성
 다음부터 지킬 규칙: 태그 생성 전 Version Files 전체를 검사한다
-관련 파일: pubspec.yaml, build.gradle.kts, CHANGELOG.md
-```
-
-```text
-문제: Android 패키지명 불일치로 인한 런타임 크래시
-원인: build.gradle.kts와 MainActivity.kt의 패키지명이 서로 다름
-해결: MainActivity.kt를 올바른 경로로 이동 및 패키지 선언 수정
-다음부터 지킬 규칙: 패키지명 변경 시 build.gradle.kts, MainActivity.kt, AndroidManifest.xml을 함께 확인한다
-관련 파일: build.gradle.kts, MainActivity.kt, AndroidManifest.xml
-```
-
-```text
-문제: LocaleDataException으로 인한 회색 화면
-원인: initializeDateFormatting('ko_KR', null) 호출 누락
-해결: main.dart 초기화 로직에 추가
-다음부터 지킬 규칙: 다국어 관련 코드 추가 시 반드시 locale 초기화를 확인한다
-관련 파일: main.dart
+관련 파일: package.json, build.gradle, CHANGELOG.md
 ```
 
 ---
@@ -704,66 +701,3 @@ gh release view vX.Y.Z
 ```
 
 규칙의 단일 진실 공급원은 항상 `AGENTS.md`입니다.
-
----
-
-## Appendix A. 프로젝트 아키텍처 및 디자인 철학
-
-이 섹션은 Zephyr Sky 프로젝트 고유 정책입니다.
-
-- **프로젝트 명**: Zephyr Sky (Sophisticated Minimalist Weather App)
-- **디자인 철학**: 정제된 그라데이션 UI, 최소한의 정보 노출, 유려한 애니메이션.
-- **아키텍처**: Clean Architecture
-    - `lib/core/`: 공통 유틸리티, 테마, 서비스 초기화
-    - `lib/data/`: API 소스, 리포지토리 구현체, 데이터 모델
-    - `lib/domain/`: 엔티티, 리포지토리 인터페이스, 유스케이스
-    - `lib/presentation/`: UI 레이어 (Screens, Widgets), Provider 상태 관리
-
-### 코드 스타일
-- Flutter Stable 채널 사용.
-- `Provider`를 이용한 상태 관리.
-- 비즈니스 로직은 `domain` 및 `data` 레이어에, UI 로직은 `presentation` 레이어에 엄격히 분리.
-
-### 빌드 및 배포 제약
-- 안드로이드 빌드 시 SDK 36 규격을 준수하고, R8 관련 Proguard 규칙(`android/app/proguard-rules.pro`)을 유지할 것.
-- GitHub Actions 워크플로우(`release.yml`, `pages.yml`) 수정 시 권한 설정을 엄격히 검토할 것.
-
----
-
-## Appendix B. 핵심 기술 스택
-
-- **Framework**: Flutter
-- **State Management**: Provider (flutter_riverpod)
-- **Local Storage**: SharedPreferences (마지막 위치 저장용 등)
-- **API**: Open-Meteo API (날씨 + 대기질)
-- **Charts**: fl_chart
-- **Notifications**: flutter_local_notifications
-- **Widget**: home_widget (안드로이드 홈 스크린 위젯)
-- **Fonts**: google_fonts (Lato)
-- **i18n**: intl (한국어)
-- **CI/CD**: GitHub Actions (APK 릴리즈 및 GitHub Pages 배포)
-
----
-
-## Appendix C. 문서 체계
-
-에이전트는 다음 문서들을 항상 최신 상태로 유지해야 합니다.
-
-| 문서 | 용도 |
-|------|------|
-| `AGENTS.md` | 본 문서 — 에이전트 공통 규칙 + 프로젝트 고유 정책 |
-| `HISTORY.md` | 일일 작업 이력, 시행착오, 검증 내역, 현재 이슈 트래킹 |
-| `CHANGELOG.md` | 사용자 공개용 변경 요약 (릴리즈별) |
-| `README.md` | 프로젝트 소개, 사용법, 기술 스택 |
-| `ROADMAP.md` | 개발 로드맵 및 작업 목록 |
-| `DEPLOYMENT.md` | 배포 환경 설정, 서명, 버전 관리 절차 |
-| `PLAY_STORE.md` | Play Store 출시 가이드 |
-
----
-
-## Appendix D. 자주 발생하는 문제 및 해결 (Troubleshooting)
-
-- **Localization**: `initializeDateFormatting('ko_KR', null)` 호출 필수.
-- **Android Package Name**: `com.jeiel.zephyr_sky` (폴더 구조와 `build.gradle.kts` 일치 확인).
-- **GitHub Pages**: 배포 소스가 "GitHub Actions"로 설정되어 있는지 항상 확인할 것.
-- **R8 빌드**: `proguard-rules.pro`에 Flutter 프레임워크 및 플러그인 보존 규칙이 포함되어 있어야 함.
