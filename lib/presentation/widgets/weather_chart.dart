@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:zephyr_sky/l10n/app_localizations.dart';
 import '../../domain/entities/weather.dart';
 import '../../core/utils/weather_helper.dart';
 
@@ -43,9 +44,9 @@ class WeatherChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '기온 추이',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.temperatureTrend,
+            style: const TextStyle(
               color: Colors.white, 
               fontSize: 16, 
               fontWeight: FontWeight.bold,
@@ -87,7 +88,7 @@ class WeatherChart extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.8),
                                 fontSize: 12,
-                                shadows: [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
+                                shadows: const [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
                               ),
                             ),
                           );
@@ -230,9 +231,9 @@ class PrecipitationChart extends StatelessWidget {
             children: [
               const Icon(Icons.water_drop, color: Colors.lightBlueAccent, size: 18),
               const SizedBox(width: 8),
-              const Text(
-                '강수 확률',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.precipitationChance,
+                style: const TextStyle(
                   color: Colors.white, 
                   fontSize: 16, 
                   fontWeight: FontWeight.bold,
@@ -277,7 +278,7 @@ class PrecipitationChart extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.8),
                                 fontSize: 12,
-                                shadows: [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
+                                shadows: const [Shadow(offset: Offset(0, 1), blurRadius: 2.0, color: Colors.black26)],
                               ),
                             ),
                           );

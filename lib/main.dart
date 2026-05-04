@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'l10n/app_localizations.dart';
 import 'presentation/providers/weather_provider.dart';
 import 'presentation/providers/settings_provider.dart';
 import 'presentation/screens/home_screen.dart';
+
+AppLocalizations _getDefaultL10n() => AppLocalizationsEn();
 
 void main() async {
   // 플러그인 초기화를 위해 필요
@@ -35,7 +38,7 @@ void main() async {
 
   try {
     // 플러그인 초기화 + 채널 생성 (권한 요청은 설정 화면에서 처리)
-    await container.read(notificationServiceProvider).init();
+    await container.read(notificationServiceProvider).init(_getDefaultL10n());
   } catch (e) {
     debugPrint('알림 서비스 초기화 오류: $e');
   }
@@ -65,6 +68,9 @@ class OpenWeatherApp extends StatelessWidget {
         return MaterialApp(
           title: 'Zephyr Sky',
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale(settings.languageCode),
           theme: ThemeData(
             useMaterial3: true,
             textTheme: GoogleFonts.latoTextTheme(),

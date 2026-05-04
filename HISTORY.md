@@ -1,5 +1,47 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-04] 다국어 지원(한국어/영어) 구현 완료 - Issue #1
+
+### 주요 변경 사항
+- **다국어 지원 시스템 구축:** Flutter의 `flutter_localizations`와 ARB 파일을 사용하여 한국어(ko)와 영어(en) 지원을 추가함.
+- **l10n 설정:** `l10n.yaml` 설정 파일 및 `lib/l10n/` 디렉토리에 ARB 파일(`app_ko.arb`, `app_en.arb`) 생성 (총 100+ 개의 문자열 키).
+- **main.dart 지역화:** `MaterialApp`에 `localizationsDelegates` 및 `supportedLocales` 추가, `AppLocalizations` 통합.
+- **SettingsProvider 확장:** 언어 설정(`languageCode`) 저장 및 로드 기능 추가 (`SharedPreferences` 연동).
+- **SettingsScreen 언어 선택 UI:** 설정 화면에 언어 선택 드롭다운 메뉴 추가 (한국어/영어 전환 가능).
+- **전체 문자열 교체:** 하드코딩된 한국어 문자열을 모두 `AppLocalizations` 키로 교체 (Screens, Widgets, Services, Entities, API Sources 등).
+
+### 변경된 파일
+- `pubspec.yaml`: `flutter_localizations` 및 `intl` 패키지 추가
+- `l10n.yaml`: 신규 생성
+- `lib/l10n/app_ko.arb`, `lib/l10n/app_en.arb`: 신규 생성
+- `lib/l10n/app_localizations.dart`, `lib/l10n/app_localizations_en.dart`, `lib/l10n/app_localizations_ko.dart`: 자동 생성
+- `lib/main.dart`: Locale 설정 및 AppLocalizations 통합
+- `lib/presentation/providers/settings_provider.dart`: 언어 설정 저장/로드 로직 추가
+- `lib/presentation/screens/settings_screen.dart`: 언어 선택 UI 추가
+- `lib/presentation/screens/home_screen.dart`, `search_screen.dart`: 문자열 지역화
+- `lib/presentation/widgets/weather_chart.dart`: 문자열 지역화
+- `lib/core/utils/weather_helper.dart`, `notification_service.dart`, `location_service.dart`, `home_widget_service.dart`: 문자열 지역화
+- `lib/data/sources/weather_api_source.dart`: 문자열 지역화
+- `lib/domain/entities/weather.dart`: 지역화 메서드 추가
+
+### 검증
+- 모든 하드코딩 문자열이 ARB 키로 대첸됨
+- SettingsProvider에서 언어 설정이 정상적으로 저장/로드됨
+- SettingsScreen에서 언어 전환이 UI에 반영됨
+
+---
+
+## [2026-05-04] 도메인 엔티티 지역화 지원 추가
+### 주요 변경 사항
+- **Weather 엔티티 지역화 메서드 추가:** `Weather` 클래스 내 하드코딩된 한국어 문자열을 대체하기 위해 `AppLocalizations`를 사용하는 지역화 메서드들을 추가함.
+    - `airQualityLevelLocalized(AppLocalizations l10n)`
+    - `uvRiskLevelLocalized(AppLocalizations l10n)`
+    - `outdoorActivityLevelLocalized(AppLocalizations l10n)`
+    - `outdoorActivityMessageLocalized(AppLocalizations l10n)`
+- **하위 호환성 유지:** 기존의 getter 메서드(`airQualityLevel`, `uvRiskLevel` 등)는 그대로 유지하여 기존 코드와의 호환성을 보장함.
+
+---
+
 ## [2026-05-04] 플레이 스토어 Top 10 진입을 위한 앱 개선 전략 수립 및 이슈 등록 완료
 ### 주요 변경 사항
 - **Top 10 진입 전략 수립:** UI/UX, Performance, Security & Privacy, Reliability & Stability, Engagement & Retention, ASO & Marketing 분야의 50개 개선안 도출.

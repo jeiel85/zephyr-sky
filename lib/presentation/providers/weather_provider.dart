@@ -8,6 +8,7 @@ import '../../core/utils/location_service.dart';
 import '../../core/utils/notification_service.dart';
 import '../../core/utils/home_widget_service.dart';
 import '../../domain/repositories/weather_repository.dart';
+import '../../l10n/app_localizations.dart';
 import 'settings_provider.dart';
 
 // SharedPreferences 프로바이더 (main.dart에서 override 필수)
@@ -44,6 +45,11 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
 
   WeatherNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
 
+  AppLocalizations _getL10n() {
+    final settings = _ref.read(settingsProvider);
+    return lookupAppLocalizations(Locale(settings.languageCode));
+  }
+
   Future<void> loadCachedWeather() async {
     final cached = await _repository.getCachedWeather();
     if (cached != null) {
@@ -51,14 +57,15 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
       
       // 알림 설정 확인 후 업데이트
       final settings = _ref.read(settingsProvider);
+      final l10n = _getL10n();
       if (settings.notificationsEnabled) {
-        await _ref.read(notificationServiceProvider).showWeatherNotification(cached);
+        await _ref.read(notificationServiceProvider).showWeatherNotification(cached, l10n);
       } else {
         await _ref.read(notificationServiceProvider).cancelNotification();
       }
       
       // 위젯 업데이트
-      await HomeWidgetService.updateWidget(cached);
+      await HomeWidgetService.updateWidget(cached, l10n);
     }
   }
 
@@ -70,14 +77,15 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
       
       // 날씨 데이터를 성공적으로 가져오면 알림 설정 확인 후 업데이트
       final settings = _ref.read(settingsProvider);
+      final l10n = _getL10n();
       if (settings.notificationsEnabled) {
-        await _ref.read(notificationServiceProvider).showWeatherNotification(weather);
+        await _ref.read(notificationServiceProvider).showWeatherNotification(weather, l10n);
       } else {
         await _ref.read(notificationServiceProvider).cancelNotification();
       }
       
       // 홈 위젯 업데이트
-      await HomeWidgetService.updateWidget(weather);
+      await HomeWidgetService.updateWidget(weather, l10n);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }

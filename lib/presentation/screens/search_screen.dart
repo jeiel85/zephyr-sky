@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zephyr_sky/l10n/app_localizations.dart';
 import '../providers/weather_provider.dart';
 
 class SearchScreen extends ConsumerWidget {
@@ -20,9 +21,9 @@ class SearchScreen extends ConsumerWidget {
           autofocus: true,
           style: const TextStyle(color: Colors.white, fontSize: 18),
           textInputAction: TextInputAction.search, // 검색 아이콘 표시
-          decoration: const InputDecoration(
-            hintText: '도시 이름 검색 (예: 서울, 도쿄...)',
-            hintStyle: TextStyle(color: Colors.white54),
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.searchHint,
+            hintStyle: const TextStyle(color: Colors.white54),
             border: InputBorder.none,
           ),
           onSubmitted: (value) {
@@ -40,11 +41,11 @@ class SearchScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.search, size: 64, color: Colors.white24),
-                  SizedBox(height: 16),
+                  const Icon(Icons.search, size: 64, color: Colors.white24),
+                  const SizedBox(height: 16),
                   Text(
-                    '검색 결과가 없습니다.',
-                    style: TextStyle(color: Colors.white54, fontSize: 16),
+                    AppLocalizations.of(context)!.noResults,
+                    style: const TextStyle(color: Colors.white54, fontSize: 16),
                   ),
                 ],
               ),
@@ -56,7 +57,7 @@ class SearchScreen extends ConsumerWidget {
             separatorBuilder: (context, index) => Divider(color: Colors.white.withOpacity(0.1)),
             itemBuilder: (context, index) {
               final place = results[index];
-              final String name = place['name'] ?? '알 수 없음';
+              final String name = place['name'] ?? AppLocalizations.of(context)!.unknown;
               final String country = place['country'] ?? '';
               final String admin1 = place['admin1'] ?? '';
               final String subtitle = [admin1, country].where((s) => s.isNotEmpty).join(', ');
@@ -88,7 +89,7 @@ class SearchScreen extends ConsumerWidget {
           child: CircularProgressIndicator(color: Colors.white),
         ),
         error: (err, stack) => Center(
-          child: Text('오류 발생: $err', style: const TextStyle(color: Colors.white)),
+          child: Text('${AppLocalizations.of(context)!.error}: $err', style: const TextStyle(color: Colors.white)),
         ),
       ),
     );

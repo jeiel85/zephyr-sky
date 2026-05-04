@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../domain/entities/weather.dart';
+import '../../l10n/app_localizations.dart';
 import 'weather_helper.dart';
 
 class NotificationService {
@@ -10,9 +11,7 @@ class NotificationService {
 
   // 알림 채널 ID
   static const String _weatherChannelId = 'weather_channel';
-  static const String _weatherChannelName = '날씨 알림';
   static const String _alertChannelId = 'weather_alert';
-  static const String _alertChannelName = '날씨 경고';
 
   // 임계값 설정
   static const double _highWindThreshold = 50.0; // km/h
@@ -20,7 +19,7 @@ class NotificationService {
   static const double _highTempThreshold = 35.0; // °C
   static const double _heavyRainThreshold = 80.0; // mm/h
 
-  Future<void> init() async {
+  Future<void> init(AppLocalizations l10n) async {
     try {
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -32,23 +31,23 @@ class NotificationService {
       await _notificationsPlugin.initialize(initializationSettings);
 
       // 채널을 명시적으로 생성 (runApp 이전 시점에서는 권한 요청 안 함)
-      await _createChannels();
+      await _createChannels(l10n);
     } catch (e) {
       debugPrint('Notification Service 초기화 실패: $e');
     }
   }
 
   // 알림 채널 명시적 생성 (Android 8+에서 필수)
-  Future<void> _createChannels() async {
+  Future<void> _createChannels(AppLocalizations l10n) async {
     final androidPlugin = _notificationsPlugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     if (androidPlugin == null) return;
 
     await androidPlugin.createNotificationChannel(
-      const AndroidNotificationChannel(
+      AndroidNotificationChannel(
         _weatherChannelId,
-        _weatherChannelName,
-        description: '현재 날씨 정보를 상태바에 표시합니다.',
+        l10n.weatherNotification,
+        description: l10n.weatherNotificationDesc,
         importance: Importance.low, // 상태바 아이콘 표시를 위한 최소 중요도
         showBadge: false,
         playSound: false,
@@ -57,10 +56,10 @@ class NotificationService {
     );
 
     await androidPlugin.createNotificationChannel(
-      const AndroidNotificationChannel(
+      AndroidNotificationChannel(
         _alertChannelId,
-        _alertChannelName,
-        description: '날씨 경고 알림을 표시합니다.',
+        l10n.weatherAlert,
+        description: l10n.weatherAlertDesc,
         importance: Importance.high,
       ),
     );
@@ -99,7 +98,7 @@ class NotificationService {
     }
   }
 
-  Future<void> showWeatherNotification(Weather weather) async {
+  Future<void> showWeatherNotification(Weather weather, AppLocalizations l10n) async {
     try {
       // 권한 확인 (Android 13+)
       final hasPermission = await areNotificationsEnabled();
@@ -108,15 +107,18 @@ class NotificationService {
         return;
       }
 
-      final String contentTitle = '${weather.locationName} (${WeatherHelper.getDescription(weather.weatherCode)})';
-      final String contentText =
-          '현재: ${weather.temperature.round()}° (최저: ${weather.minTemp.round()}° / 최고: ${weather.maxTemp.round()}°)';
+      final String contentTitle = '${weather.locationName} (${WeatherHelper.getDescriptionLocalized(weather.weatherCode, l10n)})';
+      final String contentText = l10n.currentTemp(
+        weather.temperature.round(),
+        weather.minTemp.round(),
+        weather.maxTemp.round(),
+      );
 
       final AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
         _weatherChannelId,
-        _weatherChannelName,
-        channelDescription: '현재 날씨 정보를 상태바에 표시합니다.',
+        l10n.weatherNotification,
+        channelDescription: l10n.weatherNotificationDesc,
         importance: Importance.low,
         priority: Priority.low,
         ongoing: true,
@@ -138,53 +140,53 @@ class NotificationService {
       );
       
       // 날씨 경고 체크
-      await _checkAndShowWeatherAlerts(weather);
+      await _checkAndShowWeatherAlerts(weather, l10n);
     } catch (e) {
       debugPrint('알림 표시 실패: $e');
     }
   }
 
   // 날씨 경고 체크 및 표시
-  Future<void> _checkAndShowWeatherAlerts(Weather weather) async {
+  Future<void> _checkAndShowWeatherAlerts(Weather weather, AppLocalizations l10n) async {
     final List<String> alerts = [];
     
     // 강한 바람 경고
     if (weather.windSpeed >= _highWindThreshold) {
-      alerts.add('💨 강한 바람 (${weather.windSpeed.round()}km/h)');
+      alerts.add(l10n.alertStrongWind(weather.windSpeed.round()));
     }
     
     // 한파 경고
     if (weather.minTemp <= _lowTempThreshold) {
-      alerts.add('❄️ 한파 경보 (${weather.minTemp.round()}°)');
+      alerts.add(l10n.alertColdWave(weather.minTemp.round()));
     }
     
     // 고온 경고
     if (weather.maxTemp >= _highTempThreshold) {
-      alerts.add('🔥 한열 경보 (${weather.maxTemp.round()}°)');
+      alerts.add(l10n.alertHeatWave(weather.maxTemp.round()));
     }
     
     // 강수 확률이 높은 경우
     if (weather.precipitationProbability != null && weather.precipitationProbability! >= 70) {
-      alerts.add('🌧️ 강수 확률 높음 (${weather.precipitationProbability!.round()}%)');
+      alerts.add(l10n.alertHighPrecipitation(weather.precipitationProbability!.round()));
     }
     
     // 대기질 경고
     if (weather.airQualityIndex != null && weather.airQualityIndex! > 100) {
-      alerts.add('🌬️ 대기질 ${weather.airQualityLevel} (AQI: ${weather.airQualityIndex})');
+      alerts.add(l10n.alertAirQuality(weather.airQualityLevel, weather.airQualityIndex!));
     }
     
     // 자외선 경고
     if (weather.uvIndex != null && weather.uvIndex! >= 7) {
-      alerts.add('☀️ 자외선 ${weather.uvRiskLevel} (UV: ${weather.uvIndex!.toStringAsFixed(1)})');
+      alerts.add(l10n.alertUv(weather.uvRiskLevel, weather.uvIndex!.toStringAsFixed(1)));
     }
     
     // 경고가 있으면 표시
     if (alerts.isNotEmpty) {
-      await _showAlertNotification(alerts);
+      await _showAlertNotification(alerts, l10n);
     }
   }
 
-  Future<void> _showAlertNotification(List<String> alerts) async {
+  Future<void> _showAlertNotification(List<String> alerts, AppLocalizations l10n) async {
     try {
       // 날씨 경고 알림 햅틱 피드백
       HapticFeedback.mediumImpact();
@@ -192,8 +194,8 @@ class NotificationService {
       final AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
         _alertChannelId,
-        _alertChannelName,
-        channelDescription: '날씨 경고 알림을 표시합니다.',
+        l10n.weatherAlert,
+        channelDescription: l10n.weatherAlertDesc,
         importance: Importance.high,
         priority: Priority.high,
         icon: '@mipmap/ic_launcher',
@@ -205,7 +207,7 @@ class NotificationService {
 
       await _notificationsPlugin.show(
         1,
-        '⚠️ 날씨 경고',
+        l10n.weatherWarnings,
         alerts.join('\n'),
         platformChannelSpecifics,
       );

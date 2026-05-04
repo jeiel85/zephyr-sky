@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/weather_helper.dart';
+import '../../l10n/app_localizations.dart';
 
 class Weather {
   final double temperature;
@@ -65,6 +66,18 @@ class Weather {
     return '위험';
   }
 
+  /// AQI 등급 지역화 반환
+  String airQualityLevelLocalized(AppLocalizations l10n) {
+    if (airQualityIndex == null) return l10n.aqiUnknown;
+    final aqi = airQualityIndex!;
+    if (aqi <= 50) return l10n.aqiGood;
+    if (aqi <= 100) return l10n.aqiModerate;
+    if (aqi <= 150) return l10n.aqiSensitive;
+    if (aqi <= 200) return l10n.aqiUnhealthy;
+    if (aqi <= 300) return l10n.aqiVeryUnhealthy;
+    return l10n.aqiHazardous;
+  }
+
   /// 자외선 위험 등급 반환
   String get uvRiskLevel {
     if (uvIndex == null) return '알 수 없음';
@@ -74,6 +87,17 @@ class Weather {
     if (uv <= 7) return '높음';
     if (uv <= 10) return '매우 높음';
     return '위험';
+  }
+
+  /// 자외선 위험 등급 지역화 반환
+  String uvRiskLevelLocalized(AppLocalizations l10n) {
+    if (uvIndex == null) return l10n.uvUnknown;
+    final uv = uvIndex!;
+    if (uv <= 2) return l10n.uvLow;
+    if (uv <= 5) return l10n.uvModerate;
+    if (uv <= 7) return l10n.uvHigh;
+    if (uv <= 10) return l10n.uvVeryHigh;
+    return l10n.uvExtreme;
   }
 
   /// 야외 활동 지수 (0-100, 높을수록 좋음)
@@ -112,7 +136,7 @@ class Weather {
     return score.clamp(0, 100);
   }
 
-/// 야외 활동 권장 등급
+  /// 야외 활동 권장 등급
   String get outdoorActivityLevel {
     final score = outdoorActivityScore;
     if (score >= 80) return '최상';
@@ -120,6 +144,16 @@ class Weather {
     if (score >= 40) return '보통';
     if (score >= 20) return '나쁨';
     return '위험';
+  }
+
+  /// 야외 활동 권장 등급 지역화 반환
+  String outdoorActivityLevelLocalized(AppLocalizations l10n) {
+    final score = outdoorActivityScore;
+    if (score >= 80) return l10n.outdoorExcellent;
+    if (score >= 60) return l10n.outdoorGood;
+    if (score >= 40) return l10n.outdoorFair;
+    if (score >= 20) return l10n.outdoorPoor;
+    return l10n.outdoorDangerous;
   }
 
   /// 야외 활동 추천 메시지
@@ -130,6 +164,16 @@ class Weather {
     if (score >= 40) return '야외 활동 시 주의가 필요합니다';
     if (score >= 20) return '야외 활동에 권장하지 않습니다';
     return '야외 활동을 자제해 주세요';
+  }
+
+  /// 야외 활동 추천 메시지 지역화 반환
+  String outdoorActivityMessageLocalized(AppLocalizations l10n) {
+    final score = outdoorActivityScore;
+    if (score >= 80) return l10n.outdoorMsgExcellent;
+    if (score >= 60) return l10n.outdoorMsgGood;
+    if (score >= 40) return l10n.outdoorMsgFair;
+    if (score >= 20) return l10n.outdoorMsgPoor;
+    return l10n.outdoorMsgDangerous;
   }
 
   Map<String, dynamic> toMap() {

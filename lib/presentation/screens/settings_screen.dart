@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zephyr_sky/l10n/app_localizations.dart';
 import '../providers/settings_provider.dart';
 import '../providers/weather_provider.dart';
 
@@ -15,7 +16,7 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: settings.isDarkMode ? Colors.grey[900] : Colors.grey[50],
       appBar: AppBar(
-        title: const Text('설정'),
+        title: Text(AppLocalizations.of(context)!.settings),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: settings.isDarkMode ? Colors.white : Colors.black87,
@@ -24,13 +25,13 @@ class SettingsScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         children: [
           // 알림 설정 (중요도에 따라 상단 배치)
-          _buildSectionHeader('알림', settings.isDarkMode),
+          _buildSectionHeader(AppLocalizations.of(context)!.notifications, settings.isDarkMode),
           _buildSettingsCard(
             settings.isDarkMode,
             children: [
               SwitchListTile(
-                title: const Text('상태바 날씨 알림'),
-                subtitle: const Text('상태바에 현재 날씨를 항상 표시합니다.'),
+                title: Text(AppLocalizations.of(context)!.statusBarWeatherNotification),
+                subtitle: Text(AppLocalizations.of(context)!.statusBarWeatherDesc),
                 value: settings.notificationsEnabled,
                 onChanged: (value) async {
                   // 설정 토글 햅틱 피드백
@@ -49,9 +50,9 @@ class SettingsScreen extends ConsumerWidget {
                       // 권한 거부 시 설정 안내
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('알림 권한이 필요합니다. 시스템 설정 > 앱 > Zephyr Sky에서 알림을 허용해주세요.'),
-                            duration: Duration(seconds: 4),
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!.notificationPermissionRequired),
+                            duration: const Duration(seconds: 4),
                           ),
                         );
                       }
@@ -71,13 +72,13 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // 외관 설정
-          _buildSectionHeader('외관', settings.isDarkMode),
+          _buildSectionHeader(AppLocalizations.of(context)!.appearance, settings.isDarkMode),
           _buildSettingsCard(
             settings.isDarkMode,
             children: [
               SwitchListTile(
-                title: const Text('다크 모드'),
-                subtitle: const Text('어두운 테마 사용'),
+                title: Text(AppLocalizations.of(context)!.darkMode),
+                subtitle: Text(AppLocalizations.of(context)!.darkModeDesc),
                 value: settings.isDarkMode,
                 onChanged: (value) {
                   // 설정 토글 햅틱 피드백
@@ -95,13 +96,13 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           
           // 단위 설정
-          _buildSectionHeader('단위', settings.isDarkMode),
+          _buildSectionHeader(AppLocalizations.of(context)!.unit, settings.isDarkMode),
           _buildSettingsCard(
             settings.isDarkMode,
             children: [
               RadioListTile<bool>(
-                title: const Text('섭씨 (°C)'),
-                subtitle: const Text('한국, 유럽 등'),
+                title: Text(AppLocalizations.of(context)!.celsius),
+                subtitle: Text(AppLocalizations.of(context)!.celsiusDesc),
                 value: true,
                 groupValue: settings.useCelsius,
                 onChanged: (value) {
@@ -111,8 +112,8 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               RadioListTile<bool>(
-                title: const Text('화씨 (°F)'),
-                subtitle: const Text('미국 등'),
+                title: Text(AppLocalizations.of(context)!.fahrenheit),
+                subtitle: Text(AppLocalizations.of(context)!.fahrenheitDesc),
                 value: false,
                 groupValue: settings.useCelsius,
                 onChanged: (value) {
@@ -126,41 +127,69 @@ class SettingsScreen extends ConsumerWidget {
           
           const SizedBox(height: 24),
           
+          // 언어 설정
+          _buildSectionHeader(AppLocalizations.of(context)!.language, settings.isDarkMode),
+          _buildSettingsCard(
+            settings.isDarkMode,
+            children: [
+              RadioListTile<String>(
+                title: Text(AppLocalizations.of(context)!.korean),
+                value: 'ko',
+                groupValue: settings.languageCode,
+                onChanged: (value) {
+                  HapticFeedback.lightImpact();
+                  settingsNotifier.setLanguage('ko');
+                },
+              ),
+              RadioListTile<String>(
+                title: Text(AppLocalizations.of(context)!.english),
+                value: 'en',
+                groupValue: settings.languageCode,
+                onChanged: (value) {
+                  HapticFeedback.lightImpact();
+                  settingsNotifier.setLanguage('en');
+                },
+              ),
+            ],
+          ),
+          
+          const SizedBox(height: 24),
+          
           // 즐겨찾기 위치
-          _buildSectionHeader('즐겨찾기 위치', settings.isDarkMode),
+          _buildSectionHeader(AppLocalizations.of(context)!.favoriteLocations, settings.isDarkMode),
           _buildSettingsCard(
             settings.isDarkMode,
             children: [
               if (settings.favoriteLocations.isEmpty)
-                const ListTile(
-                  leading: Icon(Icons.location_off, color: Colors.grey),
-                  title: Text('즐겨찾기 위치가 없습니다'),
-                  subtitle: Text('홈 화면에서 검색 후 추가하세요'),
+                ListTile(
+                  leading: const Icon(Icons.location_off, color: Colors.grey),
+                  title: Text(AppLocalizations.of(context)!.noFavoriteLocations),
+                  subtitle: Text(AppLocalizations.of(context)!.addFavoriteHint),
                 )
               else
                 ...List.generate(settings.favoriteLocations.length, (index) {
                   final location = settings.favoriteLocations[index];
                   return ListTile(
                     leading: const Icon(Icons.location_on, color: Colors.green),
-                    title: Text(location['name'] ?? '알 수 없는 위치'),
+                    title: Text(location['name'] ?? AppLocalizations.of(context)!.unknownLocation),
                     subtitle: Text(
-                      '위도: ${location['lat']?.toStringAsFixed(2)}, 경도: ${location['lon']?.toStringAsFixed(2)}',
+                      AppLocalizations.of(context)!.latLon(location['lat'], location['lon']),
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline, color: Colors.red),
                       onPressed: () => settingsNotifier.removeFavoriteLocation(index),
-                      tooltip: '삭제',
+                      tooltip: AppLocalizations.of(context)!.delete,
                     ),
                   );
                 }),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.add_location, color: Colors.blue),
-                title: const Text('현재 위치 추가'),
+                title: Text(AppLocalizations.of(context)!.addCurrentLocation),
                 onTap: () {
                   // TODO: 현재 위치 추가 기능
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('홈 화면에서 검색 후 추가하세요')),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.addFavoriteHint)),
                   );
                 },
               ),
@@ -170,20 +199,20 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           
           // 앱 정보
-          _buildSectionHeader('정보', settings.isDarkMode),
+          _buildSectionHeader(AppLocalizations.of(context)!.info, settings.isDarkMode),
           _buildSettingsCard(
             settings.isDarkMode,
             children: [
               ListTile(
                 leading: const Icon(Icons.info_outline, color: Colors.grey),
-                title: const Text('Zephyr Sky'),
-                subtitle: const Text('버전 1.2.1'),
+                title: Text(AppLocalizations.of(context)!.appName),
+                subtitle: Text('${AppLocalizations.of(context)!.version} 1.2.1'),
               ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.code, color: Colors.grey),
-                title: const Text('데이터 소스'),
-                subtitle: const Text('Open-Meteo API'),
+                title: Text(AppLocalizations.of(context)!.dataSource),
+                subtitle: Text(AppLocalizations.of(context)!.openMeteoApi),
               ),
             ],
           ),

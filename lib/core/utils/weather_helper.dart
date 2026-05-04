@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 
 class WeatherHelper {
   static String getDescription(int code) {
@@ -23,6 +24,31 @@ class WeatherHelper {
       case 95: return '뇌우';
       case 96: case 99: return '우박을 동반한 뇌우';
       default: return '알 수 없음';
+    }
+  }
+
+  static String getDescriptionLocalized(int code, AppLocalizations l10n) {
+    switch (code) {
+      case 0: return l10n.weatherClear;
+      case 1: return l10n.weatherMainlyClear;
+      case 2: return l10n.weatherPartlyCloudy;
+      case 3: return l10n.weatherOvercast;
+      case 45: case 48: return l10n.weatherFog;
+      case 51: case 53: case 55: return l10n.weatherLightDrizzle;
+      case 56: case 57: return l10n.weatherFreezingDrizzle;
+      case 61: return l10n.weatherLightRain;
+      case 63: return l10n.weatherModerateRain;
+      case 65: return l10n.weatherHeavyRain;
+      case 66: case 67: return l10n.weatherFreezingRain;
+      case 71: return l10n.weatherLightSnow;
+      case 73: return l10n.weatherModerateSnow;
+      case 75: return l10n.weatherHeavySnow;
+      case 77: return l10n.weatherSnowGrains;
+      case 80: case 81: case 82: return l10n.weatherRainShowers;
+      case 85: case 86: return l10n.weatherSnowShowers;
+      case 95: return l10n.weatherThunderstorm;
+      case 96: case 99: return l10n.weatherThunderstormHail;
+      default: return l10n.weatherUnknown;
     }
   }
 

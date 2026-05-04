@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:zephyr_sky/l10n/app_localizations.dart';
 import '../../core/utils/weather_helper.dart';
 import '../../core/utils/route_animations.dart';
 import '../providers/weather_provider.dart';
@@ -77,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       
       // 역지오코딩으로 지역명 가져오기
       final address = await locationService.getAddressFromLatLng(position.latitude, position.longitude);
-      final locationLabel = address != null ? '현재 위치 ($address)' : '현재 위치';
+      final locationLabel = address != null ? '${AppLocalizations.of(context)!.addCurrentLocation} ($address)' : AppLocalizations.of(context)!.addCurrentLocation;
       
       await ref.read(weatherStateProvider.notifier).fetchWeather(
         position.latitude, 
@@ -170,7 +171,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Column(
             children: [
               Text(
-                weather?.locationName ?? '위치 로드 중...',
+                weather?.locationName ?? AppLocalizations.of(context)!.locationLoading,
                 style: const TextStyle(
                   fontSize: 22, 
                   color: Colors.white,
@@ -180,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               if (weather != null)
                 Text(
-                  DateFormat('M월 d일 (E)', 'ko_KR').format(weather.time),
+                  DateFormat('M월 d일 (E)', AppLocalizations.of(context)!.localeName).format(weather.time),
                   style: TextStyle(
                     fontSize: 14, 
                     color: Colors.white.withOpacity(0.8),
@@ -192,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           IconButton(
             onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
             icon: const Icon(Icons.menu, color: Colors.white, size: 28),
-            tooltip: '메뉴 열기',
+            tooltip: AppLocalizations.of(context)!.menuOpen,
           ),
         ],
       ),
@@ -211,14 +212,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('Zephyr Sky', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-                Text('날씨 및 설정', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                Text(AppLocalizations.of(context)!.appName, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(AppLocalizations.of(context)!.appSubtitle, style: const TextStyle(color: Colors.white70, fontSize: 14)),
               ],
             ),
           ),
           ListTile(
             leading: const Icon(Icons.search, color: Colors.white),
-            title: const Text('위치 검색', style: TextStyle(color: Colors.white)),
+            title: Text(AppLocalizations.of(context)!.searchLocation, style: const TextStyle(color: Colors.white)),
             onTap: () {
               // Navigator.pop(context); // Drawer를 닫지 않고 이동
               Navigator.push(
@@ -229,7 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           ListTile(
             leading: const Icon(Icons.settings, color: Colors.white),
-            title: const Text('설정', style: TextStyle(color: Colors.white)),
+            title: Text(AppLocalizations.of(context)!.settings, style: const TextStyle(color: Colors.white)),
             onTap: () {
               // Navigator.pop(context); // Drawer를 닫지 않고 이동
               Navigator.push(
@@ -240,7 +241,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           ListTile(
             leading: const Icon(Icons.refresh, color: Colors.white),
-            title: const Text('날씨 새로고침', style: TextStyle(color: Colors.white)),
+            title: Text(AppLocalizations.of(context)!.weatherRefresh, style: const TextStyle(color: Colors.white)),
             onTap: () {
               Navigator.pop(context);
               _refreshWeather();
@@ -269,9 +270,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 20),
             _buildOutdoorActivity(weather),
             const SizedBox(height: 30),
-            const Text(
-              '기온 및 강수량 추이',
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows),
+            Text(
+              AppLocalizations.of(context)!.temperaturePrecipitationTrend,
+              style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows),
             ),
             const SizedBox(height: 16),
             WeatherChart(hourlyForecast: weather.hourlyForecast, isDarkMode: isDarkMode),
@@ -290,7 +291,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildCurrentWeather(Weather weather) {
     return Semantics(
-      label: '현재 날씨: ${weather.weatherDescription}, ${weather.temperature.round()}도',
+      label: AppLocalizations.of(context)!.currentWeatherLabel(weather.weatherDescription, weather.temperature.round()),
       child: Column(
         children: [
           Row(
@@ -328,7 +329,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           style: const TextStyle(fontSize: 100, fontWeight: FontWeight.w100, color: Colors.white, shadows: _textShadows),
         ),
         Text(
-          '최고: ${weather.maxTemp.round()}°  최저: ${weather.minTemp.round()}°',
+          '${AppLocalizations.of(context)!.maxTemp}: ${weather.maxTemp.round()}°  ${AppLocalizations.of(context)!.minTemp}: ${weather.minTemp.round()}°',
           style: TextStyle(fontSize: 18, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w400, shadows: _textShadows),
         ),
         if (weather.precipitationProbability != null && weather.precipitationProbability! > 0) ...[
@@ -345,7 +346,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const Icon(Icons.water_drop, color: Colors.lightBlueAccent, size: 20),
                 const SizedBox(width: 6),
                 Text(
-                  '강수확률 ${weather.precipitationProbability!.round()}%',
+                  '${AppLocalizations.of(context)!.precipitationProbability} ${weather.precipitationProbability!.round()}%',
                   style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -363,9 +364,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildDetailItem(Icons.water_drop_outlined, '습도', '${weather.humidity.round()}%'),
-          _buildDetailItem(Icons.air, '풍속', '${weather.windSpeed.round()}km/h'),
-          _buildDetailItem(Icons.thermostat_outlined, '체감', '${weather.apparentTemperature.round()}°'),
+          _buildDetailItem(Icons.water_drop_outlined, AppLocalizations.of(context)!.humidity, '${weather.humidity.round()}%'),
+          _buildDetailItem(Icons.air, AppLocalizations.of(context)!.windSpeed, '${weather.windSpeed.round()}km/h'),
+          _buildDetailItem(Icons.thermostat_outlined, AppLocalizations.of(context)!.feelsLike, '${weather.apparentTemperature.round()}°'),
         ],
       ),
     );
@@ -377,16 +378,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       items.add(_buildDetailItem(Icons.eco_outlined, 'AQI', '${weather.airQualityIndex} (${weather.airQualityLevel})', color: _getAqiColor(weather.airQualityIndex!)));
     }
     if (weather.pressure != null) {
-      items.add(_buildDetailItem(Icons.speed_outlined, '기압', '${weather.pressure!.round()}hPa'));
+      items.add(_buildDetailItem(Icons.speed_outlined, AppLocalizations.of(context)!.pressure, '${weather.pressure!.round()}hPa'));
     }
     if (weather.visibility != null) {
-      items.add(_buildDetailItem(Icons.visibility_outlined, '시정', '${(weather.visibility! / 1000).toStringAsFixed(1)}km'));
+      items.add(_buildDetailItem(Icons.visibility_outlined, AppLocalizations.of(context)!.visibility, '${(weather.visibility! / 1000).toStringAsFixed(1)}km'));
     }
     if (weather.dewPoint != null) {
-      items.add(_buildDetailItem(Icons.water_outlined, '이슬점', '${weather.dewPoint!.round()}°'));
+      items.add(_buildDetailItem(Icons.water_outlined, AppLocalizations.of(context)!.dewPoint, '${weather.dewPoint!.round()}°'));
     }
     if (weather.cloudCover != null) {
-      items.add(_buildDetailItem(Icons.cloud_outlined, '구름', '${weather.cloudCover}%'));
+      items.add(_buildDetailItem(Icons.cloud_outlined, AppLocalizations.of(context)!.cloudCover, '${weather.cloudCover}%'));
     }
     
     if (items.isEmpty) return const SizedBox.shrink();
@@ -410,7 +411,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Color scoreColor = score >= 80 ? Colors.greenAccent : (score >= 60 ? Colors.lightGreenAccent : (score >= 40 ? Colors.orangeAccent : Colors.redAccent));
     
     return Semantics(
-      label: '야외 활동 지수: $score점, $level, $message',
+      label: '${AppLocalizations.of(context)!.outdoorActivityIndex}: $score점, $level, $message',
       child: _buildGlassCard(
         child: Column(
           children: [
@@ -418,7 +419,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               const Icon(Icons.directions_run, color: Colors.amber, size: 24),
               const SizedBox(width: 8),
-              const Text('야외 활동 지수', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              Text(AppLocalizations.of(context)!.outdoorActivityIndex, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
               const Spacer(),
               Text(level, style: TextStyle(color: scoreColor, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
             ],
@@ -458,9 +459,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Text('시간별 예보', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
+        Padding(
+          padding: const EdgeInsets.only(left: 4),
+          child: Text(AppLocalizations.of(context)!.hourlyForecast, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
         ),
         const SizedBox(height: 16),
         Container(
@@ -484,7 +485,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(DateFormat('HH시').format(item.time), style: const TextStyle(color: Colors.white70, fontSize: 12, shadows: _textShadows)),
+                        Text(DateFormat('HH시', AppLocalizations.of(context)!.localeName).format(item.time), style: const TextStyle(color: Colors.white70, fontSize: 12, shadows: _textShadows)),
                         const SizedBox(height: 10),
                         Icon(WeatherHelper.getIcon(item.weatherCode), color: Colors.white, size: 28, shadows: const [Shadow(blurRadius: 5, color: Colors.black26)]),
                         const SizedBox(height: 10),
@@ -524,11 +525,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('주간 예보', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              Text(AppLocalizations.of(context)!.dailyForecast, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, shadows: _textShadows)),
               TextButton(
                 onPressed: () => setState(() => _isDailyExpanded = !_isDailyExpanded),
                 child: Text(
-                  _isDailyExpanded ? '접기' : '더보기',
+                  _isDailyExpanded ? AppLocalizations.of(context)!.collapse : AppLocalizations.of(context)!.seeMore,
                   style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -548,7 +549,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Expanded(
                         flex: 3,
                         child: Text(
-                          DateFormat('E d일', 'ko_KR').format(day.time),
+                          DateFormat('E d일', AppLocalizations.of(context)!.localeName).format(day.time),
                           style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w400, shadows: _textShadows),
                         ),
                       ),
@@ -638,14 +639,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           const Icon(Icons.error_outline, size: 60, color: Colors.white),
           const SizedBox(height: 16),
-          const Text('날씨 정보를 가져올 수 없습니다.', style: TextStyle(color: Colors.white, fontSize: 18, shadows: _textShadows)),
+          Text(AppLocalizations.of(context)!.weatherLoadError, style: const TextStyle(color: Colors.white, fontSize: 18, shadows: _textShadows)),
           const SizedBox(height: 8),
           Text(err.toString(), style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 12), textAlign: TextAlign.center),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: _refreshWeather,
             style: ElevatedButton.styleFrom(backgroundColor: Colors.white24, foregroundColor: Colors.white),
-            child: const Text('다시 시도'),
+            child: Text(AppLocalizations.of(context)!.retry),
           ),
         ],
       ),

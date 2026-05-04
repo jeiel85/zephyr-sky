@@ -7,12 +7,14 @@ class SettingsState {
   final bool isDarkMode;
   final bool notificationsEnabled;
   final List<Map<String, dynamic>> favoriteLocations;
+  final String languageCode; // 'ko' or 'en'
 
   const SettingsState({
     this.useCelsius = true,
     this.isDarkMode = false,
     this.notificationsEnabled = true,
     this.favoriteLocations = const [],
+    this.languageCode = 'ko',
   });
 
   SettingsState copyWith({
@@ -20,12 +22,14 @@ class SettingsState {
     bool? isDarkMode,
     bool? notificationsEnabled,
     List<Map<String, dynamic>>? favoriteLocations,
+    String? languageCode,
   }) {
     return SettingsState(
       useCelsius: useCelsius ?? this.useCelsius,
       isDarkMode: isDarkMode ?? this.isDarkMode,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       favoriteLocations: favoriteLocations ?? this.favoriteLocations,
+      languageCode: languageCode ?? this.languageCode,
     );
   }
 }
@@ -38,6 +42,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   static const String _keyIsDarkMode = 'dark_mode';
   static const String _keyNotifications = 'notifications_enabled';
   static const String _keyFavorites = 'favorite_locations';
+  static const String _keyLanguage = 'language_code';
 
   SettingsNotifier(this._prefs) : super(const SettingsState()) {
     _loadSettings();
@@ -47,6 +52,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final useCelsius = _prefs.getBool(_keyUseCelsius) ?? true;
     final isDarkMode = _prefs.getBool(_keyIsDarkMode) ?? false;
     final notificationsEnabled = _prefs.getBool(_keyNotifications) ?? true;
+    final languageCode = _prefs.getString(_keyLanguage) ?? 'ko';
     
     // 즐겨찾기 위치 로드
     final favoritesJson = _prefs.getStringList(_keyFavorites) ?? [];
@@ -68,6 +74,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       isDarkMode: isDarkMode,
       notificationsEnabled: notificationsEnabled,
       favoriteLocations: favorites,
+      languageCode: languageCode,
     );
   }
 
@@ -87,6 +94,12 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> setNotificationsEnabled(bool value) async {
     await _prefs.setBool(_keyNotifications, value);
     state = state.copyWith(notificationsEnabled: value);
+  }
+
+  // 언어 설정 변경
+  Future<void> setLanguage(String languageCode) async {
+    await _prefs.setString(_keyLanguage, languageCode);
+    state = state.copyWith(languageCode: languageCode);
   }
 
   // 즐겨찾기 추가
