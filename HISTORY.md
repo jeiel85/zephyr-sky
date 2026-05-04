@@ -1,5 +1,12 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-04] 플레이 스토어 Top 10 진입을 위한 앱 개선 전략 수립 및 이슈 등록 완료
+### 주요 변경 사항
+- **Top 10 진입 전략 수립:** UI/UX, Performance, Security & Privacy, Reliability & Stability, Engagement & Retention, ASO & Marketing 분야의 50개 개선안 도출.
+- **GitHub 이슈 등록:** 해당 50개의 개선 사항을 프로젝트 파이프라인으로 관리할 수 있도록 GitHub 이슈에 일괄 등록 완료.
+
+---
+
 ## [2026-04-22] 가독성 및 UI/UX 레이아웃 대폭 개선 (v1.2.0)
 
 ### 주요 개선 사항
