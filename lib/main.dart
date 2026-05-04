@@ -17,8 +17,9 @@ void main() async {
   SharedPreferences? sharedPreferences;
 
   try {
-    // 날짜 포맷팅 초기화 (ko_KR 로케일 지원)
+    // 날짜 포맷팅 초기화 (ko_KR, en 로케일 지원)
     await initializeDateFormatting('ko_KR', null);
+    await initializeDateFormatting('en', null);
     
     // SharedPreferences 초기화
     sharedPreferences = await SharedPreferences.getInstance();

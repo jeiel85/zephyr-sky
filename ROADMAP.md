@@ -226,7 +226,7 @@ Phase 5:
 - [ ] 레이다/위성 imagery — 미정
 - [ ] AI 기반 날씨 요약 — 미정
 - [ ] 기후 데이터 분석 — 미정
-- [ ] 오프라인 모드 최적화 — [#2](https://github.com/jeiel85/zephyr-sky/issues/2)
+- [x] 오프라인 모드 최적화 — [#2](https://github.com/jeiel85/zephyr-sky/issues/2)
 - [ ] 개인정보 보호 강화 (지속적 개선)
 - [ ] 단위 테스트 커버리지 80%+ — [#3](https://github.com/jeiel85/zephyr-sky/issues/3)
 

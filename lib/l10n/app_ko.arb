@@ -314,5 +314,30 @@
   "temperatureTrend": "기온 추이",
   "@temperatureTrend": {},
   "precipitationChance": "강수 확률",
-  "@precipitationChance": {}
+  "@precipitationChance": {},
+
+  "offlineMode": "오프라인 모드 - 캐시된 데이터 표시 중",
+  "@offlineMode": {},
+  "cacheExpired": "캐시가 만료되었습니다",
+  "@cacheExpired": {},
+  "minutesAgo": "{count}분 전",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "hoursAgo": "{count}시간 전",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "daysAgo": "{count}일 전",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "searchOffline": "오프라인 상태에서는 검색할 수 없습니다",
+  "@searchOffline": {}
 }

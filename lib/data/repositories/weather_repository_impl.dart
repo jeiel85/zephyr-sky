@@ -9,6 +9,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
   final SharedPreferences _prefs;
   static const String _cacheKey = 'cached_weather';
   static const String _lastLocationKey = 'last_location';
+  static const String _cacheTimestampKey = 'cached_weather_timestamp';
+  
+  // 캐시 유효 시간: 30분
+  static const int _cacheValidityMinutes = 30;
 
   WeatherRepositoryImpl(this._apiSource, this._prefs);
 
@@ -44,11 +48,36 @@ class WeatherRepositoryImpl implements WeatherRepository {
     }
     return null;
   }
+  
+  @override
+  Future<CachedWeatherInfo?> getCachedWeatherWithInfo() async {
+    final jsonString = _prefs.getString(_cacheKey);
+    final timestamp = _prefs.getInt(_cacheTimestampKey);
+    
+    if (jsonString != null && timestamp != null) {
+      try {
+        final Map<String, dynamic> map = json.decode(jsonString);
+        final weather = Weather.fromMap(map);
+        final cachedTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+        final isExpired = DateTime.now().difference(cachedTime).inMinutes > _cacheValidityMinutes;
+        
+        return CachedWeatherInfo(
+          weather: weather,
+          cachedTime: cachedTime,
+          isExpired: isExpired,
+        );
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
 
   @override
   Future<void> saveWeatherToCache(Weather weather) async {
     final jsonString = json.encode(weather.toMap());
     await _prefs.setString(_cacheKey, jsonString);
+    await _prefs.setInt(_cacheTimestampKey, DateTime.now().millisecondsSinceEpoch);
   }
 
   @override

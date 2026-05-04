@@ -1,40 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zephyr_sky/l10n/app_localizations.dart';
+import '../../core/utils/connectivity_service.dart';
 import '../providers/weather_provider.dart';
+import '../../l10n/app_localizations.dart';
 
-class SearchScreen extends ConsumerWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends ConsumerState<SearchScreen> {
+  final ConnectivityService _connectivityService = ConnectivityService();
+  bool _isOffline = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkConnectivity();
+  }
+
+  Future<void> _checkConnectivity() async {
+    await _connectivityService.initialize();
+    final isConnected = await _connectivityService.checkConnection();
+    if (mounted) {
+      setState(() {
+        _isOffline = !isConnected;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _connectivityService.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final searchResults = ref.watch(searchResultsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1e3c72), // 일관성 있는 배경색
+      backgroundColor: const Color(0xFF1e3c72),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         title: TextField(
           autofocus: true,
+          enabled: !_isOffline,
           style: const TextStyle(color: Colors.white, fontSize: 18),
-          textInputAction: TextInputAction.search, // 검색 아이콘 표시
+          textInputAction: TextInputAction.search,
           decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.searchHint,
-            hintStyle: const TextStyle(color: Colors.white54),
+            hintText: _isOffline ? l10n.searchOffline : l10n.searchHint,
+            hintStyle: TextStyle(color: _isOffline ? Colors.white30 : Colors.white54),
             border: InputBorder.none,
           ),
           onSubmitted: (value) {
-            // 엔터나 검색 버튼을 눌렀을 때만 검색 실행
+            if (_isOffline) return;
             if (value.trim().isNotEmpty) {
               ref.read(searchResultsProvider.notifier).search(value.trim());
             }
           },
         ),
       ),
-      body: searchResults.when(
+      body: _isOffline
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.wifi_off, size: 64, color: Colors.white.withOpacity(0.3)),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.searchOffline,
+                  style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 16),
+                ),
+              ],
+            ),
+          )
+        : searchResults.when(
         data: (results) {
           if (results.isEmpty) {
             return const Center(

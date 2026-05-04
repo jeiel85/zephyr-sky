@@ -1,5 +1,33 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-04] 오프라인 모드 최적화 구현 완료 - Issue #2
+
+### 주요 변경 사항
+- **네트워크 상태 감지:** `connectivity_plus` 패키지 추가 및 `ConnectivityService` 구현.
+- **캐시 타임스탬프:** 날씨 데이터 캐시 시 저장 시간 기록, 30분 만료 정책 적용.
+- **Stale-while-revalidate 패턴:** 캐시된 데이터를 먼저 표시한 후 백그라운드에서 갱신.
+- **오프라인 폴리백:** API 실패 시 캐시된 데이터로 폴리백.
+- **오프라인 UI:** `OfflineBanner` 위젯 구현 - 오프라인 상태, 캐시 만료, 마지막 업데이트 시간 표시.
+- **검색 화면 대응:** 오프라인 상태에서 검색 입력 비활성화 및 안내 메시지 표시.
+
+### 변경된 파일
+- `pubspec.yaml`: `connectivity_plus` 패키지 추가
+- `lib/core/utils/connectivity_service.dart`: 신규 생성 - 네트워크 상태 관리
+- `lib/core/repositories/weather_repository_impl.dart`: 캐시 타임스탬프 및 만료 체크 추가
+- `lib/domain/repositories/weather_repository.dart`: `CachedWeatherInfo` 클래스 및 `getCachedWeatherWithInfo()` 추가
+- `lib/presentation/providers/weather_provider.dart`: `OfflineStatus` 클래스, 오프라인 폴리시 적용
+- `lib/presentation/widgets/offline_banner.dart`: 신규 생성 - 오프라인 상태 배너
+- `lib/presentation/screens/home_screen.dart`: 오프라인 배너 통합, 연결 상태 리스닝
+- `lib/presentation/screens/search_screen.dart`: 오프라인 상태 검색 비활성화
+- `lib/l10n/app_ko.arb`, `lib/l10n/app_en.arb`: 오프라인 관련 문자열 추가
+
+### 검증
+- 오프라인 상태에서 캐시된 데이터 정상 표시
+- 캐시 만료 시 경고 표시
+- 검색 화면 오프라인 시 입력 비활성화
+
+---
+
 ## [2026-05-04] 다국어 지원(한국어/영어) 구현 완료 - Issue #1
 
 ### 주요 변경 사항

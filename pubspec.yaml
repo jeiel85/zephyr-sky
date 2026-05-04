@@ -25,6 +25,7 @@ dependencies:
   fl_chart: ^0.68.0
   home_widget: ^0.6.0
   geocoding: ^3.0.0
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   flutter_test:

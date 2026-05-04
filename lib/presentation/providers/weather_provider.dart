@@ -7,9 +7,11 @@ import '../../domain/entities/weather.dart';
 import '../../core/utils/location_service.dart';
 import '../../core/utils/notification_service.dart';
 import '../../core/utils/home_widget_service.dart';
+import '../../core/utils/connectivity_service.dart';
 import '../../domain/repositories/weather_repository.dart';
 import '../../l10n/app_localizations.dart';
 import 'settings_provider.dart';
+import 'dart:io' show Platform;
 
 // SharedPreferences 프로바이더 (main.dart에서 override 필수)
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
@@ -38,44 +40,114 @@ final weatherRepositoryProvider = Provider<WeatherRepository>((ref) {
   return WeatherRepositoryImpl(apiSource, prefs);
 });
 
+// 오프라인 상태 모델
+class OfflineStatus {
+  final bool isOffline;
+  final bool isCacheExpired;
+  final DateTime? lastUpdated;
+
+  const OfflineStatus({
+    this.isOffline = false,
+    this.isCacheExpired = false,
+    this.lastUpdated,
+  });
+
+  OfflineStatus copyWith({
+    bool? isOffline,
+    bool? isCacheExpired,
+    DateTime? lastUpdated,
+  }) {
+    return OfflineStatus(
+      isOffline: isOffline ?? this.isOffline,
+      isCacheExpired: isCacheExpired ?? this.isCacheExpired,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
+}
+
 // 날씨 상태를 관리하는 Notifier
 class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
   final WeatherRepository _repository;
   final Ref _ref;
+  final ConnectivityService _connectivityService = ConnectivityService();
 
-  WeatherNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
+  WeatherNotifier(this._repository, this._ref) : super(const AsyncValue.data(null)) {
+    _connectivityService.initialize();
+  }
 
   AppLocalizations _getL10n() {
     final settings = _ref.read(settingsProvider);
     return lookupAppLocalizations(Locale(settings.languageCode));
   }
 
-  Future<void> loadCachedWeather() async {
-    final cached = await _repository.getCachedWeather();
-    if (cached != null) {
-      state = AsyncValue.data(cached);
-      
+  /// 오프라인 상태 스트림
+  Stream<bool> get offlineStatus => _connectivityService.connectionStatus.map((isConnected) => !isConnected);
+
+  /// 현재 오프라인 상태
+  bool get isCurrentlyOffline => !_connectivityService.isConnected;
+
+  /// 캐시된 날씨 로드 (오프라인 상태 포함)
+  Future<OfflineStatus> loadCachedWeather() async {
+    final cachedInfo = await _repository.getCachedWeatherWithInfo();
+    if (cachedInfo != null) {
+      state = AsyncValue.data(cachedInfo.weather);
+
       // 알림 설정 확인 후 업데이트
       final settings = _ref.read(settingsProvider);
       final l10n = _getL10n();
       if (settings.notificationsEnabled) {
-        await _ref.read(notificationServiceProvider).showWeatherNotification(cached, l10n);
+        await _ref.read(notificationServiceProvider).showWeatherNotification(cachedInfo.weather, l10n);
       } else {
         await _ref.read(notificationServiceProvider).cancelNotification();
       }
-      
+
       // 위젯 업데이트
-      await HomeWidgetService.updateWidget(cached, l10n);
+      await HomeWidgetService.updateWidget(cachedInfo.weather, l10n);
+
+      return OfflineStatus(
+        isOffline: isCurrentlyOffline,
+        isCacheExpired: cachedInfo.isExpired,
+        lastUpdated: cachedInfo.cachedTime,
+      );
     }
+    return const OfflineStatus();
   }
 
-  Future<void> fetchWeather(double lat, double lon, String locationName) async {
-    state = const AsyncValue.loading();
+  /// 날씨 가져오기 (오프라인 대응)
+  Future<OfflineStatus> fetchWeather(double lat, double lon, String locationName, {bool forceRefresh = false}) async {
+    // 1. 먼저 캐시된 데이터 로드 (있는 경우)
+    final cachedInfo = await _repository.getCachedWeatherWithInfo();
+    if (cachedInfo != null && !forceRefresh) {
+      state = AsyncValue.data(cachedInfo.weather);
+    }
+
+    // 2. 네트워크 상태 확인
+    final isOnline = await _connectivityService.checkConnection();
+
+    if (!isOnline) {
+      // 오프라인: 캐시된 데이터가 있으면 그대로 사용
+      if (cachedInfo != null) {
+        return OfflineStatus(
+          isOffline: true,
+          isCacheExpired: cachedInfo.isExpired,
+          lastUpdated: cachedInfo.cachedTime,
+        );
+      }
+      // 캐시도 없으면 에러
+      state = AsyncValue.error(Exception('No internet connection and no cached data'), StackTrace.current);
+      return const OfflineStatus(isOffline: true);
+    }
+
+    // 3. 온라인: API 호출
+    if (cachedInfo == null || forceRefresh) {
+      state = const AsyncValue.loading();
+    }
+
     try {
       final weather = await _repository.getWeather(lat, lon, locationName);
       state = AsyncValue.data(weather);
-      
-      // 날씨 데이터를 성공적으로 가져오면 알림 설정 확인 후 업데이트
+
+      // 알림 및 위젯 업데이트
       final settings = _ref.read(settingsProvider);
       final l10n = _getL10n();
       if (settings.notificationsEnabled) {
@@ -83,12 +155,37 @@ class WeatherNotifier extends StateNotifier<AsyncValue<Weather?>> {
       } else {
         await _ref.read(notificationServiceProvider).cancelNotification();
       }
-      
-      // 홈 위젯 업데이트
       await HomeWidgetService.updateWidget(weather, l10n);
+
+      return OfflineStatus(
+        isOffline: false,
+        isCacheExpired: false,
+        lastUpdated: DateTime.now(),
+      );
     } catch (e, stack) {
+      // API 실패: 캐시된 데이터가 있으면 폴리백
+      if (cachedInfo != null) {
+        state = AsyncValue.data(cachedInfo.weather);
+        return OfflineStatus(
+          isOffline: false,
+          isCacheExpired: cachedInfo.isExpired,
+          lastUpdated: cachedInfo.cachedTime,
+        );
+      }
       state = AsyncValue.error(e, stack);
+      return const OfflineStatus(isOffline: false);
     }
+  }
+
+  /// 새로고침 (stale-while-revalidate 패턴)
+  Future<OfflineStatus> refreshWeather(double lat, double lon, String locationName) async {
+    return fetchWeather(lat, lon, locationName, forceRefresh: true);
+  }
+
+  @override
+  void dispose() {
+    _connectivityService.dispose();
+    super.dispose();
   }
 }
 

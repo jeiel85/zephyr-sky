@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:zephyr_sky/l10n/app_localizations.dart';
 import '../../core/utils/weather_helper.dart';
 import '../../core/utils/route_animations.dart';
 import '../providers/weather_provider.dart';
 import '../providers/settings_provider.dart';
 import '../../domain/entities/weather.dart';
 import '../widgets/weather_chart.dart';
+import '../widgets/offline_banner.dart';
 import 'search_screen.dart';
 import 'settings_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -23,10 +24,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isDailyExpanded = false; // 주간 예보 펼침 상태
 
+  // 오프라인 상태
+  bool _isOffline = false;
+  bool _isCacheExpired = false;
+  DateTime? _lastUpdated;
+
   @override
   void initState() {
     super.initState();
     _initializeData();
+    _listenToConnectivityChanges();
+  }
+
+  /// 연결 상태 변경 리스닝
+  void _listenToConnectivityChanges() {
+    final notifier = ref.read(weatherStateProvider.notifier);
+    notifier.offlineStatus.listen((isOffline) {
+      if (mounted) {
+        setState(() {
+          _isOffline = isOffline;
+        });
+      }
+    });
   }
 
   // 가독성을 위한 공통 텍스트 그림자
@@ -56,18 +75,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _initializeData() async {
-    // ... (기존 코드와 동일)
-    await ref.read(weatherStateProvider.notifier).loadCachedWeather();
+    // 캐시된 날씨 먼저 로드 (오프라인 상태 포함)
+    final offlineStatus = await ref.read(weatherStateProvider.notifier).loadCachedWeather();
+    _updateOfflineStatus(offlineStatus);
+
     final repository = ref.read(weatherRepositoryProvider);
     final lastLocation = await repository.getLastLocation();
     if (lastLocation != null) {
-      await ref.read(weatherStateProvider.notifier).fetchWeather(
-        lastLocation['lat'], 
-        lastLocation['lon'], 
+      final newStatus = await ref.read(weatherStateProvider.notifier).fetchWeather(
+        lastLocation['lat'],
+        lastLocation['lon'],
         lastLocation['name']
       );
+      _updateOfflineStatus(newStatus);
     } else {
       _refreshWeather();
+    }
+  }
+
+  /// 오프라인 상태 업데이트
+  void _updateOfflineStatus(OfflineStatus status) {
+    if (mounted) {
+      setState(() {
+        _isOffline = status.isOffline;
+        _isCacheExpired = status.isCacheExpired;
+        _lastUpdated = status.lastUpdated;
+      });
     }
   }
 
@@ -75,17 +108,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     try {
       final locationService = ref.read(locationServiceProvider);
       final position = await locationService.getCurrentPosition();
-      
+
       // 역지오코딩으로 지역명 가져오기
       final address = await locationService.getAddressFromLatLng(position.latitude, position.longitude);
-      final locationLabel = address != null ? '${AppLocalizations.of(context)!.addCurrentLocation} ($address)' : AppLocalizations.of(context)!.addCurrentLocation;
-      
-      await ref.read(weatherStateProvider.notifier).fetchWeather(
-        position.latitude, 
-        position.longitude, 
+      final l10n = AppLocalizations.of(context)!;
+      final locationLabel = address != null ? '${l10n.addCurrentLocation} ($address)' : l10n.addCurrentLocation;
+
+      final offlineStatus = await ref.read(weatherStateProvider.notifier).fetchWeather(
+        position.latitude,
+        position.longitude,
         locationLabel
       );
-      
+      _updateOfflineStatus(offlineStatus);
+
       // Pull-to-refresh 완료 햅틱 피드백
       HapticFeedback.lightImpact();
     } catch (e) {
@@ -126,6 +161,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             children: [
               _buildTopBar(weather),
+              // 오프라인 배너
+              if (_isOffline || _isCacheExpired)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: OfflineBanner(
+                    isOffline: _isOffline,
+                    isCacheExpired: _isCacheExpired,
+                    lastUpdated: _lastUpdated,
+                  ),
+                ),
               Expanded(
                 child: weatherState.when(
                   data: (weather) {
@@ -290,20 +335,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildCurrentWeather(Weather weather) {
+    final l10n = AppLocalizations.of(context)!;
+    final weatherDesc = WeatherHelper.getDescriptionLocalized(weather.weatherCode, l10n);
     return Semantics(
-      label: AppLocalizations.of(context)!.currentWeatherLabel(weather.weatherDescription, weather.temperature.round()),
+      label: l10n.currentWeatherLabel(weatherDesc, weather.temperature.round()),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(weather.weatherIcon, size: 70, color: Colors.white, shadows: const [Shadow(blurRadius: 10, color: Colors.black26)], semanticLabel: weather.weatherDescription),
+              Icon(weather.weatherIcon, size: 70, color: Colors.white, shadows: const [Shadow(blurRadius: 10, color: Colors.black26)], semanticLabel: weatherDesc),
               const SizedBox(width: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    weather.weatherDescription,
+                    weatherDesc,
                     style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w400, shadows: _textShadows),
                   ),
                 if (weather.uvIndex != null) ...[
@@ -315,7 +362,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      'UV ${weather.uvIndex!.toStringAsFixed(1)} ${weather.uvRiskLevel}',
+                      'UV ${weather.uvIndex!.toStringAsFixed(1)} ${weather.uvRiskLevelLocalized(l10n)}',
                       style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -373,9 +420,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildExtendedWeatherInfo(Weather weather) {
+    final l10n = AppLocalizations.of(context)!;
     final List<Widget> items = [];
     if (weather.airQualityIndex != null) {
-      items.add(_buildDetailItem(Icons.eco_outlined, 'AQI', '${weather.airQualityIndex} (${weather.airQualityLevel})', color: _getAqiColor(weather.airQualityIndex!)));
+      items.add(_buildDetailItem(Icons.eco_outlined, 'AQI', '${weather.airQualityIndex} (${weather.airQualityLevelLocalized(l10n)})', color: _getAqiColor(weather.airQualityIndex!)));
     }
     if (weather.pressure != null) {
       items.add(_buildDetailItem(Icons.speed_outlined, AppLocalizations.of(context)!.pressure, '${weather.pressure!.round()}hPa'));
@@ -404,14 +452,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildOutdoorActivity(Weather weather) {
+    final l10n = AppLocalizations.of(context)!;
     final score = weather.outdoorActivityScore;
-    final level = weather.outdoorActivityLevel;
-    final message = weather.outdoorActivityMessage;
+    final level = weather.outdoorActivityLevelLocalized(l10n);
+    final message = weather.outdoorActivityMessageLocalized(l10n);
     
     Color scoreColor = score >= 80 ? Colors.greenAccent : (score >= 60 ? Colors.lightGreenAccent : (score >= 40 ? Colors.orangeAccent : Colors.redAccent));
     
     return Semantics(
-      label: '${AppLocalizations.of(context)!.outdoorActivityIndex}: $score점, $level, $message',
+      label: '${l10n.outdoorActivityIndex}: $score, $level, $message',
       child: _buildGlassCard(
         child: Column(
           children: [
@@ -419,7 +468,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               const Icon(Icons.directions_run, color: Colors.amber, size: 24),
               const SizedBox(width: 8),
-              Text(AppLocalizations.of(context)!.outdoorActivityIndex, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
+              Text(l10n.outdoorActivityIndex, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
               const Spacer(),
               Text(level, style: TextStyle(color: scoreColor, fontSize: 16, fontWeight: FontWeight.bold, shadows: _textShadows)),
             ],
