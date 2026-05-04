@@ -48,7 +48,7 @@ class NotificationService {
         _weatherChannelId,
         _weatherChannelName,
         description: '현재 날씨 정보를 상태바에 표시합니다.',
-        importance: Importance.default, // Importance.low에서 변경하여 상태바 아이콘 표시 보장
+        importance: Importance.low, // 상태바 아이콘 표시를 위한 최소 중요도
         showBadge: false,
         playSound: false,
         enableVibration: false,
@@ -116,8 +116,8 @@ class NotificationService {
         _weatherChannelId,
         _weatherChannelName,
         channelDescription: '현재 날씨 정보를 상태바에 표시합니다.',
-        importance: Importance.default,
-        priority: Priority.default,
+        importance: Importance.low,
+        priority: Priority.low,
         ongoing: true,
         showWhen: false,
         onlyAlertOnce: true,
