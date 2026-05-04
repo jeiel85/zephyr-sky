@@ -51,16 +51,28 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: flutter build apk --release --build-number=${{ github.run_number }}
-
+      
+      - name: Build AAB (Android App Bundle)
+        env:
+          RELEASE_STORE_FILE: release.keystore
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: flutter build appbundle --release --build-number=${{ github.run_number }}
+      
       - name: Check Build Artifacts
         run: |
-          ls -R build/app/outputs/
-
+          echo "=== APK Files ==="
+          ls -R build/app/outputs/flutter-apk/
+          echo "=== AAB Files ==="
+          ls -R build/app/outputs/bundle/
+      
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             build/app/outputs/flutter-apk/*.apk
+            build/app/outputs/bundle/release/*.aab
           generate_release_notes: true
           draft: false
           prerelease: false
