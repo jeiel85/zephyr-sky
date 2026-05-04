@@ -1,5 +1,52 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-04] Play Store 출시 준비 및 핵심 기능 개선 - Issues #4, #5, #8, #11, #13, #14
+
+### 주요 변경 사항
+
+#### Play Store 필수 항목
+- **개인정보 처리방침 페이지:** GitHub Pages 호스팅을 위한 HTML 페이지 및 Markdown 버전 생성
+  - 수집 데이터, 사용 목적, 제3자 제공, 사용자 권리 명시
+  - URL: https://jeiel85.github.io/zephyr-sky/privacy-policy.html
+- **PLAY_STORE.md 업데이트:** 개인정보 처리방침 체크리스트 완료 표시
+
+#### 핵심 기능 추가
+- **온볼딩 화면 구현 (Issue #8):**
+  - 4페이지 구조: 환영 → 위치 권한 → 알림 권한 → 완료
+  - 그라데이션 배경 및 애니메이션
+  - SharedPreferences에 'seen_onboarding' 플래그 저장
+  - 첫 실행 시에만 표시, 이후 홈 화면으로 바로 이동
+- **날씨 공유 기능 (Issue #13):**
+  - share_plus 패키지 추가
+  - Drawer 메뉴에 공유 버튼 추가
+  - 공유 텍스트: 도시명, 온도, 날씨 상태, 야외활동지수 포함
+
+#### UI/UX 개선
+- **Android Adaptive Icon (Issue #11):**
+  - mipmap-anydpi-v26/ic_launcher.xml 및 ic_launcher_round.xml 생성
+  - API 26+ 기기에서 적응형 아이콘 지원
+- **지역화 문자열 추가:** 온볼딩 및 공유 관련 한국어/영어 문자열 추가
+
+#### 안정성
+- **API 클라이언트 개선 (Issue #14):**
+  - ApiClient 클래스 구현
+  - Rate Limiting: 최소 5초 호출 간격
+  - Exponential Backoff: 최대 3회 재시도 (1s, 2s, 4s)
+  - Timeout 처리 (10초)
+
+### 변경된 파일
+- 신규: website/privacy-policy.html, PRIVACY_POLICY.md
+- 신규: lib/presentation/screens/onboarding_screen.dart
+- 신규: lib/core/utils/api_client.dart
+- 신규: android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml, ic_launcher_round.xml
+- 수정: lib/main.dart (온볼딩 라우팅 로직)
+- 수정: lib/presentation/screens/home_screen.dart (공유 기능 추가)
+- 수정: lib/l10n/app_ko.arb, lib/l10n/app_en.arb (신규 문자열)
+- 수정: pubspec.yaml (share_plus 추가)
+- 수정: PLAY_STORE.md
+
+---
+
 ## [2026-05-04] 오프라인 모드 최적화 구현 완료 - Issue #2
 
 ### 주요 변경 사항
