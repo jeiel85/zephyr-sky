@@ -35,8 +35,26 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test
+      - name: Run tests with coverage
+        run: |
+          flutter test --coverage
+          dart run coverage:format_coverage --packages=.packages -i coverage/lcov.info -o coverage/lcov.info --lcov --report-on=lib
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+
+      - name: Check coverage threshold (80%)
+        run: |
+          sudo apt-get update && sudo apt-get install -y lcov
+          COVERAGE=$(lcov --summary coverage/lcov.info | grep "lines" | sed 's/.*: \(.*\)%.*/\1/' | awk '{print int($1)}')
+          echo "Code coverage: $COVERAGE%"
+          if [ "$COVERAGE" -lt 80 ]; then
+            echo "Coverage $COVERAGE% is below threshold of 80%"
+            exit 1
+          fi
 
       - name: Generate App Icons
         run: dart run flutter_launcher_icons
