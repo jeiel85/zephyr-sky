@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/date_symbol_data_file.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/providers/weather_provider.dart';
 import 'presentation/providers/settings_provider.dart';
 import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/onboarding_screen.dart';
 
 AppLocalizations _getDefaultL10n() => AppLocalizationsEn();
 
@@ -50,21 +51,32 @@ void main() async {
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: OpenWeatherApp(initialDarkMode: settings.isDarkMode),
+      child: OpenWeatherApp(
+        initialDarkMode: settings.isDarkMode,
+        sharedPreferences: sharedPreferences,
+      ),
     ),
   );
 }
 
 class OpenWeatherApp extends StatelessWidget {
   final bool initialDarkMode;
+  final SharedPreferences? sharedPreferences;
   
-  const OpenWeatherApp({super.key, this.initialDarkMode = false});
+  const OpenWeatherApp({
+    super.key, 
+    this.initialDarkMode = false,
+    this.sharedPreferences,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, _) {
         final settings = ref.watch(settingsProvider);
+        
+        // 온볼딩 완료 여부 확인
+        final bool seenOnboarding = sharedPreferences?.getBool('seen_onboarding') ?? false;
         
         return MaterialApp(
           title: 'Zephyr Sky',
@@ -91,7 +103,11 @@ class OpenWeatherApp extends StatelessWidget {
             ),
           ),
           themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          home: const HomeScreen(),
+          home: seenOnboarding 
+              ? const HomeScreen()
+              : sharedPreferences != null
+                  ? OnboardingScreen(prefs: sharedPreferences!)
+                  : const HomeScreen(),
         );
       },
     );

@@ -144,5 +144,21 @@
   "minutesAgo": "{count} min ago",
   "hoursAgo": "{count} hours ago",
   "daysAgo": "{count} days ago",
-  "searchOffline": "Search is not available in offline mode"
+  "searchOffline": "Search is not available in offline mode",
+
+  "skip": "Skip",
+  "next": "Next",
+  "start": "Get Started",
+
+  "onboardingWelcomeTitle": "Zephyr Sky",
+  "onboardingWelcomeDesc": "A minimalist weather app with beautiful gradients. Brighten your day with accurate weather information.",
+  "onboardingLocationTitle": "Location Access",
+  "onboardingLocationDesc": "Location permission is needed to provide accurate weather for your current position. Location data is only used for weather lookup.",
+  "onboardingNotificationTitle": "Weather Alerts",
+  "onboardingNotificationDesc": "Allow notifications to receive daily weather updates. We'll alert you immediately for weather warnings.",
+  "onboardingReadyTitle": "All Set!",
+  "onboardingReadyDesc": "Everything is ready. Start checking the weather with Zephyr Sky now!",
+
+  "shareWeather": "Share Weather",
+  "shareWeatherText": "Currently {city}: {temp}°, {condition}. Outdoor activity score: {score}/100 🌤️ (Zephyr Sky)"
 }

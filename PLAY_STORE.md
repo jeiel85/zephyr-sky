@@ -202,10 +202,12 @@ flutter build appbundle --release
 - [ ] 제3자 제공 (Open-Meteo API)
 - [ ] 사용자 권리 (데이터 삭제 요청 등)
 
-### 샘플 URL (준비 필요)
+### 개인정보 처리방침 URL
 ```
-https://jeiel85.github.io/zephyr-sky/privacy-policy
+https://jeiel85.github.io/zephyr-sky/privacy-policy.html
 ```
+- ✅ HTML 버전: `website/privacy-policy.html`
+- ✅ Markdown 버전: `PRIVACY_POLICY.md`
 
 ---
 
