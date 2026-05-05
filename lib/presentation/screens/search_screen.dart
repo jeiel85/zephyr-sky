@@ -84,14 +84,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         : searchResults.when(
         data: (results) {
           if (results.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.search, size: 64, color: Colors.white24),
                   const SizedBox(height: 16),
                   Text(
-                    AppLocalizations.of(context)!.noResults,
+                    l10n.noResults,
                     style: const TextStyle(color: Colors.white54, fontSize: 16),
                   ),
                 ],

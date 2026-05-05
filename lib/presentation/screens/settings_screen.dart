@@ -72,7 +72,10 @@ class SettingsScreen extends ConsumerWidget {
                     }
                     final weather = ref.read(weatherStateProvider).value;
                     if (weather != null) {
-                      await notificationService.showWeatherNotification(weather);
+                      await notificationService.showWeatherNotification(
+                        weather,
+                        AppLocalizations.of(context)!,
+                      );
                     }
                   }
                 },

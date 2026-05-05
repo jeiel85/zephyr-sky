@@ -242,7 +242,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(color: Colors.blueGrey),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

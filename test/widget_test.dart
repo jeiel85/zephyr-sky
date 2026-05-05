@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zephyr_sky/l10n/app_localizations.dart';
 import 'package:zephyr_sky/presentation/providers/settings_provider.dart';
+import 'package:zephyr_sky/presentation/providers/weather_provider.dart';
 import 'package:zephyr_sky/presentation/screens/home_screen.dart';
 
 void main() {

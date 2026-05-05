@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:zephyr_sky/domain/entities/weather.dart';
@@ -75,7 +76,7 @@ void main() {
 
       await notifier.search('Seoul');
 
-      expect(notifier.state.hasError, true);
+      expect(notifier.state, isA<AsyncError<List<dynamic>>>());
     });
   });
 }

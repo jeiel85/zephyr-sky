@@ -262,7 +262,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       // 알림 권한 요청
       final notificationService = NotificationService();
-      await notificationService.init((locale) => AppLocalizations.of(context)!);
+      await notificationService.init(AppLocalizations.of(context)!);
 
       await _completeOnboarding();
     } catch (e) {
