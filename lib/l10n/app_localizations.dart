@@ -5,6 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_en.dart';
+import 'app_localizations_ko.dart';
+
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
 ///
@@ -32,18 +37,33 @@ import 'package:intl/intl.dart' as intl;
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
-///   intl: any # Use the latest version of intl
+///   intl: any # Use the pinned version from flutter_localizations
 ///
-/// flutter:
-///   generate: true # Optional, but recommended
+///   # Rest of dependencies
 /// ```
 ///
-/// ## Implementation details
+/// ## iOS Applications
 ///
-/// This file was manually generated as a replacement for the flutter gen-l10n
-/// tool because the flutter CLI was not available in the environment.
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -51,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -62,8 +83,9 @@ abstract class AppLocalizations {
   ///
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
-  /// of delegates is preferred.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -78,786 +100,902 @@ abstract class AppLocalizations {
 
   /// No description provided for @appName.
   ///
-  /// In en, this message translates to:
+  /// In ko, this message translates to:
   /// **'Zephyr Sky'**
   String get appName;
 
   /// No description provided for @ok.
   ///
-  /// In en, this message translates to:
-  /// **'OK'**
+  /// In ko, this message translates to:
+  /// **'확인'**
   String get ok;
 
   /// No description provided for @cancel.
   ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
+  /// In ko, this message translates to:
+  /// **'취소'**
   String get cancel;
 
   /// No description provided for @close.
   ///
-  /// In en, this message translates to:
-  /// **'Close'**
+  /// In ko, this message translates to:
+  /// **'닫기'**
   String get close;
 
   /// No description provided for @save.
   ///
-  /// In en, this message translates to:
-  /// **'Save'**
+  /// In ko, this message translates to:
+  /// **'저장'**
   String get save;
 
   /// No description provided for @delete.
   ///
-  /// In en, this message translates to:
-  /// **'Delete'**
+  /// In ko, this message translates to:
+  /// **'삭제'**
   String get delete;
 
   /// No description provided for @search.
   ///
-  /// In en, this message translates to:
-  /// **'Search'**
+  /// In ko, this message translates to:
+  /// **'검색'**
   String get search;
 
   /// No description provided for @refresh.
   ///
-  /// In en, this message translates to:
-  /// **'Refresh'**
+  /// In ko, this message translates to:
+  /// **'새로고침'**
   String get refresh;
 
   /// No description provided for @loading.
   ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
+  /// In ko, this message translates to:
+  /// **'로딩 중...'**
   String get loading;
 
   /// No description provided for @error.
   ///
-  /// In en, this message translates to:
-  /// **'Error'**
+  /// In ko, this message translates to:
+  /// **'오류'**
   String get error;
 
   /// No description provided for @retry.
   ///
-  /// In en, this message translates to:
-  /// **'Retry'**
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
   String get retry;
 
   /// No description provided for @locationLoading.
   ///
-  /// In en, this message translates to:
-  /// **'Loading location...'**
+  /// In ko, this message translates to:
+  /// **'위치 로드 중...'**
   String get locationLoading;
 
   /// No description provided for @menuOpen.
   ///
-  /// In en, this message translates to:
-  /// **'Open menu'**
+  /// In ko, this message translates to:
+  /// **'메뉴 열기'**
   String get menuOpen;
 
   /// No description provided for @appSubtitle.
   ///
-  /// In en, this message translates to:
-  /// **'Weather & Settings'**
+  /// In ko, this message translates to:
+  /// **'날씨 및 설정'**
   String get appSubtitle;
 
   /// No description provided for @searchLocation.
   ///
-  /// In en, this message translates to:
-  /// **'Search Location'**
+  /// In ko, this message translates to:
+  /// **'위치 검색'**
   String get searchLocation;
 
   /// No description provided for @settings.
   ///
-  /// In en, this message translates to:
-  /// **'Settings'**
+  /// In ko, this message translates to:
+  /// **'설정'**
   String get settings;
 
   /// No description provided for @weatherRefresh.
   ///
-  /// In en, this message translates to:
-  /// **'Refresh Weather'**
+  /// In ko, this message translates to:
+  /// **'날씨 새로고침'**
   String get weatherRefresh;
 
   /// No description provided for @temperaturePrecipitationTrend.
   ///
-  /// In en, this message translates to:
-  /// **'Temperature & Precipitation Trend'**
+  /// In ko, this message translates to:
+  /// **'기온 및 강수량 추이'**
   String get temperaturePrecipitationTrend;
 
   /// No description provided for @currentWeatherLabel.
   ///
-  /// In en, this message translates to:
-  /// **'Current weather: {description}, {temperature}°'**
+  /// In ko, this message translates to:
+  /// **'현재 날씨: {description}, {temperature}도'**
   String currentWeatherLabel(Object description, Object temperature);
 
   /// No description provided for @maxTemp.
   ///
-  /// In en, this message translates to:
-  /// **'High'**
+  /// In ko, this message translates to:
+  /// **'최고'**
   String get maxTemp;
 
   /// No description provided for @minTemp.
   ///
-  /// In en, this message translates to:
-  /// **'Low'**
+  /// In ko, this message translates to:
+  /// **'최저'**
   String get minTemp;
 
   /// No description provided for @precipitationProbability.
   ///
-  /// In en, this message translates to:
-  /// **'Precipitation'**
+  /// In ko, this message translates to:
+  /// **'강수확률'**
   String get precipitationProbability;
 
   /// No description provided for @humidity.
   ///
-  /// In en, this message translates to:
-  /// **'Humidity'**
+  /// In ko, this message translates to:
+  /// **'습도'**
   String get humidity;
 
   /// No description provided for @windSpeed.
   ///
-  /// In en, this message translates to:
-  /// **'Wind'**
+  /// In ko, this message translates to:
+  /// **'풍속'**
   String get windSpeed;
 
   /// No description provided for @feelsLike.
   ///
-  /// In en, this message translates to:
-  /// **'Feels Like'**
+  /// In ko, this message translates to:
+  /// **'체감'**
   String get feelsLike;
 
   /// No description provided for @pressure.
   ///
-  /// In en, this message translates to:
-  /// **'Pressure'**
+  /// In ko, this message translates to:
+  /// **'기압'**
   String get pressure;
 
   /// No description provided for @visibility.
   ///
-  /// In en, this message translates to:
-  /// **'Visibility'**
+  /// In ko, this message translates to:
+  /// **'시정'**
   String get visibility;
 
   /// No description provided for @dewPoint.
   ///
-  /// In en, this message translates to:
-  /// **'Dew Point'**
+  /// In ko, this message translates to:
+  /// **'이슬점'**
   String get dewPoint;
 
   /// No description provided for @cloudCover.
   ///
-  /// In en, this message translates to:
-  /// **'Clouds'**
+  /// In ko, this message translates to:
+  /// **'구름'**
   String get cloudCover;
 
   /// No description provided for @outdoorActivityIndex.
   ///
-  /// In en, this message translates to:
-  /// **'Outdoor Activity Index'**
+  /// In ko, this message translates to:
+  /// **'야외 활동 지수'**
   String get outdoorActivityIndex;
 
   /// No description provided for @hourlyForecast.
   ///
-  /// In en, this message translates to:
-  /// **'Hourly Forecast'**
+  /// In ko, this message translates to:
+  /// **'시간별 예보'**
   String get hourlyForecast;
 
   /// No description provided for @dailyForecast.
   ///
-  /// In en, this message translates to:
-  /// **'Weekly Forecast'**
+  /// In ko, this message translates to:
+  /// **'주간 예보'**
   String get dailyForecast;
 
   /// No description provided for @collapse.
   ///
-  /// In en, this message translates to:
-  /// **'Collapse'**
+  /// In ko, this message translates to:
+  /// **'접기'**
   String get collapse;
 
   /// No description provided for @seeMore.
   ///
-  /// In en, this message translates to:
-  /// **'See More'**
+  /// In ko, this message translates to:
+  /// **'더보기'**
   String get seeMore;
 
   /// No description provided for @weatherLoadError.
   ///
-  /// In en, this message translates to:
-  /// **'Unable to retrieve weather information.'**
+  /// In ko, this message translates to:
+  /// **'날씨 정보를 가져올 수 없습니다.'**
   String get weatherLoadError;
 
   /// No description provided for @searchHint.
   ///
-  /// In en, this message translates to:
-  /// **'Search city name (e.g. Seoul, Tokyo...)'**
+  /// In ko, this message translates to:
+  /// **'도시 이름 검색 (예: 서울, 도쿄...)'**
   String get searchHint;
 
   /// No description provided for @noResults.
   ///
-  /// In en, this message translates to:
-  /// **'No search results found.'**
+  /// In ko, this message translates to:
+  /// **'검색 결과가 없습니다.'**
   String get noResults;
 
   /// No description provided for @unknown.
   ///
-  /// In en, this message translates to:
-  /// **'Unknown'**
+  /// In ko, this message translates to:
+  /// **'알 수 없음'**
   String get unknown;
 
   /// No description provided for @notifications.
   ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
+  /// In ko, this message translates to:
+  /// **'알림'**
   String get notifications;
 
   /// No description provided for @statusBarWeatherNotification.
   ///
-  /// In en, this message translates to:
-  /// **'Status Bar Weather'**
+  /// In ko, this message translates to:
+  /// **'상태바 날씨 알림'**
   String get statusBarWeatherNotification;
 
   /// No description provided for @statusBarWeatherDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Always show current weather in the status bar.'**
+  /// In ko, this message translates to:
+  /// **'상태바에 현재 날씨를 항상 표시합니다.'**
   String get statusBarWeatherDesc;
 
   /// No description provided for @notificationPermissionRequired.
   ///
-  /// In en, this message translates to:
-  /// **'Notification permission is required. Please allow notifications in Settings > Apps > Zephyr Sky.'**
+  /// In ko, this message translates to:
+  /// **'알림 권한이 필요합니다. 시스템 설정 > 앱 > Zephyr Sky에서 알림을 허용해주세요.'**
   String get notificationPermissionRequired;
 
   /// No description provided for @appearance.
   ///
-  /// In en, this message translates to:
-  /// **'Appearance'**
+  /// In ko, this message translates to:
+  /// **'외관'**
   String get appearance;
 
   /// No description provided for @darkMode.
   ///
-  /// In en, this message translates to:
-  /// **'Dark Mode'**
+  /// In ko, this message translates to:
+  /// **'다크 모드'**
   String get darkMode;
 
   /// No description provided for @darkModeDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Use dark theme'**
+  /// In ko, this message translates to:
+  /// **'어두운 테마 사용'**
   String get darkModeDesc;
-
-  /// No description provided for @followSystemTheme.
-  ///
-  /// In en, this message translates to:
-  /// **'Follow System Theme'**
-  String get followSystemTheme;
-
-  /// No description provided for @followSystemThemeDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatically switch between light and dark mode'**
-  String get followSystemThemeDesc;
-
-  /// No description provided for @themeColor.
-  ///
-  /// In en, this message translates to:
-  /// **'Theme Color'**
-  String get themeColor;
 
   /// No description provided for @unit.
   ///
-  /// In en, this message translates to:
-  /// **'Unit'**
+  /// In ko, this message translates to:
+  /// **'단위'**
   String get unit;
 
   /// No description provided for @celsius.
   ///
-  /// In en, this message translates to:
-  /// **'Celsius (°C)'**
+  /// In ko, this message translates to:
+  /// **'섭씨 (°C)'**
   String get celsius;
 
   /// No description provided for @celsiusDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Korea, Europe, etc.'**
+  /// In ko, this message translates to:
+  /// **'한국, 유럽 등'**
   String get celsiusDesc;
 
   /// No description provided for @fahrenheit.
   ///
-  /// In en, this message translates to:
-  /// **'Fahrenheit (°F)'**
+  /// In ko, this message translates to:
+  /// **'화씨 (°F)'**
   String get fahrenheit;
 
   /// No description provided for @fahrenheitDesc.
   ///
-  /// In en, this message translates to:
-  /// **'USA, etc.'**
+  /// In ko, this message translates to:
+  /// **'미국 등'**
   String get fahrenheitDesc;
 
   /// No description provided for @favoriteLocations.
   ///
-  /// In en, this message translates to:
-  /// **'Favorite Locations'**
+  /// In ko, this message translates to:
+  /// **'즐겨찾기 위치'**
   String get favoriteLocations;
 
   /// No description provided for @noFavoriteLocations.
   ///
-  /// In en, this message translates to:
-  /// **'No favorite locations'**
+  /// In ko, this message translates to:
+  /// **'즐겨찾기 위치가 없습니다'**
   String get noFavoriteLocations;
 
   /// No description provided for @addFavoriteHint.
   ///
-  /// In en, this message translates to:
-  /// **'Search and add from the home screen'**
+  /// In ko, this message translates to:
+  /// **'홈 화면에서 검색 후 추가하세요'**
   String get addFavoriteHint;
 
   /// No description provided for @unknownLocation.
   ///
-  /// In en, this message translates to:
-  /// **'Unknown Location'**
+  /// In ko, this message translates to:
+  /// **'알 수 없는 위치'**
   String get unknownLocation;
 
   /// No description provided for @latLon.
   ///
-  /// In en, this message translates to:
-  /// **'Lat: {lat}, Lon: {lon}'**
+  /// In ko, this message translates to:
+  /// **'위도: {lat}, 경도: {lon}'**
   String latLon(Object lat, Object lon);
 
   /// No description provided for @addCurrentLocation.
   ///
-  /// In en, this message translates to:
-  /// **'Add Current Location'**
+  /// In ko, this message translates to:
+  /// **'현재 위치 추가'**
   String get addCurrentLocation;
 
   /// No description provided for @info.
   ///
-  /// In en, this message translates to:
-  /// **'About'**
+  /// In ko, this message translates to:
+  /// **'정보'**
   String get info;
 
   /// No description provided for @version.
   ///
-  /// In en, this message translates to:
-  /// **'Version 1.2.2'**
+  /// In ko, this message translates to:
+  /// **'버전 1.3.0'**
   String get version;
 
   /// No description provided for @dataSource.
   ///
-  /// In en, this message translates to:
-  /// **'Data Source'**
+  /// In ko, this message translates to:
+  /// **'데이터 소스'**
   String get dataSource;
 
   /// No description provided for @openMeteoApi.
   ///
-  /// In en, this message translates to:
+  /// In ko, this message translates to:
   /// **'Open-Meteo API'**
   String get openMeteoApi;
 
   /// No description provided for @language.
   ///
-  /// In en, this message translates to:
-  /// **'Language'**
+  /// In ko, this message translates to:
+  /// **'언어'**
   String get language;
 
   /// No description provided for @korean.
   ///
-  /// In en, this message translates to:
-  /// **'Korean'**
+  /// In ko, this message translates to:
+  /// **'한국어'**
   String get korean;
 
   /// No description provided for @english.
   ///
-  /// In en, this message translates to:
+  /// In ko, this message translates to:
   /// **'English'**
   String get english;
 
   /// No description provided for @weatherClear.
   ///
-  /// In en, this message translates to:
-  /// **'Clear'**
+  /// In ko, this message translates to:
+  /// **'맑음'**
   String get weatherClear;
 
   /// No description provided for @weatherMainlyClear.
   ///
-  /// In en, this message translates to:
-  /// **'Mainly Clear'**
+  /// In ko, this message translates to:
+  /// **'대체로 맑음'**
   String get weatherMainlyClear;
 
   /// No description provided for @weatherPartlyCloudy.
   ///
-  /// In en, this message translates to:
-  /// **'Partly Cloudy'**
+  /// In ko, this message translates to:
+  /// **'구름 조금'**
   String get weatherPartlyCloudy;
 
   /// No description provided for @weatherOvercast.
   ///
-  /// In en, this message translates to:
-  /// **'Overcast'**
+  /// In ko, this message translates to:
+  /// **'흐림'**
   String get weatherOvercast;
 
   /// No description provided for @weatherFog.
   ///
-  /// In en, this message translates to:
-  /// **'Fog'**
+  /// In ko, this message translates to:
+  /// **'안개'**
   String get weatherFog;
 
   /// No description provided for @weatherLightDrizzle.
   ///
-  /// In en, this message translates to:
-  /// **'Light Drizzle'**
+  /// In ko, this message translates to:
+  /// **'가벼운 이슬비'**
   String get weatherLightDrizzle;
 
   /// No description provided for @weatherFreezingDrizzle.
   ///
-  /// In en, this message translates to:
-  /// **'Freezing Drizzle'**
+  /// In ko, this message translates to:
+  /// **'결빙 이슬비'**
   String get weatherFreezingDrizzle;
 
   /// No description provided for @weatherLightRain.
   ///
-  /// In en, this message translates to:
-  /// **'Light Rain'**
+  /// In ko, this message translates to:
+  /// **'약한 비'**
   String get weatherLightRain;
 
   /// No description provided for @weatherModerateRain.
   ///
-  /// In en, this message translates to:
-  /// **'Moderate Rain'**
+  /// In ko, this message translates to:
+  /// **'보통 비'**
   String get weatherModerateRain;
 
   /// No description provided for @weatherHeavyRain.
   ///
-  /// In en, this message translates to:
-  /// **'Heavy Rain'**
+  /// In ko, this message translates to:
+  /// **'강한 비'**
   String get weatherHeavyRain;
 
   /// No description provided for @weatherFreezingRain.
   ///
-  /// In en, this message translates to:
-  /// **'Freezing Rain'**
+  /// In ko, this message translates to:
+  /// **'결빙 비'**
   String get weatherFreezingRain;
 
   /// No description provided for @weatherLightSnow.
   ///
-  /// In en, this message translates to:
-  /// **'Light Snow'**
+  /// In ko, this message translates to:
+  /// **'약한 눈'**
   String get weatherLightSnow;
 
   /// No description provided for @weatherModerateSnow.
   ///
-  /// In en, this message translates to:
-  /// **'Moderate Snow'**
+  /// In ko, this message translates to:
+  /// **'보통 눈'**
   String get weatherModerateSnow;
 
   /// No description provided for @weatherHeavySnow.
   ///
-  /// In en, this message translates to:
-  /// **'Heavy Snow'**
+  /// In ko, this message translates to:
+  /// **'강한 눈'**
   String get weatherHeavySnow;
 
   /// No description provided for @weatherSnowGrains.
   ///
-  /// In en, this message translates to:
-  /// **'Snow Grains'**
+  /// In ko, this message translates to:
+  /// **'싸락눈'**
   String get weatherSnowGrains;
 
   /// No description provided for @weatherRainShowers.
   ///
-  /// In en, this message translates to:
-  /// **'Rain Showers'**
+  /// In ko, this message translates to:
+  /// **'소나기'**
   String get weatherRainShowers;
 
   /// No description provided for @weatherSnowShowers.
   ///
-  /// In en, this message translates to:
-  /// **'Snow Showers'**
+  /// In ko, this message translates to:
+  /// **'눈 소나기'**
   String get weatherSnowShowers;
 
   /// No description provided for @weatherThunderstorm.
   ///
-  /// In en, this message translates to:
-  /// **'Thunderstorm'**
+  /// In ko, this message translates to:
+  /// **'뇌우'**
   String get weatherThunderstorm;
 
   /// No description provided for @weatherThunderstormHail.
   ///
-  /// In en, this message translates to:
-  /// **'Thunderstorm with Hail'**
+  /// In ko, this message translates to:
+  /// **'우박을 동반한 뇌우'**
   String get weatherThunderstormHail;
 
   /// No description provided for @weatherUnknown.
   ///
-  /// In en, this message translates to:
-  /// **'Unknown'**
+  /// In ko, this message translates to:
+  /// **'알 수 없음'**
   String get weatherUnknown;
 
   /// No description provided for @aqiUnknown.
   ///
-  /// In en, this message translates to:
-  /// **'Unknown'**
+  /// In ko, this message translates to:
+  /// **'알 수 없음'**
   String get aqiUnknown;
 
   /// No description provided for @aqiGood.
   ///
-  /// In en, this message translates to:
-  /// **'Good'**
+  /// In ko, this message translates to:
+  /// **'좋음'**
   String get aqiGood;
 
   /// No description provided for @aqiModerate.
   ///
-  /// In en, this message translates to:
-  /// **'Moderate'**
+  /// In ko, this message translates to:
+  /// **'보통'**
   String get aqiModerate;
 
   /// No description provided for @aqiSensitive.
   ///
-  /// In en, this message translates to:
-  /// **'Unhealthy for Sensitive Groups'**
+  /// In ko, this message translates to:
+  /// **'민감군 불쾌'**
   String get aqiSensitive;
 
   /// No description provided for @aqiUnhealthy.
   ///
-  /// In en, this message translates to:
-  /// **'Unhealthy'**
+  /// In ko, this message translates to:
+  /// **'불건강'**
   String get aqiUnhealthy;
 
   /// No description provided for @aqiVeryUnhealthy.
   ///
-  /// In en, this message translates to:
-  /// **'Very Unhealthy'**
+  /// In ko, this message translates to:
+  /// **'매우 불건강'**
   String get aqiVeryUnhealthy;
 
   /// No description provided for @aqiHazardous.
   ///
-  /// In en, this message translates to:
-  /// **'Hazardous'**
+  /// In ko, this message translates to:
+  /// **'위험'**
   String get aqiHazardous;
 
   /// No description provided for @uvUnknown.
   ///
-  /// In en, this message translates to:
-  /// **'Unknown'**
+  /// In ko, this message translates to:
+  /// **'알 수 없음'**
   String get uvUnknown;
 
   /// No description provided for @uvLow.
   ///
-  /// In en, this message translates to:
-  /// **'Low'**
+  /// In ko, this message translates to:
+  /// **'낮음'**
   String get uvLow;
 
   /// No description provided for @uvModerate.
   ///
-  /// In en, this message translates to:
-  /// **'Moderate'**
+  /// In ko, this message translates to:
+  /// **'보통'**
   String get uvModerate;
 
   /// No description provided for @uvHigh.
   ///
-  /// In en, this message translates to:
-  /// **'High'**
+  /// In ko, this message translates to:
+  /// **'높음'**
   String get uvHigh;
 
   /// No description provided for @uvVeryHigh.
   ///
-  /// In en, this message translates to:
-  /// **'Very High'**
+  /// In ko, this message translates to:
+  /// **'매우 높음'**
   String get uvVeryHigh;
 
   /// No description provided for @uvExtreme.
   ///
-  /// In en, this message translates to:
-  /// **'Extreme'**
+  /// In ko, this message translates to:
+  /// **'위험'**
   String get uvExtreme;
 
   /// No description provided for @outdoorExcellent.
   ///
-  /// In en, this message translates to:
-  /// **'Excellent'**
+  /// In ko, this message translates to:
+  /// **'최상'**
   String get outdoorExcellent;
 
   /// No description provided for @outdoorGood.
   ///
-  /// In en, this message translates to:
-  /// **'Good'**
+  /// In ko, this message translates to:
+  /// **'양호'**
   String get outdoorGood;
 
   /// No description provided for @outdoorFair.
   ///
-  /// In en, this message translates to:
-  /// **'Fair'**
+  /// In ko, this message translates to:
+  /// **'보통'**
   String get outdoorFair;
 
   /// No description provided for @outdoorPoor.
   ///
-  /// In en, this message translates to:
-  /// **'Poor'**
+  /// In ko, this message translates to:
+  /// **'나쁨'**
   String get outdoorPoor;
 
   /// No description provided for @outdoorDangerous.
   ///
-  /// In en, this message translates to:
-  /// **'Dangerous'**
+  /// In ko, this message translates to:
+  /// **'위험'**
   String get outdoorDangerous;
 
   /// No description provided for @outdoorMsgExcellent.
   ///
-  /// In en, this message translates to:
-  /// **'Great weather for outdoor activities!'**
+  /// In ko, this message translates to:
+  /// **'야외 활동하기 좋은 날씨입니다!'**
   String get outdoorMsgExcellent;
 
   /// No description provided for @outdoorMsgGood.
   ///
-  /// In en, this message translates to:
-  /// **'Better than usual'**
+  /// In ko, this message translates to:
+  /// **'평소보다 양호합니다'**
   String get outdoorMsgGood;
 
   /// No description provided for @outdoorMsgFair.
   ///
-  /// In en, this message translates to:
-  /// **'Be careful during outdoor activities'**
+  /// In ko, this message translates to:
+  /// **'야외 활동 시 주의가 필요합니다'**
   String get outdoorMsgFair;
 
   /// No description provided for @outdoorMsgPoor.
   ///
-  /// In en, this message translates to:
-  /// **'Not recommended for outdoor activities'**
+  /// In ko, this message translates to:
+  /// **'야외 활동에 권장하지 않습니다'**
   String get outdoorMsgPoor;
 
   /// No description provided for @outdoorMsgDangerous.
   ///
-  /// In en, this message translates to:
-  /// **'Please avoid outdoor activities'**
+  /// In ko, this message translates to:
+  /// **'야외 활동을 자제해 주세요'**
   String get outdoorMsgDangerous;
 
   /// No description provided for @weatherNotification.
   ///
-  /// In en, this message translates to:
-  /// **'Weather Notification'**
+  /// In ko, this message translates to:
+  /// **'날씨 알림'**
   String get weatherNotification;
 
   /// No description provided for @weatherAlert.
   ///
-  /// In en, this message translates to:
-  /// **'Weather Alert'**
+  /// In ko, this message translates to:
+  /// **'날씨 경고'**
   String get weatherAlert;
 
   /// No description provided for @weatherNotificationDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Show current weather in the status bar.'**
+  /// In ko, this message translates to:
+  /// **'현재 날씨 정보를 상태바에 표시합니다.'**
   String get weatherNotificationDesc;
 
   /// No description provided for @weatherAlertDesc.
   ///
-  /// In en, this message translates to:
-  /// **'Show weather alert notifications.'**
+  /// In ko, this message translates to:
+  /// **'날씨 경고 알림을 표시합니다.'**
   String get weatherAlertDesc;
 
   /// No description provided for @currentTemp.
   ///
-  /// In en, this message translates to:
-  /// **'Now: {temp}° (Low: {min}° / High: {max}°)'**
+  /// In ko, this message translates to:
+  /// **'현재: {temp}° (최저: {min}° / 최고: {max}°)'**
   String currentTemp(Object temp, Object min, Object max);
 
   /// No description provided for @alertStrongWind.
   ///
-  /// In en, this message translates to:
-  /// **'💨 Strong Wind ({speed}km/h)'**
+  /// In ko, this message translates to:
+  /// **'💨 강한 바람 ({speed}km/h)'**
   String alertStrongWind(Object speed);
 
   /// No description provided for @alertColdWave.
   ///
-  /// In en, this message translates to:
-  /// **'❄️ Cold Wave Warning ({temp}°)'**
+  /// In ko, this message translates to:
+  /// **'❄️ 한파 경보 ({temp}°)'**
   String alertColdWave(Object temp);
 
   /// No description provided for @alertHeatWave.
   ///
-  /// In en, this message translates to:
-  /// **'🔥 Heat Wave Warning ({temp}°)'**
+  /// In ko, this message translates to:
+  /// **'🔥 한열 경보 ({temp}°)'**
   String alertHeatWave(Object temp);
 
   /// No description provided for @alertHighPrecipitation.
   ///
-  /// In en, this message translates to:
-  /// **'🌧️ High Precipitation ({prob}%)'**
+  /// In ko, this message translates to:
+  /// **'🌧️ 강수 확률 높음 ({prob}%)'**
   String alertHighPrecipitation(Object prob);
 
   /// No description provided for @alertAirQuality.
   ///
-  /// In en, this message translates to:
-  /// **'🌬️ Air Quality {level} (AQI: {aqi})'**
+  /// In ko, this message translates to:
+  /// **'🌬️ 대기질 {level} (AQI: {aqi})'**
   String alertAirQuality(Object level, Object aqi);
 
   /// No description provided for @alertUv.
   ///
-  /// In en, this message translates to:
-  /// **'☀️ UV {level} (UV: {uv})'**
+  /// In ko, this message translates to:
+  /// **'☀️ 자외선 {level} (UV: {uv})'**
   String alertUv(Object level, Object uv);
 
   /// No description provided for @weatherWarnings.
   ///
-  /// In en, this message translates to:
-  /// **'⚠️ Weather Warnings'**
+  /// In ko, this message translates to:
+  /// **'⚠️ 날씨 경고'**
   String get weatherWarnings;
 
   /// No description provided for @lastUpdate.
   ///
-  /// In en, this message translates to:
-  /// **'Last Update: {time}'**
+  /// In ko, this message translates to:
+  /// **'마지막 업데이트: {time}'**
   String lastUpdate(Object time);
 
   /// No description provided for @locationServiceDisabled.
   ///
-  /// In en, this message translates to:
-  /// **'Location services are disabled. Please enable them in Settings.'**
+  /// In ko, this message translates to:
+  /// **'위치 서비스가 비활성화되어 있습니다. 설정에서 활성화해 주세요.'**
   String get locationServiceDisabled;
 
   /// No description provided for @locationPermissionDenied.
   ///
-  /// In en, this message translates to:
-  /// **'Location permission denied.'**
+  /// In ko, this message translates to:
+  /// **'위치 권한이 거부되었습니다.'**
   String get locationPermissionDenied;
 
   /// No description provided for @locationPermissionPermanentlyDenied.
   ///
-  /// In en, this message translates to:
-  /// **'Location permission permanently denied. Please allow it in Settings.'**
+  /// In ko, this message translates to:
+  /// **'위치 권한이 영구적으로 거부되었습니다. 설정에서 직접 허용해 주세요.'**
   String get locationPermissionPermanentlyDenied;
 
   /// No description provided for @weatherLoadFailed.
   ///
-  /// In en, this message translates to:
-  /// **'Failed to load weather information.'**
+  /// In ko, this message translates to:
+  /// **'날씨 정보를 불러오는 데 실패했습니다.'**
   String get weatherLoadFailed;
 
   /// No description provided for @aqiLoadFailed.
   ///
-  /// In en, this message translates to:
-  /// **'Failed to load AQI information: {error}'**
+  /// In ko, this message translates to:
+  /// **'AQI 정보를 불러오는 데 실패했습니다: {error}'**
   String aqiLoadFailed(Object error);
 
   /// No description provided for @searchFailed.
   ///
-  /// In en, this message translates to:
-  /// **'Location search failed.'**
+  /// In ko, this message translates to:
+  /// **'위치 검색에 실패했습니다.'**
   String get searchFailed;
 
   /// No description provided for @temperatureTrend.
   ///
-  /// In en, this message translates to:
-  /// **'Temperature Trend'**
+  /// In ko, this message translates to:
+  /// **'기온 추이'**
   String get temperatureTrend;
 
   /// No description provided for @precipitationChance.
   ///
-  /// In en, this message translates to:
-  /// **'Precipitation Chance'**
+  /// In ko, this message translates to:
+  /// **'강수 확률'**
   String get precipitationChance;
+
+  /// No description provided for @offlineMode.
+  ///
+  /// In ko, this message translates to:
+  /// **'오프라인 모드 - 캐시된 데이터 표시 중'**
+  String get offlineMode;
+
+  /// No description provided for @cacheExpired.
+  ///
+  /// In ko, this message translates to:
+  /// **'캐시가 만료되었습니다'**
+  String get cacheExpired;
+
+  /// No description provided for @minutesAgo.
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}분 전'**
+  String minutesAgo(Object count);
+
+  /// No description provided for @hoursAgo.
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}시간 전'**
+  String hoursAgo(Object count);
+
+  /// No description provided for @daysAgo.
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}일 전'**
+  String daysAgo(Object count);
+
+  /// No description provided for @searchOffline.
+  ///
+  /// In ko, this message translates to:
+  /// **'오프라인 상태에서는 검색할 수 없습니다'**
+  String get searchOffline;
+
+  /// No description provided for @followSystemTheme.
+  ///
+  /// In ko, this message translates to:
+  /// **'시스템 테마 따르기'**
+  String get followSystemTheme;
+
+  /// No description provided for @followSystemThemeDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'기기 설정에 따라 라이트/다크 모드를 자동으로 적용합니다'**
+  String get followSystemThemeDesc;
+
+  /// No description provided for @themeColor.
+  ///
+  /// In ko, this message translates to:
+  /// **'테마 색상'**
+  String get themeColor;
+
+  /// No description provided for @skip.
+  ///
+  /// In ko, this message translates to:
+  /// **'걸러뛰기'**
+  String get skip;
+
+  /// No description provided for @next.
+  ///
+  /// In ko, this message translates to:
+  /// **'다음'**
+  String get next;
+
+  /// No description provided for @start.
+  ///
+  /// In ko, this message translates to:
+  /// **'시작하기'**
+  String get start;
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'Zephyr Sky'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아름다운 그라데이션과 함께하는 미니멀리스트 날씨 앱입니다. 정확한 날씨 정보로 당신의 하루를 밝게 비춰드립니다.'**
+  String get onboardingWelcomeDesc;
+
+  /// No description provided for @onboardingLocationTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'위치 정보'**
+  String get onboardingLocationTitle;
+
+  /// No description provided for @onboardingLocationDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 위치의 정확한 날씨를 제공하기 위해 위치 권한이 필요합니다. 위치 데이터는 날씨 조회에만 사용됩니다.'**
+  String get onboardingLocationDesc;
+
+  /// No description provided for @onboardingNotificationTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'날씨 알림'**
+  String get onboardingNotificationTitle;
+
+  /// No description provided for @onboardingNotificationDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'매일 아침 날씨 정보를 받아보시려면 알림을 허용해주세요. 날씨 경고 시 즉시 알려드립니다.'**
+  String get onboardingNotificationDesc;
+
+  /// No description provided for @onboardingReadyTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'준비 완료!'**
+  String get onboardingReadyTitle;
+
+  /// No description provided for @onboardingReadyDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 설정이 완료되었습니다. 지금 바로 Zephyr Sky와 함께 날씨를 확인핳세요!'**
+  String get onboardingReadyDesc;
+
+  /// No description provided for @shareWeather.
+  ///
+  /// In ko, this message translates to:
+  /// **'날씨 공유'**
+  String get shareWeather;
+
+  /// No description provided for @shareWeatherText.
+  ///
+  /// In ko, this message translates to:
+  /// **'지금 {city}은 {temp}도, {condition}. 야외활동지수 {score}점 🌤️ (Zephyr Sky)'**
+  String shareWeatherText(
+      Object city, Object temp, Object condition, Object score);
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -866,7 +1004,8 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'ko'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'ko'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -875,847 +1014,15 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'ko': return AppLocalizationsKo();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'ko':
+      return AppLocalizationsKo();
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue on GitHub with '
-    'a reproducible sample app and the gen-l10n configuration that was used.'
-  );
-}
-
-/// The translations for English (`en`).
-class AppLocalizationsEn extends AppLocalizations {
-  AppLocalizationsEn([String locale = 'en']) : super(locale);
-
-  @override
-  String get appName => 'Zephyr Sky';
-
-  @override
-  String get ok => 'OK';
-
-  @override
-  String get cancel => 'Cancel';
-
-  @override
-  String get close => 'Close';
-
-  @override
-  String get save => 'Save';
-
-  @override
-  String get delete => 'Delete';
-
-  @override
-  String get search => 'Search';
-
-  @override
-  String get refresh => 'Refresh';
-
-  @override
-  String get loading => 'Loading...';
-
-  @override
-  String get error => 'Error';
-
-  @override
-  String get retry => 'Retry';
-
-  @override
-  String get locationLoading => 'Loading location...';
-
-  @override
-  String get menuOpen => 'Open menu';
-
-  @override
-  String get appSubtitle => 'Weather & Settings';
-
-  @override
-  String get searchLocation => 'Search Location';
-
-  @override
-  String get settings => 'Settings';
-
-  @override
-  String get weatherRefresh => 'Refresh Weather';
-
-  @override
-  String get temperaturePrecipitationTrend => 'Temperature & Precipitation Trend';
-
-  @override
-  String currentWeatherLabel(Object description, Object temperature) {
-    return 'Current weather: $description, $temperature°';
-  }
-
-  @override
-  String get maxTemp => 'High';
-
-  @override
-  String get minTemp => 'Low';
-
-  @override
-  String get precipitationProbability => 'Precipitation';
-
-  @override
-  String get humidity => 'Humidity';
-
-  @override
-  String get windSpeed => 'Wind';
-
-  @override
-  String get feelsLike => 'Feels Like';
-
-  @override
-  String get pressure => 'Pressure';
-
-  @override
-  String get visibility => 'Visibility';
-
-  @override
-  String get dewPoint => 'Dew Point';
-
-  @override
-  String get cloudCover => 'Clouds';
-
-  @override
-  String get outdoorActivityIndex => 'Outdoor Activity Index';
-
-  @override
-  String get hourlyForecast => 'Hourly Forecast';
-
-  @override
-  String get dailyForecast => 'Weekly Forecast';
-
-  @override
-  String get collapse => 'Collapse';
-
-  @override
-  String get seeMore => 'See More';
-
-  @override
-  String get weatherLoadError => 'Unable to retrieve weather information.';
-
-  @override
-  String get searchHint => 'Search city name (e.g. Seoul, Tokyo...)';
-
-  @override
-  String get noResults => 'No search results found.';
-
-  @override
-  String get unknown => 'Unknown';
-
-  @override
-  String get notifications => 'Notifications';
-
-  @override
-  String get statusBarWeatherNotification => 'Status Bar Weather';
-
-  @override
-  String get statusBarWeatherDesc => 'Always show current weather in the status bar.';
-
-  @override
-  String get notificationPermissionRequired => 'Notification permission is required. Please allow notifications in Settings > Apps > Zephyr Sky.';
-
-  @override
-  String get appearance => 'Appearance';
-
-  @override
-  String get darkMode => 'Dark Mode';
-
-  @override
-  String get darkModeDesc => 'Use dark theme';
-
-  @override
-  String get followSystemTheme => 'Follow System Theme';
-
-  @override
-  String get followSystemThemeDesc => 'Automatically switch between light and dark mode';
-
-  @override
-  String get themeColor => 'Theme Color';
-
-  @override
-  String get unit => 'Unit';
-
-  @override
-  String get celsius => 'Celsius (°C)';
-
-  @override
-  String get celsiusDesc => 'Korea, Europe, etc.';
-
-  @override
-  String get fahrenheit => 'Fahrenheit (°F)';
-
-  @override
-  String get fahrenheitDesc => 'USA, etc.';
-
-  @override
-  String get favoriteLocations => 'Favorite Locations';
-
-  @override
-  String get noFavoriteLocations => 'No favorite locations';
-
-  @override
-  String get addFavoriteHint => 'Search and add from the home screen';
-
-  @override
-  String get unknownLocation => 'Unknown Location';
-
-  @override
-  String latLon(Object lat, Object lon) {
-    return 'Lat: $lat, Lon: $lon';
-  }
-
-  @override
-  String get addCurrentLocation => 'Add Current Location';
-
-  @override
-  String get info => 'About';
-
-  @override
-  String get version => 'Version 1.2.2';
-
-  @override
-  String get dataSource => 'Data Source';
-
-  @override
-  String get openMeteoApi => 'Open-Meteo API';
-
-  @override
-  String get language => 'Language';
-
-  @override
-  String get korean => 'Korean';
-
-  @override
-  String get english => 'English';
-
-  @override
-  String get weatherClear => 'Clear';
-
-  @override
-  String get weatherMainlyClear => 'Mainly Clear';
-
-  @override
-  String get weatherPartlyCloudy => 'Partly Cloudy';
-
-  @override
-  String get weatherOvercast => 'Overcast';
-
-  @override
-  String get weatherFog => 'Fog';
-
-  @override
-  String get weatherLightDrizzle => 'Light Drizzle';
-
-  @override
-  String get weatherFreezingDrizzle => 'Freezing Drizzle';
-
-  @override
-  String get weatherLightRain => 'Light Rain';
-
-  @override
-  String get weatherModerateRain => 'Moderate Rain';
-
-  @override
-  String get weatherHeavyRain => 'Heavy Rain';
-
-  @override
-  String get weatherFreezingRain => 'Freezing Rain';
-
-  @override
-  String get weatherLightSnow => 'Light Snow';
-
-  @override
-  String get weatherModerateSnow => 'Moderate Snow';
-
-  @override
-  String get weatherHeavySnow => 'Heavy Snow';
-
-  @override
-  String get weatherSnowGrains => 'Snow Grains';
-
-  @override
-  String get weatherRainShowers => 'Rain Showers';
-
-  @override
-  String get weatherSnowShowers => 'Snow Showers';
-
-  @override
-  String get weatherThunderstorm => 'Thunderstorm';
-
-  @override
-  String get weatherThunderstormHail => 'Thunderstorm with Hail';
-
-  @override
-  String get weatherUnknown => 'Unknown';
-
-  @override
-  String get aqiUnknown => 'Unknown';
-
-  @override
-  String get aqiGood => 'Good';
-
-  @override
-  String get aqiModerate => 'Moderate';
-
-  @override
-  String get aqiSensitive => 'Unhealthy for Sensitive Groups';
-
-  @override
-  String get aqiUnhealthy => 'Unhealthy';
-
-  @override
-  String get aqiVeryUnhealthy => 'Very Unhealthy';
-
-  @override
-  String get aqiHazardous => 'Hazardous';
-
-  @override
-  String get uvUnknown => 'Unknown';
-
-  @override
-  String get uvLow => 'Low';
-
-  @override
-  String get uvModerate => 'Moderate';
-
-  @override
-  String get uvHigh => 'High';
-
-  @override
-  String get uvVeryHigh => 'Very High';
-
-  @override
-  String get uvExtreme => 'Extreme';
-
-  @override
-  String get outdoorExcellent => 'Excellent';
-
-  @override
-  String get outdoorGood => 'Good';
-
-  @override
-  String get outdoorFair => 'Fair';
-
-  @override
-  String get outdoorPoor => 'Poor';
-
-  @override
-  String get outdoorDangerous => 'Dangerous';
-
-  @override
-  String get outdoorMsgExcellent => 'Great weather for outdoor activities!';
-
-  @override
-  String get outdoorMsgGood => 'Better than usual';
-
-  @override
-  String get outdoorMsgFair => 'Be careful during outdoor activities';
-
-  @override
-  String get outdoorMsgPoor => 'Not recommended for outdoor activities';
-
-  @override
-  String get outdoorMsgDangerous => 'Please avoid outdoor activities';
-
-  @override
-  String get weatherNotification => 'Weather Notification';
-
-  @override
-  String get weatherAlert => 'Weather Alert';
-
-  @override
-  String get weatherNotificationDesc => 'Show current weather in the status bar.';
-
-  @override
-  String get weatherAlertDesc => 'Show weather alert notifications.';
-
-  @override
-  String currentTemp(Object temp, Object min, Object max) {
-    return 'Now: $temp° (Low: $min° / High: $max°)';
-  }
-
-  @override
-  String alertStrongWind(Object speed) {
-    return '💨 Strong Wind (${speed}km/h)';
-  }
-
-  @override
-  String alertColdWave(Object temp) {
-    return '❄️ Cold Wave Warning ($temp°)';
-  }
-
-  @override
-  String alertHeatWave(Object temp) {
-    return '🔥 Heat Wave Warning ($temp°)';
-  }
-
-  @override
-  String alertHighPrecipitation(Object prob) {
-    return '🌧️ High Precipitation ($prob%)';
-  }
-
-  @override
-  String alertAirQuality(Object level, Object aqi) {
-    return '🌬️ Air Quality $level (AQI: $aqi)';
-  }
-
-  @override
-  String alertUv(Object level, Object uv) {
-    return '☀️ UV $level (UV: $uv)';
-  }
-
-  @override
-  String get weatherWarnings => '⚠️ Weather Warnings';
-
-  @override
-  String lastUpdate(Object time) {
-    return 'Last Update: $time';
-  }
-
-  @override
-  String get locationServiceDisabled => 'Location services are disabled. Please enable them in Settings.';
-
-  @override
-  String get locationPermissionDenied => 'Location permission denied.';
-
-  @override
-  String get locationPermissionPermanentlyDenied => 'Location permission permanently denied. Please allow it in Settings.';
-
-  @override
-  String get weatherLoadFailed => 'Failed to load weather information.';
-
-  @override
-  String aqiLoadFailed(Object error) {
-    return 'Failed to load AQI information: $error';
-  }
-
-  @override
-  String get searchFailed => 'Location search failed.';
-
-  @override
-  String get temperatureTrend => 'Temperature Trend';
-
-  @override
-  String get precipitationChance => 'Precipitation Chance';
-}
-
-/// The translations for Korean (`ko`).
-class AppLocalizationsKo extends AppLocalizations {
-  AppLocalizationsKo([String locale = 'ko']) : super(locale);
-
-  @override
-  String get appName => 'Zephyr Sky';
-
-  @override
-  String get ok => '확인';
-
-  @override
-  String get cancel => '취소';
-
-  @override
-  String get close => '닫기';
-
-  @override
-  String get save => '저장';
-
-  @override
-  String get delete => '삭제';
-
-  @override
-  String get search => '검색';
-
-  @override
-  String get refresh => '새로고침';
-
-  @override
-  String get loading => '로딩 중...';
-
-  @override
-  String get error => '오류';
-
-  @override
-  String get retry => '다시 시도';
-
-  @override
-  String get locationLoading => '위치 로드 중...';
-
-  @override
-  String get menuOpen => '메뉴 열기';
-
-  @override
-  String get appSubtitle => '날씨 및 설정';
-
-  @override
-  String get searchLocation => '위치 검색';
-
-  @override
-  String get settings => '설정';
-
-  @override
-  String get weatherRefresh => '날씨 새로고침';
-
-  @override
-  String get temperaturePrecipitationTrend => '기온 및 강수량 추이';
-
-  @override
-  String currentWeatherLabel(Object description, Object temperature) {
-    return '현재 날씨: $description, $temperature도';
-  }
-
-  @override
-  String get maxTemp => '최고';
-
-  @override
-  String get minTemp => '최저';
-
-  @override
-  String get precipitationProbability => '강수확률';
-
-  @override
-  String get humidity => '습도';
-
-  @override
-  String get windSpeed => '풍속';
-
-  @override
-  String get feelsLike => '체감';
-
-  @override
-  String get pressure => '기압';
-
-  @override
-  String get visibility => '시정';
-
-  @override
-  String get dewPoint => '이슬점';
-
-  @override
-  String get cloudCover => '구름';
-
-  @override
-  String get outdoorActivityIndex => '야외 활동 지수';
-
-  @override
-  String get hourlyForecast => '시간별 예보';
-
-  @override
-  String get dailyForecast => '주간 예보';
-
-  @override
-  String get collapse => '접기';
-
-  @override
-  String get seeMore => '더보기';
-
-  @override
-  String get weatherLoadError => '날씨 정보를 가져올 수 없습니다.';
-
-  @override
-  String get searchHint => '도시 이름 검색 (예: 서울, 도쿄...)';
-
-  @override
-  String get noResults => '검색 결과가 없습니다.';
-
-  @override
-  String get unknown => '알 수 없음';
-
-  @override
-  String get notifications => '알림';
-
-  @override
-  String get statusBarWeatherNotification => '상태바 날씨 알림';
-
-  @override
-  String get statusBarWeatherDesc => '상태바에 현재 날씨를 항상 표시합니다.';
-
-  @override
-  String get notificationPermissionRequired => '알림 권한이 필요합니다. 시스템 설정 > 앱 > Zephyr Sky에서 알림을 허용해주세요.';
-
-  @override
-  String get appearance => '외관';
-
-  @override
-  String get darkMode => '다크 모드';
-
-  @override
-  String get darkModeDesc => '어두운 테마 사용';
-
-  @override
-  String get followSystemTheme => '시스템 설정 따라하기';
-
-  @override
-  String get followSystemThemeDesc => '밝음/어두음을 시스템 설정에 맞춰 자동 전환';
-
-  @override
-  String get themeColor => '테마 색상';
-
-  @override
-  String get unit => '단위';
-
-  @override
-  String get celsius => '섭씨 (°C)';
-
-  @override
-  String get celsiusDesc => '한국, 유럽 등';
-
-  @override
-  String get fahrenheit => '화씨 (°F)';
-
-  @override
-  String get fahrenheitDesc => '미국 등';
-
-  @override
-  String get favoriteLocations => '즐겨찾기 위치';
-
-  @override
-  String get noFavoriteLocations => '즐겨찾기 위치가 없습니다';
-
-  @override
-  String get addFavoriteHint => '홈 화면에서 검색 후 추가하세요';
-
-  @override
-  String get unknownLocation => '알 수 없는 위치';
-
-  @override
-  String latLon(Object lat, Object lon) {
-    return '위도: $lat, 경도: $lon';
-  }
-
-  @override
-  String get addCurrentLocation => '현재 위치 추가';
-
-  @override
-  String get info => '정보';
-
-  @override
-  String get version => '버전 1.2.2';
-
-  @override
-  String get dataSource => '데이터 소스';
-
-  @override
-  String get openMeteoApi => 'Open-Meteo API';
-
-  @override
-  String get language => '언어';
-
-  @override
-  String get korean => '한국어';
-
-  @override
-  String get english => 'English';
-
-  @override
-  String get weatherClear => '맑음';
-
-  @override
-  String get weatherMainlyClear => '대체로 맑음';
-
-  @override
-  String get weatherPartlyCloudy => '구름 조금';
-
-  @override
-  String get weatherOvercast => '흐림';
-
-  @override
-  String get weatherFog => '안개';
-
-  @override
-  String get weatherLightDrizzle => '가벼운 이슬비';
-
-  @override
-  String get weatherFreezingDrizzle => '결빙 이슬비';
-
-  @override
-  String get weatherLightRain => '약한 비';
-
-  @override
-  String get weatherModerateRain => '보통 비';
-
-  @override
-  String get weatherHeavyRain => '강한 비';
-
-  @override
-  String get weatherFreezingRain => '결빙 비';
-
-  @override
-  String get weatherLightSnow => '약한 눈';
-
-  @override
-  String get weatherModerateSnow => '보통 눈';
-
-  @override
-  String get weatherHeavySnow => '강한 눈';
-
-  @override
-  String get weatherSnowGrains => '싸락눈';
-
-  @override
-  String get weatherRainShowers => '소나기';
-
-  @override
-  String get weatherSnowShowers => '눈 소나기';
-
-  @override
-  String get weatherThunderstorm => '뇌우';
-
-  @override
-  String get weatherThunderstormHail => '우박을 동반한 뇌우';
-
-  @override
-  String get weatherUnknown => '알 수 없음';
-
-  @override
-  String get aqiUnknown => '알 수 없음';
-
-  @override
-  String get aqiGood => '좋음';
-
-  @override
-  String get aqiModerate => '보통';
-
-  @override
-  String get aqiSensitive => '민감군 불쾌';
-
-  @override
-  String get aqiUnhealthy => '불건강';
-
-  @override
-  String get aqiVeryUnhealthy => '매우 불건강';
-
-  @override
-  String get aqiHazardous => '위험';
-
-  @override
-  String get uvUnknown => '알 수 없음';
-
-  @override
-  String get uvLow => '낮음';
-
-  @override
-  String get uvModerate => '보통';
-
-  @override
-  String get uvHigh => '높음';
-
-  @override
-  String get uvVeryHigh => '매우 높음';
-
-  @override
-  String get uvExtreme => '위험';
-
-  @override
-  String get outdoorExcellent => '최상';
-
-  @override
-  String get outdoorGood => '양호';
-
-  @override
-  String get outdoorFair => '보통';
-
-  @override
-  String get outdoorPoor => '나쁨';
-
-  @override
-  String get outdoorDangerous => '위험';
-
-  @override
-  String get outdoorMsgExcellent => '야외 활동하기 좋은 날씨입니다!';
-
-  @override
-  String get outdoorMsgGood => '평소보다 양호합니다';
-
-  @override
-  String get outdoorMsgFair => '야외 활동 시 주의가 필요합니다';
-
-  @override
-  String get outdoorMsgPoor => '야외 활동에 권장하지 않습니다';
-
-  @override
-  String get outdoorMsgDangerous => '야외 활동을 자제해 주세요';
-
-  @override
-  String get weatherNotification => '날씨 알림';
-
-  @override
-  String get weatherAlert => '날씨 경고';
-
-  @override
-  String get weatherNotificationDesc => '현재 날씨 정보를 상태바에 표시합니다.';
-
-  @override
-  String get weatherAlertDesc => '날씨 경고 알림을 표시합니다.';
-
-  @override
-  String currentTemp(Object temp, Object min, Object max) {
-    return '현재: $temp° (최저: $min° / 최고: $max°)';
-  }
-
-  @override
-  String alertStrongWind(Object speed) {
-    return '💨 강한 바람 (${speed}km/h)';
-  }
-
-  @override
-  String alertColdWave(Object temp) {
-    return '❄️ 한파 경보 ($temp°)';
-  }
-
-  @override
-  String alertHeatWave(Object temp) {
-    return '🔥 한열 경보 ($temp°)';
-  }
-
-  @override
-  String alertHighPrecipitation(Object prob) {
-    return '🌧️ 강수 확률 높음 ($prob%)';
-  }
-
-  @override
-  String alertAirQuality(Object level, Object aqi) {
-    return '🌬️ 대기질 $level (AQI: $aqi)';
-  }
-
-  @override
-  String alertUv(Object level, Object uv) {
-    return '☀️ 자외선 $level (UV: $uv)';
-  }
-
-  @override
-  String get weatherWarnings => '⚠️ 날씨 경고';
-
-  @override
-  String lastUpdate(Object time) {
-    return '마지막 업데이트: $time';
-  }
-
-  @override
-  String get locationServiceDisabled => '위치 서비스가 비활성화되어 있습니다. 설정에서 활성화해 주세요.';
-
-  @override
-  String get locationPermissionDenied => '위치 권한이 거부되었습니다.';
-
-  @override
-  String get locationPermissionPermanentlyDenied => '위치 권한이 영구적으로 거부되었습니다. 설정에서 직접 허용해 주세요.';
-
-  @override
-  String get weatherLoadFailed => '날씨 정보를 불러오는 데 실패했습니다.';
-
-  @override
-  String aqiLoadFailed(Object error) {
-    return 'AQI 정보를 불러오는 데 실패했습니다: $error';
-  }
-
-  @override
-  String get searchFailed => '위치 검색에 실패했습니다.';
-
-  @override
-  String get temperatureTrend => '기온 추이';
-
-  @override
-  String get precipitationChance => '강수 확률';
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

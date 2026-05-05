@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/date_symbol_data_file.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/providers/weather_provider.dart';
@@ -9,7 +9,7 @@ import 'presentation/providers/settings_provider.dart';
 import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/onboarding_screen.dart';
 
-AppLocalizations _getDefaultL10n() => AppLocalizationsEn();
+AppLocalizations _getDefaultL10n() => lookupAppLocalizations(const Locale('en'));
 
 void main() async {
   // 플러그인 초기화를 위해 필요
@@ -19,8 +19,8 @@ void main() async {
 
   try {
     // 날짜 포맷팅 초기화 (ko_KR, en 로케일 지원)
-    await initializeDateFormatting('ko_KR', null);
-    await initializeDateFormatting('en', null);
+    await initializeDateFormatting('ko_KR');
+    await initializeDateFormatting('en');
     
     // SharedPreferences 초기화
     sharedPreferences = await SharedPreferences.getInstance();

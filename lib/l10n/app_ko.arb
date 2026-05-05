@@ -341,6 +341,13 @@
   "searchOffline": "오프라인 상태에서는 검색할 수 없습니다",
   "@searchOffline": {},
 
+  "followSystemTheme": "시스템 테마 따르기",
+  "@followSystemTheme": {},
+  "followSystemThemeDesc": "기기 설정에 따라 라이트/다크 모드를 자동으로 적용합니다",
+  "@followSystemThemeDesc": {},
+  "themeColor": "테마 색상",
+  "@themeColor": {},
+
   "skip": "걸러뛰기",
   "@skip": {},
   "next": "다음",

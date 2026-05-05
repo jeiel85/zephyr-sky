@@ -146,6 +146,10 @@
   "daysAgo": "{count} days ago",
   "searchOffline": "Search is not available in offline mode",
 
+  "followSystemTheme": "Follow system theme",
+  "followSystemThemeDesc": "Automatically apply light or dark mode based on device settings",
+  "themeColor": "Theme color",
+
   "skip": "Skip",
   "next": "Next",
   "start": "Get Started",
