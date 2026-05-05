@@ -77,5 +77,5 @@ jobs:
           profile: pixel_7
           script: |
             adb install -r build/app/outputs/flutter-apk/app-debug.apk
-            adb shell am start -W com.jeiel.zephyr_sky/com.jeiel.zephyr_sky.MainActivity
+            adb shell monkey -p com.jeiel.zephyr_sky -c android.intent.category.LAUNCHER 1
             adb shell pidof com.jeiel.zephyr_sky
