@@ -1,5 +1,22 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-05] GitHub Actions 에뮬레이터 앱 실행 실패 수정
+
+### 작업
+- `gh run view --log-failed`로 최신 실패 런(`25381071461`) 로그를 분석.
+- `.github/workflows/ci.yml`의 에뮬레이터 앱 실행 명령을 `monkey` 방식에서 명시적 Activity 실행 방식(`adb shell am start -W -n com.jeiel.zephyr_sky/.MainActivity`)으로 변경.
+
+### 변경 파일
+- `.github/workflows/ci.yml`
+
+### 검증
+- 로컬: `flutter analyze` 실행 (기존 warning/info 다수 존재, 신규 오류 추가 없음 확인)
+- 로컬: `flutter test` 실행 (기존 테스트 3건 실패 확인: `test/domain/entities/weather_test.dart`의 outdoorActivityLevel 기대값 불일치)
+- CI: 커밋/푸시 후 GitHub Actions 재실행 성공 여부 모니터링 예정
+
+### 결과
+- CI 앱 실행 단계의 액티비티 탐색 실패 가능성을 제거하는 방향으로 워크플로를 보정함.
+
 ## [2026-05-05] GitHub CI 앱 실행 검증 단계 추가
 
 ### 작업 내용
