@@ -1,5 +1,15 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-05] GitHub CI 앱 실행 검증 단계 추가
+
+### 작업 내용
+- `.github/workflows/ci.yml` 신규 추가.
+- `push(main)`/`pull_request` 기준으로 `flutter test`, `flutter build apk --debug`를 수행하는 기본 CI 파이프라인 구성.
+- `reactivecircus/android-emulator-runner@v2` 기반 Android 에뮬레이터 스모크 테스트 잡을 추가해, 디버그 APK 설치 후 `MainActivity` 실행(`adb shell am start -W ...`) 및 프로세스 기동(`adb shell pidof ...`)까지 검증하도록 구성.
+
+### 현재 상태
+- GitHub Actions에서 테스트 + 빌드 + 앱 실행(에뮬레이터)까지 자동 검증 가능.
+
 ## [2026-05-04] Play Store 출시 준비 및 핵심 기능 개선 - Issues #4, #5, #8, #11, #13, #14
 
 ### 주요 변경 사항
