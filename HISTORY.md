@@ -16,6 +16,7 @@
 
 ### 결과
 - 디버그 APK 설치 후 실제 설치 패키지 기준으로 앱 실행 검증이 가능하도록 정렬함.
+- 후속 재시도에서 `adb install`의 streamed install 단계가 `Broken pipe (32)`로 실패해, CI 설치 방식을 `--no-streaming`으로 추가 보정함.
 
 ## [2026-05-05] GitHub Actions 에뮬레이터 앱 실행 실패 수정
 
