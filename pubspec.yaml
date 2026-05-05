@@ -20,7 +20,7 @@ dependencies:
   shared_preferences: ^2.2.2
   path_provider: ^2.1.1
   flutter_local_notifications: ^17.1.2
-  intl: ^0.18.1
+  intl: ^0.20.2
   google_fonts: ^6.1.0
   fl_chart: ^0.68.0
   home_widget: ^0.6.0
@@ -44,4 +44,5 @@ flutter_launcher_icons:
   adaptive_icon_foreground: "assets/icon/app_icon.png"
 
 flutter:
+  generate: true
   uses-material-design: true
