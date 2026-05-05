@@ -1,9 +1,9 @@
 # CHANGELOG.md
 
-## Unreleased - 2026-05-05
+## v1.3.1 - 2026-05-05
 
 ### Build / CI
-- GitHub Actions Android 에뮬레이터 스모크 테스트의 앱 실행 방식을 `adb shell monkey ...`에서 `adb shell am start -W -n com.jeiel.zephyr_sky/.MainActivity`로 변경해 런처 액티비티 탐색 실패를 방지.
+- GitHub Actions Android 에뮬레이터 스모크 테스트의 실행 대상을 디버그 빌드 패키지(`com.jeiel.zephyr_sky.debug`)와 실제 `MainActivity` 컴포넌트 기준으로 보정해 액티비티 탐색 실패를 방지.
 
 ## v1.3.0 - 2026-05-04
 
