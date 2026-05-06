@@ -14,6 +14,7 @@ void main() {
           ),
         ),
       );
+      await tester.pump(const Duration(milliseconds: 100));
 
       final containerFinder = find.byType(Container);
       expect(containerFinder, findsOneWidget);
@@ -33,6 +34,7 @@ void main() {
           ),
         ),
       );
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Initial state
       expect(find.byType(CustomPaint), findsOneWidget);
@@ -48,7 +50,7 @@ void main() {
         ),
       );
 
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
       expect(find.byType(CustomPaint), findsOneWidget);
     });
 
@@ -62,6 +64,7 @@ void main() {
           ),
         ),
       );
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(CustomPaint), findsOneWidget);
     });
@@ -76,6 +79,7 @@ void main() {
           ),
         ),
       );
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(CustomPaint), findsOneWidget);
     });
@@ -90,6 +94,7 @@ void main() {
           ),
         ),
       );
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(CustomPaint), findsOneWidget);
     });

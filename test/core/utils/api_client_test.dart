@@ -11,6 +11,10 @@ void main() {
   late MockHttpClient mockHttpClient;
   late SharedPreferences prefs;
 
+  setUpAll(() {
+    registerFallbackValue(Uri());
+  });
+
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     prefs = await SharedPreferences.getInstance();
