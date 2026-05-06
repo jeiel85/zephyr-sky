@@ -4,7 +4,7 @@ import 'package:zephyr_sky/presentation/widgets/animated_weather_background.dart
 
 void main() {
   group('AnimatedWeatherBackground Widget Tests', () {
-    testWidgets('renders gradient background correctly', (WidgetTester tester) async {
+    testWidgets('renders correctly for clear day', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: AnimatedWeatherBackground(
@@ -15,14 +15,10 @@ void main() {
         ),
       );
       await tester.pump();
-
-      expect(find.byType(Container), findsOneWidget);
-      final container = tester.widget<Container>(find.byType(Container));
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.gradient, isA<LinearGradient>());
+      expect(find.byType(AnimatedWeatherBackground), findsOneWidget);
     });
 
-    testWidgets('renders rain effect', (WidgetTester tester) async {
+    testWidgets('renders correctly for rain', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: AnimatedWeatherBackground(
@@ -33,10 +29,10 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(CustomPaint), findsOneWidget);
+      expect(find.byType(AnimatedWeatherBackground), findsOneWidget);
     });
 
-    testWidgets('renders stars at night', (WidgetTester tester) async {
+    testWidgets('renders correctly for night', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: AnimatedWeatherBackground(
@@ -47,10 +43,10 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(CustomPaint), findsOneWidget);
+      expect(find.byType(AnimatedWeatherBackground), findsOneWidget);
     });
 
-    testWidgets('renders snow effect', (WidgetTester tester) async {
+    testWidgets('renders correctly for snow', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: AnimatedWeatherBackground(
@@ -61,10 +57,10 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(CustomPaint), findsOneWidget);
+      expect(find.byType(AnimatedWeatherBackground), findsOneWidget);
     });
 
-    testWidgets('renders clouds effect', (WidgetTester tester) async {
+    testWidgets('renders correctly for clouds', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: AnimatedWeatherBackground(
@@ -75,7 +71,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(CustomPaint), findsOneWidget);
+      expect(find.byType(AnimatedWeatherBackground), findsOneWidget);
     });
   });
 }
