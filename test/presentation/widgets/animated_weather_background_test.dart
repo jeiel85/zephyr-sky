@@ -14,7 +14,7 @@ void main() {
           ),
         ),
       );
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
 
       final containerFinder = find.byType(Container);
       expect(containerFinder, findsOneWidget);
@@ -22,6 +22,8 @@ void main() {
       final container = tester.widget<Container>(containerFinder);
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.gradient, isA<LinearGradient>());
+      
+      await tester.pumpWidget(const SizedBox());
     });
 
     testWidgets('changes particles when weather code changes', (WidgetTester tester) async {
@@ -34,12 +36,10 @@ void main() {
           ),
         ),
       );
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
 
-      // Initial state
       expect(find.byType(CustomPaint), findsOneWidget);
 
-      // Change to rain
       await tester.pumpWidget(
         const MaterialApp(
           home: AnimatedWeatherBackground(
@@ -49,9 +49,10 @@ void main() {
           ),
         ),
       );
-
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      
       expect(find.byType(CustomPaint), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
     });
 
     testWidgets('renders stars at night', (WidgetTester tester) async {
@@ -64,9 +65,10 @@ void main() {
           ),
         ),
       );
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
 
       expect(find.byType(CustomPaint), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
     });
 
     testWidgets('renders snow effect', (WidgetTester tester) async {
@@ -79,9 +81,10 @@ void main() {
           ),
         ),
       );
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
 
       expect(find.byType(CustomPaint), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
     });
 
     testWidgets('renders clouds effect', (WidgetTester tester) async {
@@ -94,9 +97,10 @@ void main() {
           ),
         ),
       );
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
 
       expect(find.byType(CustomPaint), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
     });
   });
 }
