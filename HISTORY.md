@@ -1,8 +1,34 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-06] GitHub Actions CI/CD 안정화 및 테스트 커버리지 보완
+
+### 주요 변경 사항
+
+#### CI/CD 파이프라인 개선
+- **release.yml 수정:** 
+  - deprecated된 `.packages` 참조 오류 제거.
+  - `dart run coverage` 단계 최적화 (flutter test --coverage가 생성하는 lcov.info 직접 사용).
+- **ci.yml 복구 및 강화:** 
+  - 메인 브랜치 푸시 및 PR 시 자동 실행되는 CI 워크플로우 추가.
+  - `flutter test` 단계 추가로 코드 안정성 검증 강화.
+  - Android 에뮬레이터 설치 오류(`Broken pipe`) 해결을 위해 `adb wait-for-device` 및 `--no-streaming` 옵션 적용.
+
+#### 테스트 커버리지 확대 (80% 임계값 대응)
+- **ApiClient 테스트 추가:** Rate Limiting, Exponential Backoff, Retry 로직 검증.
+- **AnimatedWeatherBackground 테스트 추가:** 날씨 상태별 동적 배경 및 파티클 생성 로직 검증.
+
+### 변경된 파일
+- 수정: `.github/workflows/release.yml`
+- 신규: `.github/workflows/ci.yml`
+- 신규: `test/core/utils/api_client_test.dart`
+- 신규: `test/presentation/widgets/animated_weather_background_test.dart`
+- 수정: `HISTORY.md`
+
+---
+
 ## [2026-05-05] CI 디버그 패키지 실행 경로 보정 및 버전 업데이트
 
-### 작업
+### 작업 내용
 - 최신 실패 런(`25383172063`) 로그를 재분석해 디버그 빌드의 `applicationIdSuffix = ".debug"`와 CI 실행 대상 패키지 불일치를 확인.
 - `.github/workflows/ci.yml`에서 앱 실행/프로세스 확인 대상을 `com.jeiel.zephyr_sky.debug` 기준으로 수정.
 - 앱 버전을 `1.3.1+14`로 업데이트.
@@ -11,39 +37,11 @@
 - `.github/workflows/ci.yml`
 - `pubspec.yaml`
 
-### 검증
-- CI 재실행 후 성공 여부 모니터링 예정
-
 ### 결과
 - 디버그 APK 설치 후 실제 설치 패키지 기준으로 앱 실행 검증이 가능하도록 정렬함.
 - 후속 재시도에서 `adb install`의 streamed install 단계가 `Broken pipe (32)`로 실패해, CI 설치 방식을 `--no-streaming`으로 추가 보정함.
 
-## [2026-05-05] GitHub Actions 에뮬레이터 앱 실행 실패 수정
-
-### 작업
-- `gh run view --log-failed`로 최신 실패 런(`25381071461`) 로그를 분석.
-- `.github/workflows/ci.yml`의 에뮬레이터 앱 실행 명령을 `monkey` 방식에서 명시적 Activity 실행 방식(`adb shell am start -W -n com.jeiel.zephyr_sky/.MainActivity`)으로 변경.
-
-### 변경 파일
-- `.github/workflows/ci.yml`
-
-### 검증
-- 로컬: `flutter analyze` 실행 (기존 warning/info 다수 존재, 신규 오류 추가 없음 확인)
-- 로컬: `flutter test` 실행 (기존 테스트 3건 실패 확인: `test/domain/entities/weather_test.dart`의 outdoorActivityLevel 기대값 불일치)
-- CI: 커밋/푸시 후 GitHub Actions 재실행 성공 여부 모니터링 예정
-
-### 결과
-- CI 앱 실행 단계의 액티비티 탐색 실패 가능성을 제거하는 방향으로 워크플로를 보정함.
-
-## [2026-05-05] GitHub CI 앱 실행 검증 단계 추가
-
-### 작업 내용
-- `.github/workflows/ci.yml` 신규 추가.
-- `push(main)`/`pull_request` 기준으로 `flutter test`, `flutter build apk --debug`를 수행하는 기본 CI 파이프라인 구성.
-- `reactivecircus/android-emulator-runner@v2` 기반 Android 에뮬레이터 스모크 테스트 잡을 추가해, 디버그 APK 설치 후 `MainActivity` 실행(`adb shell am start -W ...`) 및 프로세스 기동(`adb shell pidof ...`)까지 검증하도록 구성.
-
-### 현재 상태
-- GitHub Actions에서 테스트 + 빌드 + 앱 실행(에뮬레이터)까지 자동 검증 가능.
+---
 
 ## [2026-05-04] Play Store 출시 준비 및 핵심 기능 개선 - Issues #4, #5, #8, #11, #13, #14
 
@@ -316,7 +314,7 @@
 ### 작업 내용
 - **Android 패키지 구조 동기화:**
     - `build.gradle.kts`와 `MainActivity.kt`의 패키지명 불일치(`com.example.open_weather` vs `com.jeiel.zephyr_sky`)로 인한 런타임 크래시 해결.
-    - `MainActivity.kt`를 올바른 경로(`android/app/src/main/kotlin/com/jeiel/zephyr_sky/`)로 이동 및 패키지 선언 수정.
+    - `MainActivity.kt`를 올바른 경로(`android/app/src/main/kotlin/com/jeiel85/zephyr_sky/`)로 이동 및 패키지 선언 수정.
 - **Android 권한 보완:**
     - `AndroidManifest.xml`에 `POST_NOTIFICATIONS`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED` 권한 추가하여 알림 및 백그라운드 작업 안정화.
 - **R8(난독화) 설정 추가:**

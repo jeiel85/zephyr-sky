@@ -36,9 +36,7 @@ jobs:
         run: flutter pub get
 
       - name: Run tests with coverage
-        run: |
-          flutter test --coverage
-          dart run coverage:format_coverage --packages=.packages -i coverage/lcov.info -o coverage/lcov.info --lcov --report-on=lib
+        run: flutter test --coverage
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
