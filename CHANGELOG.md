@@ -1,5 +1,14 @@
 # CHANGELOG.md
 
+## v1.3.3 - 2026-05-06
+
+### Changed
+- 앱 내부 버전을 `1.3.3+16`으로 상향하고 README 버전 배지를 동기화.
+
+### Verification
+- 로컬: 미실행 (CI에서 검증 예정)
+- CI: 태그 푸시 후 GitHub Actions 모니터링
+
 ## v1.3.1 - 2026-05-05
 
 ### Build / CI

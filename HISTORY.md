@@ -1,5 +1,14 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-06] v1.3.3 버전업 및 GitHub Actions 모니터링
+
+날짜: 2026-05-06  
+작업: 앱 버전업(`1.3.2+15` -> `1.3.3+16`), README/CHANGELOG 동기화, 태그 릴리즈 트리거 및 CI 모니터링  
+변경 파일: `pubspec.yaml`, `README.md`, `CHANGELOG.md`, `HISTORY.md`  
+검증: 로컬 무거운 빌드/테스트 생략, GitHub Actions 기준 검증  
+결과: 태그 푸시 후 GitHub Actions 성공 여부 확인 예정  
+후속 작업: 실패 런 발생 시 `gh run view --log-failed`로 원인 분석 및 수정 후 재푸시
+
 ## [2026-05-06] CI 안정화 완료 및 v1.3.2 정식 릴리즈
 
 ### 주요 작업

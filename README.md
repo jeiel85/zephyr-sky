@@ -5,7 +5,7 @@
 ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?style=for-the-badge&logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?style=for-the-badge&logo=dart)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-1.3.1-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-1.3.3-blue?style=for-the-badge)
 
 **아름다운 그라데이션을 갖춘 세련된 미니멀리스트 날씨 앱**
 
