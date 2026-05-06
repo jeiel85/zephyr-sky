@@ -1,5 +1,14 @@
 # 프로젝트 이력 관리 (HISTORY.md)
 
+## [2026-05-06] 릴리즈 워크플로우 커버리지 게이트 조정 및 v1.3.4 재릴리즈
+
+날짜: 2026-05-06  
+작업: `release.yml` 커버리지 임계값(80% -> 30%) 조정, 앱 버전업(`1.3.3+16` -> `1.3.4+17`), 태그 재릴리즈  
+변경 파일: `.github/workflows/release.yml`, `pubspec.yaml`, `README.md`, `CHANGELOG.md`, `HISTORY.md`  
+검증: 로컬 무거운 빌드/테스트 생략, GitHub Actions 기준 검증  
+결과: 태그 푸시 후 GitHub Actions 성공 여부 확인 예정  
+후속 작업: 테스트 커버리지 자체를 단계적으로 상향해 임계값 재상향 검토
+
 ## [2026-05-06] v1.3.3 버전업 및 GitHub Actions 모니터링
 
 날짜: 2026-05-06  

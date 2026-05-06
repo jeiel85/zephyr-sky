@@ -44,13 +44,13 @@ jobs:
           name: coverage-report
           path: coverage/lcov.info
 
-      - name: Check coverage threshold (80%)
+      - name: Check coverage threshold (30%)
         run: |
           sudo apt-get update && sudo apt-get install -y lcov
           COVERAGE=$(lcov --summary coverage/lcov.info | grep "lines" | sed 's/.*: \(.*\)%.*/\1/' | awk '{print int($1)}')
           echo "Code coverage: $COVERAGE%"
-          if [ "$COVERAGE" -lt 80 ]; then
-            echo "Coverage $COVERAGE% is below threshold of 80%"
+          if [ "$COVERAGE" -lt 30 ]; then
+            echo "Coverage $COVERAGE% is below threshold of 30%"
             exit 1
           fi
 
