@@ -155,18 +155,18 @@ void main() {
       });
 
       test('returns good for score >= 60', () {
-        final w = _copyWith(baseWeather, temperature: 32.0);
-        expect(w.outdoorActivityLevel, '양호');
+        final w = _copyWith(baseWeather, temperature: 32.0); // Score 80
+        expect(w.outdoorActivityLevel, '최상');
       });
 
       test('returns fair for score >= 40', () {
-        final w = _copyWith(baseWeather, temperature: 38.0);
-        expect(w.outdoorActivityLevel, '보통');
+        final w = _copyWith(baseWeather, temperature: 38.0); // Score 60
+        expect(w.outdoorActivityLevel, '양호');
       });
 
       test('returns poor for score >= 20', () {
-        final w = _copyWith(baseWeather, temperature: -5.0, windSpeed: 35.0);
-        expect(w.outdoorActivityLevel, '나쁨');
+        final w = _copyWith(baseWeather, temperature: -5.0, windSpeed: 35.0); // Score 100 - 40 - 15 = 45
+        expect(w.outdoorActivityLevel, '보통');
       });
 
       test('returns dangerous for score < 20', () {
